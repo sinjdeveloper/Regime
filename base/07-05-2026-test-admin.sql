@@ -1,0 +1,1 @@
+INSERT INTO user(username,password_hash,role) VALUES ('admin','$2y$12$rEu5nzaxaZLRq396OvrkFOpXYR8tvkxqE6Lw/rokk93FtvDBLFyim','admin');

@@ -1,0 +1,56 @@
+:root {
+  --primary-purple: #663366;
+  --sidebar-bg: linear-gradient(180deg, #330f42 0%, #310e3f 25%, #2e0e3c 50%, #2c0d39 75%, #2a0c36 100%);
+  --bg-light: #f8fafc;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  --text-dark: #0f172b;
+  --text-gray: #45556c;
+  --text-light-gray: #62748e;
+  --accent-yellow: #a3a101;
+  --accent-blue: #1447e6;
+  --accent-green: #008236;
+  --accent-orange: #bb4d00;
+  --border-color: #e2e8f0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+}
+
+.app-wrapper {
+  width: 100%;
+  max-width: none;
+  background: var(--bg-gradient);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
