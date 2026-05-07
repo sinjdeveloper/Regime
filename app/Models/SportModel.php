@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class SportModel extends Model
 {
-    protected $table            = 'sports';
+    protected $table            = 'sport';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -22,7 +22,10 @@ class SportModel extends Model
 
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'libelle'              => 'required|string|min_length[3]|max_length[255]',
+        'pourcentage_reduction' => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

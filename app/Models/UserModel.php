@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class UserModel extends Model
 {
-    protected $table            = 'users';
+    protected $table            = 'user';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -22,8 +22,14 @@ class UserModel extends Model
 
 
     // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
+    protected $validationRules      = [
+        'username'      => 'required|string|min_length[3]|max_length[255]|is_unique[user.username]',
+        'password_hash' => 'required|string|min_length[60]',
+        'role'          => 'required|in_list[admin,user]',
+    ];
+    protected $validationMessages   = [
+        'username' => ['is_unique' => 'Ce nom d\'utilisateur existe déjà'],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

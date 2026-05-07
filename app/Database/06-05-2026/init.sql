@@ -66,13 +66,18 @@ CREATE TABLE IF NOT EXISTS suggestion(
 CREATE TABLE IF NOT EXISTS code(
     id INT AUTO_INCREMENT PRIMARY KEY,
     token VARCHAR(255) NOT NULL UNIQUE,
-    montant FLOAT NOT NULL
+    montant FLOAT NOT NULL,
+    utilisé BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS historiquetransaction(
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
-    code_id INT NOT NULL,
+    code_id INT,
+    type VARCHAR(50) NOT NULL,
+    montant FLOAT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (client_id) REFERENCES client(id),
     FOREIGN KEY (code_id) REFERENCES code(id)
 );

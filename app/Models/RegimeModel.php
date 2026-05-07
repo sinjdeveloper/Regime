@@ -22,7 +22,15 @@ class RegimeModel extends Model
 
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'libelle'              => 'required|string|min_length[3]|max_length[255]',
+        'description'          => 'required|string|min_length[10]',
+        'variation_poids'      => 'required|numeric|greater_than[0]|less_than[100]',
+        'pourcentage_viande'   => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'pourcentage_poisson'  => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'pourcentage_volaille' => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'prix'                 => 'required|numeric|greater_than[0]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

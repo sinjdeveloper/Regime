@@ -23,7 +23,9 @@ class ObjectifModel extends Model
 
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'libelle' => 'required|string|min_length[3]|max_length[255]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
