@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class TransactionModel extends Model
 {
-    protected $table            = 'transactions';
+    protected $table            = 'historiquetransaction';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['client_id', 'code_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
