@@ -10,4 +10,15 @@ class UserModel extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields    = ['usename','password_hash','role'];
 
+    public function checkAccess(string $username, string $password): ?array
+    {
+        $user = $this->where('username', $username)->first();
+
+        if (!$user || !password_verify($password, $user['password_hash'])) {
+            return null;
+        }
+
+        return $user;
+    }
+
 }

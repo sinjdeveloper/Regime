@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 
 class AuthController extends BaseController
@@ -13,15 +12,19 @@ class AuthController extends BaseController
         $model = new UserModel();
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
-        $user = $model->where('username', $username)->first();
-        if (!$user || !password_verify($password, $user['password_hash'])) {
+
+        $user = $model->checkAccess((string) $username, (string) $password);
+
+        if (!$user) {
             return redirect()->back()->withInput()->with('errors', ['Username ou mot de passe incorrect']);
         }
+
         session()->set('user', [
             'id' => $user['id'],
             'username' => $user['username'],
             'role' => $user['role'],
         ]);
+
         return redirect()->to('/admin/dashboard');
     }
     public function logout()
