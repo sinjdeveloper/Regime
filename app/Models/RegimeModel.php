@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class RegimeModel extends Model
 {
-    protected $table            = 'regimes';
+    protected $table            = 'regime';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -20,15 +20,17 @@ class RegimeModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'libelle'              => 'required|string|min_length[3]|max_length[255]',
+        'description'          => 'required|string|min_length[10]',
+        'variation_poids'      => 'required|numeric|greater_than[0]|less_than[100]',
+        'pourcentage_viande'   => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'pourcentage_poisson'  => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'pourcentage_volaille' => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
+        'prix'                 => 'required|numeric|greater_than[0]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

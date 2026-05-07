@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class TransactionModel extends Model
 {
-    protected $table            = 'transactions';
+    protected $table            = 'historiquetransaction';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['client_id', 'code_id', 'type', 'montant'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -28,8 +28,15 @@ class TransactionModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
+    protected $validationRules      = [
+        'client_id' => 'required|integer|greater_than[0]',
+        'code_id'   => 'permit_empty|integer|greater_than[0]',
+        'type'      => 'required|in_list[code_redemption,gold_subscription,purchase]',
+        'montant'   => 'required|numeric|greater_than[0]',
+    ];
+    protected $validationMessages   = [
+        'type' => ['in_list' => 'Type de transaction invalide'],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

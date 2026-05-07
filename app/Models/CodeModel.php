@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class CodeModel extends Model
 {
-    protected $table            = 'codes';
+    protected $table            = 'code';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['token', 'montant', 'utilisé'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -20,16 +20,17 @@ class CodeModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+
 
     // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
+    protected $validationRules      = [
+        'token'   => 'required|string|is_unique[code.token]|min_length[5]',
+        'montant' => 'required|numeric|greater_than[0]',
+        'utilisé' => 'boolean',
+    ];
+    protected $validationMessages   = [
+        'token' => ['is_unique' => 'Ce code existe déjà'],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class ClientModel extends Model
 {
-    protected $table            = 'clients';
+    protected $table            = 'client';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id_user', 'email', 'genre', 'dateNaissance', 'poids', 'taille', 'estGold', 'argent'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -20,16 +20,21 @@ class ClientModel extends Model
     protected array $casts = [];
     protected array $castHandlers = [];
 
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
-    protected $validationMessages   = [];
+    protected $validationRules      = [
+        'id_user'       => 'required|integer|greater_than[0]',
+        'email'         => 'required|valid_email|is_unique[client.email]',
+        'genre'         => 'required|in_list[masculin,féminin,autre]',
+        'dateNaissance' => 'required|valid_date[Y-m-d]',
+        'poids'         => 'required|numeric|greater_than[0]',
+        'taille'        => 'required|numeric|greater_than[0]',
+        'estGold'       => 'boolean',
+        'argent'        => 'numeric|greater_than_equal_to[0]',
+    ];
+    protected $validationMessages   = [
+        'email' => ['is_unique' => 'Cet email est déjà utilisé'],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -43,4 +48,56 @@ class ClientModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Récupère tous les objectifs du client
+     *
+     * @param int $clientId ID du client
+     * @return array Array d'objectifs avec détails
+     */
+    public function getGoals(int $clientId): array
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('goalpoids');
+        $builder->select('goalpoids.*,objectif.libelle as objectif_libelle');
+        $builder->join('objectif', 'objectif.id = goalpoids.objectif_id', 'left');
+        $builder->where('goalpoids.client_id', $clientId);
+        return $builder->get()->getResultArray();
+    }
+
+    /**
+     * Applique la réduction Gold (15%) au prix si applicable
+     *
+     * @param float $prix Prix original
+     * @return float Prix avec réduction si Gold, sinon prix original
+     */
+    public function applyGoldDiscount(float $prix): float
+    {
+        if ($this->estGold) {
+            return round($prix * 0.85, 2);
+        }
+        return round($prix, 2);
+    }
+
+    /**
+     * Mise à jour du solde (wallet)
+     *
+     * @param int   $clientId ID du client
+     * @param float $montant  Montant à ajouter (négatif pour débiter)
+     * @return bool Succès de la mise à jour
+     */
+    public function updateBalance(int $clientId, float $montant): bool
+    {
+        $client = $this->find($clientId);
+        if (!$client) {
+            return false;
+        }
+
+        $nouveauSolde = $client['argent'] + $montant;
+        if ($nouveauSolde < 0) {
+            return false;
+        }
+
+        return $this->update($clientId, ['argent' => $nouveauSolde]);
+    }
 }
