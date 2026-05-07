@@ -31,17 +31,29 @@
           </div>
           <div class="card-body">
             <form action="<?= site_url('admin/login') ?>" class="login-form" method="post">
+              <?php $errors = session('errors'); ?>
+              
+              <?php if (!empty($errors) && is_array($errors)): ?>
+                <div style="margin-bottom:12px;padding:10px 12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
+                  <?php foreach ($errors as $error): ?>
+                    <div><?= esc($error) ?></div>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
+
               <div class="form-group">
                 <label for="email">Nom d'utilisateur</label>
                 <div class="input-wrapper">
                   <img src="<?= base_url('assets/images/login') ?>/28_120.svg" alt="" class="icon-left">
-                  <input type="text" id="email" placeholder="admin" name="username">
+                  <?= csrf_field() ?>
+                  <input type="text" id="email" placeholder="admin" name="username" value="<?= old('username') ?>">
                 </div>
               </div>
               <div class="form-group">
                 <label for="password">Mot de passe</label>
                 <div class="input-wrapper">
                   <img src="<?= base_url('assets/images/login') ?>/28_130.svg" alt="" class="icon-left">
+                  <?= csrf_field() ?>
                   <input type="password" id="password" placeholder="Mot de Passe" name="password">
                   <button type="button" class="icon-btn icon-right" aria-label="Toggle password visibility">
                     <img src="<?= base_url('assets/images/login') ?>/28_134.svg" alt="">
@@ -51,6 +63,8 @@
               <div class="form-actions">
                 <a href="#" class="forgot-password">Forgot password?</a>
               </div>
+              <?= csrf_field() ?>
+
               <button type="submit" class="btn-submit">Sign in</button>
             </form>
 
