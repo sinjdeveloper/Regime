@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\AdminModel;
+
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AdminController extends BaseController
@@ -11,7 +13,12 @@ class AdminController extends BaseController
     {
         return view('login-admin');
     }
-    public function index(){
-        return view('admin/dashboard');
+    public function index()
+    {
+        $model = new AdminModel();
+        $data = $model->getStats();
+
+        return view('admin/dashboard',$data);
     }
+
 }

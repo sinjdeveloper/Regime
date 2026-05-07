@@ -94,7 +94,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_868.svg" alt="Total régimes">
             </div>
             <div class="stat-info">
-              <div class="stat-value">5</div>
+              <div class="stat-value"><?= $regimes?></div>
               <div class="stat-label">Total régimes</div>
             </div>
           </div>
@@ -103,7 +103,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_870.svg" alt="Utilisateurs">
             </div>
             <div class="stat-info">
-              <div class="stat-value">5</div>
+              <div class="stat-value"><?= $utilisateurs ?></div>
               <div class="stat-label">Utilisateurs</div>
             </div>
           </div>
@@ -112,7 +112,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_872.svg" alt="Transactions">
             </div>
             <div class="stat-info">
-              <div class="stat-value">15</div>
+              <div class="stat-value"><?= $transactions ?></div>
               <div class="stat-label">Transactions</div>
             </div>
           </div>

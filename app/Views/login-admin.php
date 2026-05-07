@@ -32,7 +32,7 @@
           <div class="card-body">
             <form action="<?= site_url('admin/login') ?>" class="login-form" method="post">
               <?php $errors = session('errors'); ?>
-              
+
               <?php if (!empty($errors) && is_array($errors)): ?>
                 <div style="margin-bottom:12px;padding:10px 12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
                   <?php foreach ($errors as $error): ?>
@@ -69,7 +69,7 @@
             </form>
 
             <div class="demo-credentials">
-              Demo: demo@varyena.com / demo123
+              Demo: admin / admin
             </div>
 
             <div class="signup-prompt">
