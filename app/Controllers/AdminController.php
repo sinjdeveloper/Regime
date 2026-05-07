@@ -7,8 +7,11 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class AdminController extends BaseController
 {
-    public function index()
+    public function loginPage()
     {
-        return view('login');
+        return view('login-admin');
+    }
+    public function index(){
+        return view('admin/dashboard');
     }
 }
