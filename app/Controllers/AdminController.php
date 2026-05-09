@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AdminModel;
 
 use App\Models\RegimeModel;
+use App\Models\SportModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AdminController extends BaseController
@@ -25,6 +26,17 @@ class AdminController extends BaseController
             'stats' => $data,
             'regimes' => $regimes
         ]);
+    }
+    public function sportIndex()
+    {
+        $model = new SportModel();
+        $sports = $model->findAllSport();
+
+        return view(
+            'admin/sport/dashboard',
+            ['sports' => $sports]
+        );
+
     }
 
 }

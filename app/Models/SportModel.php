@@ -45,4 +45,23 @@ class SportModel extends Model
     {
         return $this->orderBy('RAND()')->limit(3)->findAll();
     }
+      public function addSport($data)
+    {
+        return $this->insert($data);
+    }
+
+    public function deleteSport($id)
+    {
+        return $this->delete($id);
+    }
+
+    public function updateSport($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
+    public function findAllSport()
+    {
+        return $this->findAll();
+    }
 }

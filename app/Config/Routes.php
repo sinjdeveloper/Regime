@@ -19,6 +19,9 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
         $routes->post('update/(:num)', 'RegimeController::update/$1');
         $routes->post('delete/(:num)','RegimeController::delete/$1');   
     });
+    $routes->group('sports',function ($routes) { 
+        $routes->get('index' , 'AdminController::sportIndex');
+    });
 });
 
 // API Routes - Profile & Goals
