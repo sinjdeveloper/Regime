@@ -139,3 +139,48 @@ button {
 .btn-icon:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+.profile-popup {
+    position: absolute;
+    min-width: 200px;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: 0.2s ease;
+    z-index: 1000;
+}
+
+.profile-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.popup-title {
+    font-weight: 600;
+    margin: 5px 10px;
+    font-size: 14px;
+}
+
+.popup-divider {
+    height: 1px;
+    background: #eee;
+    margin: 8px 0;
+}
+
+.profile-popup a {
+    display: block;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.profile-popup a:hover {
+    background: #f3f4f6;
+}

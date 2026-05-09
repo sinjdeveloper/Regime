@@ -1,42 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+   
+
     const profileBtn = document.querySelector(".btn-icon");
+    if (profileBtn) {
 
-    if (!profileBtn) return;
+        const popup = document.createElement("div");
+        popup.className = "profile-popup";
 
-    const popup = document.createElement("div");
-    popup.classList.add("profile-popup");
-    popup.style.position = "absolute";
-    popup.style.top = "70px";
-    popup.style.right = "20px";
-    popup.style.background = "#fff";
-    popup.style.border = "1px solid #ddd";
-    popup.style.padding = "15px";
-    popup.style.borderRadius = "10px";
-    popup.style.boxShadow = "0 5px 15px rgba(0,0,0,0.1)";
-    popup.style.display = "none";
-    popup.style.zIndex = "1000";
+        popup.innerHTML = `
+            <a href="/login"> Non connecté</a>
+            <div class="popup-divider"></div>
+            <a href="/login"> Modifier objectifs</a>
+            <a href="/login">Modifier durée</a>
+            <a href="/login"> Entrer code</a>
+        `;
 
-    popup.innerHTML = `
-        <p><strong>Non connecté</strong></p>
-        <hr>
-        <a href="/login">Modifier objectifs</a><br>
-        <a href="/login">Modifier durée</a><br>
-        <a href="/login">Entrer code</a>
-    `;
+        document.body.appendChild(popup);
 
-    document.body.appendChild(popup);
+        let isOpen = false;
 
-    profileBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        popup.style.display = popup.style.display === "none" ? "block" : "none";
-    });
+        function positionPopup() {
+            const rect = profileBtn.getBoundingClientRect();
 
-    document.addEventListener("click", (e) => {
-        if (!popup.contains(e.target) && !profileBtn.contains(e.target)) {
-            popup.style.display = "none";
+            popup.style.top = (rect.bottom + window.scrollY + 10) + "px";
+            popup.style.left = (rect.left + window.scrollX - 120) + "px";
         }
-    });
+
+        profileBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                positionPopup();
+                popup.classList.add("show");
+            } else {
+                popup.classList.remove("show");
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!popup.contains(e.target) && !profileBtn.contains(e.target)) {
+                popup.classList.remove("show");
+                isOpen = false;
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (isOpen) positionPopup();
+        });
+    }
+
 
     const buttons = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.card');
