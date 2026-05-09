@@ -40,4 +40,38 @@ class ObjectifModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getAvailableGoals()
+    {
+        $db = db_connect();
+        return $db->table('objectif')->get()->getResultArray();
+    }
+
+    public function validateMax3($goals)
+    {
+        $errors = [];
+
+        if (!is_array($goals)) {
+            $errors[] = "Invalid data format";
+            return ['status' => false, 'errors' => $errors];
+        }
+
+        if (count($goals) > 3) {
+            $errors[] = "Vous ne pouvez sélectionner que 3 objectifs maximum";
+        }
+
+        return [
+            'status' => empty($errors),
+            'errors' => $errors,
+            'data' => $goals
+        ];
+    }
+
+    public function storeDraft($goals)
+    {
+        return [
+            'goals' => $goals
+        ];
+    }
+
 }
