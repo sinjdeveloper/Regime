@@ -45,4 +45,9 @@ class RegimeModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getDemo()
+    {
+        return $this->limit(3)->findAll();
+    }
 }
