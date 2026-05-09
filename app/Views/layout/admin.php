@@ -2,15 +2,15 @@
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php $pageTitle = trim($this->renderSection('title')); ?>
     <title><?= esc($pageTitle ? $pageTitle . ' | Administration' : 'Administration') ?></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= base_url('assets/css/globals.css') ?>">
-  <link rel="stylesheet" href="<?= base_url('assets/css/admin.css') ?>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('assets/css/globals.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin.css') ?>">
 
     <script src="<?= base_url('assets/js/global.js') ?>" defer></script>
 </head>
@@ -42,16 +42,16 @@
         </header>
     </section>
     <?php
-        $path = (string) service('uri')->getPath();
-        $isDashboard = strpos($path, 'admin/dashboard') === 0;
-        $isSports = strpos($path, 'admin/sports') === 0;
+    $path = (string) service('uri')->getPath();
+    $isDashboard = strpos($path, 'admin/dashboard') === 0;
+    $isSports = strpos($path, 'admin/sports') === 0;
     ?>
 
     <section id="section-dashboard" class="app-wrapper">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <nav class="sidebar-nav">
-                    <a href="<?= site_url('admin/dashboard') ?>" class="nav-item<?= $isDashboard ? ' active' : '' ?>">
+                    <a href="<?= site_url('admin/infos') ?>" class="nav-item<?= $isDashboard ? ' active' : '' ?>">
                         <img src="<?= base_url('assets/images/admin') ?>/20_531.svg" alt="Dashboard">
                         <span>Dashboard</span>
                     </a>
@@ -79,6 +79,11 @@
             <?= $this->renderSection('content') ?>
         </div>
     </section>
+    <!-- Floating Action Button -->
+    <a class="fab-public" href="<?= site_url('/logout') ?>">
+        <img src="<?= base_url('assets/images/admin') ?>/20_863.svg" alt="Public">
+        Public
+    </a>
 
 </body>
 

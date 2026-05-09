@@ -8,8 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'HomeController::index');
 $routes->get('/login', 'AdminController::loginPage');
 $routes->post('admin/login', 'AuthController::loginAdmin');
-$routes->get('/logout','AuthController::logout');
+$routes->get('/logout', 'AuthController::logout');
 $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('infos','DashboardController::index');
     $routes->get(
         'dashboard',
         'AdminController::index'
@@ -17,16 +18,18 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->group('regimes', function ($routes) {
         $routes->post('store', 'RegimeController::create');
         $routes->post('update/(:num)', 'RegimeController::update/$1');
-        $routes->post('delete/(:num)','RegimeController::delete/$1');   
+        $routes->post('delete/(:num)', 'RegimeController::delete/$1');
     });
-    $routes->group('sports',function ($routes) { 
-        $routes->get('index' , 'AdminController::sportIndex');
+    $routes->group('sports', function ($routes) {
+        $routes->get('index', 'AdminController::sportIndex');
         $routes->post('store', 'AdminController::createSport');
-        $routes->post('update/(:num)','AdminController::updateSport/$1');
-        $routes->post('delete/(:num)','AdminController::deleteSport/$1');   
-
-
+        $routes->post('update/(:num)', 'AdminController::updateSport/$1');
+        $routes->post('delete/(:num)', 'AdminController::deleteSport/$1');
     });
+    $routes->group('api', function ($routes) {
+        $routes->get('repartition','DashboardController::getRepartition');
+        $routes->get('gold','DashboardController::getRepartitionGold');
+        });
 });
 
 // API Routes - Profile & Goals
