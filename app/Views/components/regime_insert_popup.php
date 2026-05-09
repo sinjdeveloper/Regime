@@ -26,7 +26,7 @@
         </div>
 
         <div class="modal-body">
-            <form id="regime-form" class="recipe-form" action="<?= site_url('admin/regime/store') ?>" method="post">
+            <form id="regime-form" class="recipe-form" action="<?= site_url('admin/regimes/store') ?>" method="post">
                 <?= csrf_field() ?>
 
                 <div class="form-group">

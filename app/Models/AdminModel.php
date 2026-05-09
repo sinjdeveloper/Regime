@@ -11,13 +11,13 @@ class AdminModel extends Model
     protected $allowedFields    = [];
 
     function getRegimes(){
-        return $this->table('regime')->countAll();
+        return $this->db->table('regime')->countAllResults();
     }
     function getUtilisateurs(){
-        return $this->table('client')->countAll();
+        return $this->db->table('client')->countAllResults();
     }
     function getTransactions(){
-        return $this->table('historiquetransaction')->countAll();
+        return $this->db->table('historiquetransaction')->countAllResults();
     }
     function getStats(){
         return [

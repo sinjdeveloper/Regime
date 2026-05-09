@@ -14,8 +14,9 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
         'dashboard',
         'AdminController::index'
     );
-    $routes->group('regime', function ($routes) {
+    $routes->group('regimes', function ($routes) {
         $routes->post('store', 'RegimeController::create');
+        $routes->post('delete/(:num)','RegimeController::delete/$1');   
     });
 });
 
