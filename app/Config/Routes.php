@@ -21,6 +21,8 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     });
     $routes->group('sports',function ($routes) { 
         $routes->get('index' , 'AdminController::sportIndex');
+        $routes->post('store', 'AdminController::createSport');
+
     });
 });
 

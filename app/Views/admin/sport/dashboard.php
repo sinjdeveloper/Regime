@@ -15,7 +15,7 @@ Sports
         </div>
     </div>
 
-    <?= $this->include('components/regime_insert_popup.php') ?>
+    <?= $this->include('components/sport_insert_popup.php') ?>
 
     <div class="table-section">
         <div class="table-toolbar">
@@ -26,7 +26,7 @@ Sports
                 <button class="filter-btn active">Tous</button>
             </div>
 
-            <button class="btn-primary btn-new" type="button" disabled>
+            <button class="btn-primary btn-new" type="button" id="btn-ajout-sport" >
                 + Nouveau sport
             </button>
         </div>
@@ -77,7 +77,6 @@ Sports
     </div>
 </main>
 
-<!-- Floating Action Button -->
 <a class="fab-public" href="<?= site_url('/logout') ?>">
     <img src="<?= base_url('assets/images/admin') ?>/20_863.svg" alt="Public">
     Public

@@ -38,5 +38,17 @@ class AdminController extends BaseController
         );
 
     }
+    public function createSport(){
+         $model = new SportModel();
+        $data = $this->request->getPost();
+        
+        if (!$model->addSport($data)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+        return redirect()->to('/admin/sports/dashboard')
+            ->with('success', 'Regime ajouté avec succès');
+    }
 
 }
