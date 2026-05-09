@@ -88,4 +88,18 @@ class SessionService
         self::start();
         $_SESSION['signup_draft']['goals'] = is_array($goals) ? $goals : [];
     }
+
+    public static function createUserSession($user)
+    {
+        self::start();
+
+        $_SESSION['user'] = $user;
+    }
+
+    public static function clearSignupDraft()
+    {
+        self::start();
+
+        unset($_SESSION['signup_draft']);
+    }
 }

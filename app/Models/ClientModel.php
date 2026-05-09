@@ -25,7 +25,7 @@ class ClientModel extends Model
     protected $validationRules      = [
         'id_user'       => 'required|integer|greater_than[0]',
         'email'         => 'required|valid_email|is_unique[client.email]',
-        'genre'         => 'required|in_list[masculin,féminin,autre]',
+        'genre' => 'required|in_list[homme,femme,autre]',
         'dateNaissance' => 'required|valid_date[Y-m-d]',
         'poids'         => 'required|numeric|greater_than[0]',
         'taille'        => 'required|numeric|greater_than[0]',
@@ -105,44 +105,24 @@ class ClientModel extends Model
     {
         $errors = [];
 
-        if (empty($data['prenom'])) {
-            $errors[] = "Prénom requis";
-        }
-
-        if (empty($data['nom'])) {
-            $errors[] = "Nom requis";
-        }
-
-        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors[] = "Email invalide";
-        }
-
-        if (empty($data['genre'])) {
-            $errors[] = "Genre requis";
-        }
-
-        if (empty($data['password'])) {
-            $errors[] = "Mot de passe requis";
-        }
-
-        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) {
-            $errors[] = "Les mots de passe ne correspondent pas";
-        }
+        if (empty($data['prenom'])) $errors[] = "Prénom requis";
+        if (empty($data['nom']))    $errors[] = "Nom requis";
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors[] = "Email invalide";
+        if (empty($data['genre'])) $errors[] = "Genre requis";
+        if (empty($data['password'])) $errors[] = "Mot de passe requis";
+        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) $errors[] = "Les mots de passe ne correspondent pas";
 
         if (!empty($errors)) {
-            return [
-                'status' => false,
-                'errors' => $errors
-            ];
+            return ['status' => false, 'errors' => $errors];
         }
 
         return [
             'status' => true,
             'data' => [
-                'prenom' => $data['prenom'],
-                'nom' => $data['nom'],
-                'email' => $data['email'],
-                'genre' => $data['genre'],
+                'prenom'        => $data['prenom'],   // must be here
+                'nom'           => $data['nom'],       // must be here
+                'email'         => $data['email'],
+                'genre'         => $data['genre'],
                 'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT)
             ]
         ];
@@ -174,5 +154,15 @@ class ClientModel extends Model
                 'taille' => (float) $data['taille']
             ]
         ];
+    }
+
+    public function insertUser($data)
+    {
+        return $this->db->table('user')->insert($data);
+    }
+
+    public function insertClient($data)
+    {
+        return $this->db->table('client')->insert($data);
     }
 }

@@ -49,25 +49,34 @@
                             <span class="dot"></span>
                         </div>
 
+                        <!-- ERROR DISPLAY -->
+                        <?php if (!empty(session()->getFlashdata('errors'))): ?>
+                            <div style="color: red; margin-bottom: 15px;">
+                                <?php foreach (session()->getFlashdata('errors') as $msg): ?>
+                                    <p><?= esc((string)$msg) ?></p>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+
                         <h2 class="form-title">Choisissez vos objectifs</h2>
                         <p class="form-subtitle">Sélectionnez votre objectif</p>
 
-                        <form method="POST" action="<?= base_url('/signup/goals') ?>">
+                        <form method="POST" action="<?= base_url('/signup/complete') ?>" id="goals-form">
+                            <?= csrf_field() ?>
 
                             <div class="options-list">
 
-                                <?php foreach (($goals ?? []) as $goal): ?>
+                                <?php foreach (($goals ?? []) as $i => $goal): ?>
 
                                     <label class="goal-option">
-
-                    
                                         <span class="option-text">
-                                            <?= $goal['libelle'] ?>
+                                            <?= esc((string)($goal['libelle'] ?? '')) ?>
                                         </span>
 
                                         <input type="checkbox"
-                                            name="goals[]"
-                                            value="<?= $goal['id'] ?>"
+                                            name="goals[<?= $i ?>][selected]"
+                                            value="1"
                                             class="hidden-checkbox">
 
                                         <span class="custom-checkbox">
@@ -75,6 +84,18 @@
                                         </span>
 
                                     </label>
+
+                                    <div class="goal-extra" id="extra-<?= $i ?>">
+                                        <input type="number"
+                                            name="goals[<?= $i ?>][poids_cible]"
+                                            step="0.1" min="20" max="300"
+                                            placeholder="Poids cible (kg)">
+                                        <input type="number"
+                                            name="goals[<?= $i ?>][duree]"
+                                            min="1" max="730"
+                                            placeholder="Durée (jours)">
+                                        <input type="hidden" name="goals[<?= $i ?>][objectif_id]" value="<?= $goal['id'] ?>">
+                                    </div>
 
                                 <?php endforeach; ?>
 
@@ -92,6 +113,11 @@
 
         </div>
     </section>
+    <script>
+    document.getElementById('goals-form').addEventListener('submit', function(e) {
+        // TEMP: disabled for testing
+    });
+</script>
 
 </body>
 

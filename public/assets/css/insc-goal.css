@@ -245,6 +245,27 @@ body {
     cursor: pointer;
 }
 
+.goal-extra {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px 16px 14px;
+    margin-top: -10px;
+}
+
+.goal-extra input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+}
+
+.goal-option:has(.hidden-checkbox:checked)~.goal-extra {
+    display: grid;
+}
+
 /* =========================
    RESPONSIVE
 ========================= */

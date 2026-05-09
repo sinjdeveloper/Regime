@@ -11,6 +11,11 @@ $routes->post('admin/login', 'AuthController::loginAdmin');
 $routes->get('/user/login', 'UserController::loginPage');
 $routes->post('/user/login', 'UserController::login');
 $routes->get('/logout', 'AuthController::logout');
+$routes->get('/logout','AuthController::logout');
+
+// Client Dashboard
+$routes->get('/dashboard', 'ClientController::dashboard');
+
 $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('infos','DashboardController::index');
     $routes->get(
@@ -57,6 +62,6 @@ $routes->get('/signup/health', 'AuthController::showHealthForm');
 $routes->post('/signup/health', 'AuthController::storeHealthInfo');
 
 $routes->get('/signup/goals', 'ObjectifController::showSelection');
-$routes->post('/signup/goals', 'ObjectifController::storeGoals');
+// $routes->post('/signup/goals', 'ObjectifController::storeGoals');
 
 $routes->post('/signup/complete', 'AuthController::completeSignup');

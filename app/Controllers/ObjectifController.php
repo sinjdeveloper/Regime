@@ -8,6 +8,7 @@ use App\Models\ObjectifModel;
 use App\Models\GoalPoidsModel;
 use App\Models\ClientModel;
 use App\Services\SessionService;
+use App\Controllers\AuthController;
 
 class ObjectifController extends BaseController
 {
@@ -191,15 +192,19 @@ class ObjectifController extends BaseController
 
     public function showSelection()
     {
-        SessionService::initSignupDraft();
+        $model = new ObjectifModel();
 
-        $model = new \App\Models\ObjectifModel();
+        // Get raw result and force flat associative arrays
+        $raw   = $model->findAll();
+        $goals = array_map(function ($g) {
+            return is_array($g) ? $g : (array)$g;
+        }, $raw);
 
-        $data['goals'] = $model->getAvailableGoals();
+        // Dump to log so we can see exactly what the view receives
+        log_message('debug', 'GOALS DUMP: ' . json_encode($goals));
 
-        return view('signup/goals', $data);
+        return view('signup/goals', ['goals' => $goals]);
     }
-
     public function showGoals()
     {
         SessionService::initSignupDraft();
@@ -214,22 +219,9 @@ class ObjectifController extends BaseController
     }
 
     public function storeGoals()
-    {
-        $goals = $this->request->getPost('goals');
-
-        $model = new \App\Models\ObjectifModel();
-
-        $result = $model->validateMax3($goals);
-
-        if (!$result['status']) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('errors', $result['errors']);
-        }
-
-        SessionService::updateGoals($result['data']);
-
-        return redirect()->to('/signup/complete');
-    }
+{
+    // Just forward to AuthController::completeSignup
+    $auth = new AuthController();
+    return $auth->completeSignup();
+}
 }

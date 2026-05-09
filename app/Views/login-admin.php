@@ -74,7 +74,7 @@
 
             <div class="signup-prompt">
               <span class="text-muted">Don't have an account? </span>
-              <a href="#" class="link-primary">Sign up</a>
+              <a href="<?= base_url('/signup') ?>" class="link-primary">Sign up</a>
             </div>
           </div>
         </div>

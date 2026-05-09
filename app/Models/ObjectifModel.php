@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class ObjectifModel extends Model
 {
-    protected $table            = 'objectifs';
+    protected $table            = 'objectif';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -43,27 +43,27 @@ class ObjectifModel extends Model
 
     public function getAvailableGoals()
     {
-        $db = db_connect();
-        return $db->table('objectif')->get()->getResultArray();
+        return $this->findAll(); // uses $this->table, no mismatch possible
     }
 
     public function validateMax3($goals)
     {
         $errors = [];
 
-        if (!is_array($goals)) {
-            $errors[] = "Invalid data format";
-            return ['status' => false, 'errors' => $errors];
+        // Handle null or missing goals
+        if (empty($goals) || !is_array($goals)) {
+            $goals = [];
         }
 
-        if (count($goals) > 1) {
-            $errors[] = "Vous ne pouvez sélectionner que 1 objectif maximum";
+        // Check max 3 goals
+        if (count($goals) > 3) {
+            $errors[] = "Vous ne pouvez sélectionner que 3 objectifs maximum";
         }
 
         return [
             'status' => empty($errors),
             'errors' => $errors,
-            'data' => $goals
+            'data' => is_array($goals) ? $goals : []
         ];
     }
 
@@ -74,4 +74,13 @@ class ObjectifModel extends Model
         ];
     }
 
+    public function attachToClient($clientId, $goalIds)
+    {
+        foreach ($goalIds as $goalId) {
+            $this->db->table('goalpoids')->insert([
+                'client_id' => $clientId,
+                'objectif_id' => $goalId
+            ]);
+        }
+    }
 }

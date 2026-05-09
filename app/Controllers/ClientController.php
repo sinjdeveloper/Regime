@@ -17,10 +17,12 @@ class ClientController extends BaseController
 {
     public function dashboard()
     {
-        if(!$this->session->has('user_id')){
+        $userSession = session()->get('user');
+        
+        if(!$userSession){
             return redirect()->to('/login');
         }
-        $userId = $this->session->get('user_id');
+        $userId = $userSession['id'];
 
         $clientModel = new ClientModel();
         $client = $clientModel->where('id_user', $userId)->first();
@@ -60,14 +62,15 @@ class ClientController extends BaseController
     public function getProfilePopup()
     {
         // Vérifier authentification
-        if (!$this->session->has('user_id')) {
+        $userSession = session()->get('user');
+        if (!$userSession) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Non authentifié'
             ])->setStatusCode(401);
         }
 
-        $userId = $this->session->get('user_id');
+        $userId = $userSession['id'];
         $clientModel = new ClientModel();
         $userModel = new \App\Models\UserModel();
 
