@@ -1,11 +1,22 @@
+/* RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   background-color: #e2e2e2;
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* BUTTON RESET */
+button {
+  font-family: inherit;
 }
