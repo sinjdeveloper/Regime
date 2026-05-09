@@ -121,8 +121,8 @@ class ClientModel extends Model
             $errors[] = "Genre requis";
         }
 
-        if (empty($data['password']) || strlen($data['password']) < 6) {
-            $errors[] = "Mot de passe trop court";
+        if (empty($data['password'])) {
+            $errors[] = "Mot de passe requis";
         }
 
         if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) {

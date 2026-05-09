@@ -46,3 +46,6 @@ $routes->post('api/wallet/redeem-code', 'WalletController::redeemCode');
 
 $routes->get('/signup', 'AuthController::showSignup');
 $routes->post('/signup/user', 'AuthController::storeUserInfo');
+
+$routes->get('/signup/health', 'AuthController::showHealthForm');
+$routes->post('/signup/health', 'AuthController::storeHealthInfo');
