@@ -23,7 +23,7 @@ class RegimeModel extends Model
 
     // Validation
     protected $validationRules = [
-        'libelle' => 'required|string|min_length[3]|max_length[255]',
+        'libelle' => 'required|min_length[3]|max_length[255]|is_unique[regime.libelle]',
         'description' => 'required|string|min_length[10]',
         'variation_poids' => 'required|numeric|greater_than_equal_to[-100]|less_than_equal_to[100]',
         'pourcentage_viande' => 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]',
@@ -36,6 +36,7 @@ class RegimeModel extends Model
             'required' => 'Le nom de la recette est obligatoire.',
             'min_length' => 'Le nom de la recette doit contenir au moins 3 caractères.',
             'max_length' => 'Le nom de la recette ne doit pas dépasser 255 caractères.',
+            'is_unique' => 'Ce régime existe déjà.',
         ],
 
         'description' => [

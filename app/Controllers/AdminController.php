@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AdminModel;
 
 use App\Models\RegimeModel;
+use App\Models\SportModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AdminController extends BaseController
@@ -26,5 +27,56 @@ class AdminController extends BaseController
             'regimes' => $regimes
         ]);
     }
+    public function sportIndex()
+    {
+        $model = new SportModel();
+        $sports = $model->findAllSport();
 
+        return view(
+            'admin/sport/dashboard',
+            ['sports' => $sports]
+        );
+
+    }
+    public function createSport()
+    {
+        $model = new SportModel();
+        $data = $this->request->getPost();
+
+        if (!$model->addSport($data)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport ajouté avec succès');
+    }
+    public function updateSport($id)
+    {
+        $model = new SportModel();
+        $data = $this->request->getPost();
+
+        unset($data['id']);
+
+        if (!$model->updateSport($id, $data)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport mis à jour avec succès');
+
+    }
+    public function deleteSport($id)
+    {
+        $model = new SportModel();
+        if (!$model->deleteSport($id)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport supprimé avec succès');
+    }
 }

@@ -26,4 +26,5 @@ class AdminModel extends Model
             "transactions" => $this->getTransactions()
         ];
     }
+    
 }
