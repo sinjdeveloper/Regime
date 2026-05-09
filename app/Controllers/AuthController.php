@@ -10,9 +10,7 @@ use App\Models\ObjectifModel;
 
 class AuthController extends BaseController
 {
-    public function loginClient(){
-
-    }
+    public function loginClient() {}
     public function loginAdmin()
     {
         $model = new UserModel();
@@ -41,10 +39,14 @@ class AuthController extends BaseController
 
     public function showSignup()
     {
-        // Initialize draft only if not already started
+        session()->remove('user');
+
         if (!session()->get('signup_draft')) {
             session()->set('signup_draft', ['user' => [], 'health' => []]);
         }
+
+        // TEMP: dump all flash data
+        var_dump(session()->getFlashdata('errors'));
 
         return view('signup/user-info');
     }
@@ -102,10 +104,7 @@ class AuthController extends BaseController
     public function completeSignup()
     {
 
-        dd([
-            'session' => session()->get('signup_draft'),
-            'post'    => $this->request->getPost('goals')
-        ]);
+
         $draft         = session()->get('signup_draft') ?? [];
         $userSession   = $draft['user']   ?? [];
         $healthSession = $draft['health'] ?? [];
@@ -181,7 +180,8 @@ class AuthController extends BaseController
             }
 
             // Insert client
-            $clientId = $clientModel->skipValidation(true)->insert([
+            // REPLACE WITH THIS:
+            $clientModel->skipValidation(true)->insert([
                 'id_user'       => $userId,
                 'email'         => $userSession['email'],
                 'genre'         => $userSession['genre'],
@@ -191,6 +191,7 @@ class AuthController extends BaseController
                 'estGold'       => 0,
                 'argent'        => 0
             ]);
+            $clientId = $clientModel->getInsertID();
 
             if (!$clientId) {
                 throw new \Exception('Erreur création client: ' . implode(', ', $clientModel->errors()));

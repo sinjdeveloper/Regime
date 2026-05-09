@@ -70,7 +70,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <form method="POST" action="/signup/user" class="signup-form">
+                        <form method="POST" action="<?= base_url('signup/user') ?>" class="signup-form">
 
                             <div class="form-row split">
 
