@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'HomeController::index');
 $routes->get('/login', 'AdminController::loginPage');
 $routes->post('admin/login', 'AuthController::loginAdmin');
 $routes->get('/logout','AuthController::logout');
