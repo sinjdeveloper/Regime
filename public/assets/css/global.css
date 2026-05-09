@@ -1,0 +1,141 @@
+:root {
+    /* ===== PRIMARY THEME ===== */
+    --primary: #663366;
+    --primary-dark: #4b244b;
+
+    --secondary: #666699;
+    --secondary-hover: #58587e;
+
+    /* ===== BACKGROUNDS ===== */
+    --bg-light: #f8fafc;
+    --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --bg-dark: #0f172b;
+
+    /* ===== TEXT COLORS ===== */
+    --text-dark: #0f172b;
+    --text-gray: #45556c;
+    --text-muted: #62748e;
+    --text-light: #ffffff;
+
+    /* ===== ACCENTS ===== */
+    --accent: #a3a101;
+    --accent-yellow: #a3a101;
+    --accent-blue: #666699;
+    --accent-green: #008236;
+    --accent-orange: #bb4d00;
+
+    /* ===== BORDER / UI ===== */
+    --border: #e2e8f0;
+    --shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* ===== BASE RESET ===== */
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-gradient);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* ===== LINKS ===== */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ===== LISTS ===== */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ===== BUTTON FONT ===== */
+button {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== MAIN WRAPPER ===== */
+.app-wrapper {
+    width: 100%;
+    max-width: none;
+    background: var(--bg-gradient);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px var(--shadow);
+}
+
+/* ===== BASE BUTTON SYSTEM ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* ===== PRIMARY BUTTON (Calculer IMC) ===== */
+.btn-primary {
+    background-color: var(--secondary);
+    color: var(--text-light);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-hover);
+}
+
+/* ===== GOLD BUTTON (Offre Gold) ===== */
+.btn-gold {
+    background: linear-gradient(135deg, #d4af37, #a37b00);
+    color: #fff;
+}
+
+.btn-gold:hover {
+    opacity: 0.9;
+}
+
+/* ===== OUTLINE BUTTON ===== */
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--text-light);
+    color: var(--text-light);
+}
+
+.btn-outline:hover {
+    background: var(--text-light);
+    color: var(--primary);
+}
+
+/* ===== ICON BUTTON ===== */
+.btn-icon {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
