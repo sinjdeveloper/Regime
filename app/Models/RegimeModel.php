@@ -9,10 +9,10 @@ class RegimeModel extends Model
     protected $table = 'regime';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix','image'];
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
+    protected $allowedFields = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix', 'image'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -114,5 +114,18 @@ class RegimeModel extends Model
     public function findAllRegime()
     {
         return $this->findAll();
+    }
+    public function getPopularRegimes()
+    {
+        $result = $this->select('COUNT(*) AS nombre, r.libelle')
+            ->from('regimeclient rc')
+            ->join('regime r', 'r.id = rc.regime_id')
+            ->groupBy('rc.regime_id')
+            ->orderBy('nombre', 'DESC')
+            ->limit(5)
+            ->get()
+            ->getResultArray();
+
+        return $result;
     }
 }

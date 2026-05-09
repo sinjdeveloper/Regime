@@ -28,7 +28,11 @@ class DashboardController extends BaseController
         $repartition = $model->getRepartitionGold();
         return response()->setJSON($repartition);
     }
-
+    public function getPopularRegimes(){
+        $model = new RegimeModel();
+        $popular = $model->getPopularRegimes();
+        return response()->setJSON($popular);
+    }
 
 
 }

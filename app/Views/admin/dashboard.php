@@ -5,7 +5,8 @@ Régimes
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="<?= base_url('assets/js/admin/bar_chart.js') ?>" defer></script>
 <main class="main-content">
 
   <!-- Page Header -->
@@ -17,6 +18,9 @@ Régimes
   </div>
 
   <!-- Stats Cards -->
+  <div style="width: 400px; min-height: 200px;">
+    <canvas id="regimeChart"></canvas>
+  </div>
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon-wrapper">
@@ -123,10 +127,5 @@ Régimes
   </div>
 </main>
 
-<!-- Floating Action Button -->
-<a class="fab-public" href="<?= site_url('/logout') ?>">
-  <img src="<?= base_url('assets/images/admin') ?>/20_863.svg" alt="Public">
-  Public
-</a>
 
 <?= $this->endSection() ?>
