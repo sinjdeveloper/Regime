@@ -82,4 +82,10 @@ class SessionService
 
         return $temp;
     }
+
+    public static function updateGoals($goals)
+    {
+        self::start();
+        $_SESSION['signup_draft']['goals'] = is_array($goals) ? $goals : [];
+    }
 }

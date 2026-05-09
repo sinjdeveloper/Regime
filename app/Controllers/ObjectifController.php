@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ObjectifModel;
 use App\Models\GoalPoidsModel;
 use App\Models\ClientModel;
+use App\Services\SessionService;
 
 class ObjectifController extends BaseController
 {
@@ -179,7 +180,6 @@ class ObjectifController extends BaseController
                     'nombre_objectifs' => count($objectifs)
                 ]
             ]);
-
         } catch (\Exception $e) {
             $db->transRollback();
             return $this->response->setJSON([
@@ -187,5 +187,49 @@ class ObjectifController extends BaseController
                 'message' => 'Erreur serveur: ' . $e->getMessage()
             ])->setStatusCode(500);
         }
+    }
+
+    public function showSelection()
+    {
+        SessionService::initSignupDraft();
+
+        $model = new \App\Models\ObjectifModel();
+
+        $data['goals'] = $model->getAvailableGoals();
+
+        return view('signup/goals', $data);
+    }
+
+    public function showGoals()
+    {
+        SessionService::initSignupDraft();
+
+        $model = new \App\Models\ObjectifModel();
+
+        $goals = $model->getAvailableGoals();
+
+        return view('signup/goals', [
+            'goals' => $goals ?? []
+        ]);
+    }
+
+    public function storeGoals()
+    {
+        $goals = $this->request->getPost('goals');
+
+        $model = new \App\Models\ObjectifModel();
+
+        $result = $model->validateMax3($goals);
+
+        if (!$result['status']) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $result['errors']);
+        }
+
+        SessionService::updateGoals($result['data']);
+
+        return redirect()->to('/signup/complete');
     }
 }

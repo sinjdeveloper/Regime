@@ -56,8 +56,8 @@ class ObjectifModel extends Model
             return ['status' => false, 'errors' => $errors];
         }
 
-        if (count($goals) > 3) {
-            $errors[] = "Vous ne pouvez sélectionner que 3 objectifs maximum";
+        if (count($goals) > 1) {
+            $errors[] = "Vous ne pouvez sélectionner que 1 objectif maximum";
         }
 
         return [

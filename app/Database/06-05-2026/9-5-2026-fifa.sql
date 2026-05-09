@@ -66,3 +66,8 @@ UPDATE sport SET image = 'yoga.jpg' WHERE libelle = 'Yoga Relax';
 UPDATE sport SET image = 'hiit.jpg' WHERE libelle = 'HIIT Extreme';
 UPDATE sport SET image = 'pilates.jpg' WHERE libelle = 'Pilates Core';
 UPDATE sport SET image = 'musculation.jpg' WHERE libelle = 'Musculation Pro';
+
+INSERT INTO objectif (libelle) VALUES
+('Augmenter son poids'),
+('Réduire son poids'),
+('Atteindre son IMC idéal');
