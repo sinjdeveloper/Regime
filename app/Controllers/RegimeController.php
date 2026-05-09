@@ -77,7 +77,6 @@ class RegimeController extends BaseController
         $model = new RegimeModel();
         $data = $this->request->getPost();
 
-        // Permettre l'update sans bloquer sur l'unicité du libellé (même en gardant la valeur inchangée)
         $model->setValidationRule('libelle', 'required|min_length[3]|max_length[255]|is_unique[regime.libelle,id,' . (int) $id . ']');
 
         unset($data['id']);

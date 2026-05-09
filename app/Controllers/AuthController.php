@@ -9,6 +9,9 @@ use App\Services\SessionService;
 
 class AuthController extends BaseController
 {
+    public function loginClient(){
+
+    }
     public function loginAdmin()
     {
         $model = new UserModel();
@@ -34,9 +37,6 @@ class AuthController extends BaseController
         session()->destroy();
         return redirect()->to('/login');
     }
-
-
-
 
     public function showSignup()
     {
