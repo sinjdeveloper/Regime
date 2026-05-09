@@ -1,0 +1,22 @@
+:root {
+  --primary-color: #663366;
+  --accent-color: #ffb900;
+  --text-dark: #000000;
+  --text-gray: #4a5565;
+  --bg-gray: #e2e2e2;
+  --white: #ffffff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--bg-gray);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}

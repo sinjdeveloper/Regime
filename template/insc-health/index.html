@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Page</title>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style id="sections-styles">
+/* CSS for section section:Onboarding */
+#section-onboarding {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.split-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.left-panel {
+  flex: 1;
+  background-image: linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)), url('images/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.brand-large {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-large .highlight {
+  color: #ffb900;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 448px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.right-panel {
+  flex: 1;
+  background-color: #e2e2e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 448px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  background-color: #663366;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #ffffff;
+}
+
+.brand-small {
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brand-small .highlight {
+  color: #ffb900;
+}
+
+.card-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #663366;
+  opacity: 0.5;
+}
+
+.dot.active {
+  opacity: 1;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+  margin: 0 0 32px 0;
+  max-width: 300px;
+  line-height: 1.4;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 16px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 12px;
+  color: #000000;
+  font-weight: 500;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  height: 51px;
+  border: 1px solid rgba(0, 0, 0, 0.29);
+  border-radius: 10px;
+  padding: 0 16px 0 48px;
+  font-size: 14px;
+  color: #000000;
+  background-color: transparent;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: #663366;
+}
+
+.form-input::placeholder {
+  color: rgba(0, 0, 0, 0.27);
+}
+
+.form-select {
+  padding: 0 40px 0 16px;
+  appearance: none;
+  border: 1px solid rgba(101, 101, 152, 0.98);
+  cursor: pointer;
+}
+
+.select-icon {
+  position: absolute;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.btn-primary {
+  width: 100%;
+  height: 44px;
+  background-color: #663366;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1), 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s, transform 0.1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary:hover {
+  background-color: #552255;
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+  .split-layout {
+    flex-direction: column;
+  }
+  .left-panel {
+    padding: 60px 20px;
+    min-height: 400px;
+  }
+  .right-panel {
+    padding: 40px 20px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+  <script src="global.js" defer></script>
+</head>
+<body>
+<section id="section-onboarding">
+  <div class="split-layout">
+    <div class="left-panel">
+      <div class="brand-large">
+        <span>Vary</span><span class="highlight">'</span><span>Ena</span>
+      </div>
+      <p class="subtitle">Rejoignez notre communauté et atteignez vos objectifs de santé</p>
+    </div>
+    <div class="right-panel">
+      <div class="card">
+        <div class="card-header">
+          <div class="logo-icon-merged" style="position: relative; width: 40px; height: 40px;">
+            <!--merged image-->
+            <img src="images/76_241.svg" style="position: absolute; left: 1px; top: 1px; width: 38px; height: 39px;" alt="">
+            <img src="images/76_244.svg" style="position: absolute; left: 15px; top: 16.5px; width: 8px; height: 13.5px;" alt="">
+            <img src="images/76_249.svg" style="position: absolute; left: 16px; top: 12px; width: 3px; height: 6.5px;" alt="">
+            <img src="images/76_252.svg" style="position: absolute; left: 24px; top: 11.5px; width: 3.75px; height: 4.625px;" alt="">
+            <img src="images/76_255.svg" style="position: absolute; left: 13px; top: 25px; width: 2px; height: 2px;" alt="">
+            <img src="images/76_258.svg" style="position: absolute; left: 19px; top: 22px; width: 2px; height: 2px;" alt="">
+            <img src="images/76_261.svg" style="position: absolute; left: 25px; top: 20.5px; width: 2px; height: 2px;" alt="">
+          </div>
+          <div class="brand-small">
+            <span>Vary</span><span class="highlight">'</span><span>Ena</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="pagination">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+          </div>
+          <h2 class="heading">Help us match you to the perfect lifestyle</h2>
+          <form class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Height (cm)</label>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="images/76_290.svg" alt="Height Icon">
+                </div>
+                <input type="number" class="form-input" placeholder="175">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Weight (kg)</label>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="images/76_301.svg" alt="Weight Icon">
+                </div>
+                <input type="number" class="form-input" placeholder="70">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Age</label>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="images/76_312.svg" alt="Age Icon">
+                </div>
+                <input type="number" class="form-input" placeholder="25">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Activity Level</label>
+              <div class="input-wrapper">
+                <select class="form-select">
+                  <option value="" disabled selected></option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+                <div class="select-icon">
+                  <img src="images/76_323.svg" alt="Dropdown Icon">
+                </div>
+              </div>
+            </div>
+          </form>
+          <button type="button" class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
