@@ -14,6 +14,9 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
         'dashboard',
         'AdminController::index'
     );
+    $routes->group('regime', function ($routes) {
+        $routes->post('store', 'RegimeController::create');
+    });
 });
 
 // API Routes - Profile & Goals

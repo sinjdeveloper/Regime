@@ -25,28 +25,53 @@
             </button>
         </div>
 
-        <!-- Form Content -->
         <div class="modal-body">
-            <form class="recipe-form">
-                <!-- Nom de la recette -->
+            <form id="regime-form" class="recipe-form" action="<?= site_url('admin/regime/store') ?>" method="post">
+                <?= csrf_field() ?>
+
                 <div class="form-group">
                     <label class="form-label">Nom de la recette</label>
-                    <input type="text" class="form-input" placeholder="Ex: Poulet grillé aux légumes">
+                    <input type="text" class="form-input <?= session('errors.libelle') ? 'is-invalid' : '' ?>"
+                        placeholder="Ex: Poulet grillé aux légumes" name="libelle" value="<?= old('libelle') ?>">
+
+                    <?php if (session('errors.libelle')): ?>
+                        <small class="text-danger"><?= session('errors.libelle') ?></small>
+                    <?php endif; ?>
                 </div>
 
-                <!-- Row: Variation & Prix -->
+                <div class="form-group">
+                    <label class="form-label">Description de la recette</label>
+                    <input type="text" class="form-input <?= session('errors.description') ? 'is-invalid' : '' ?>"
+                        placeholder="Description" name="description" value="<?= old('description') ?>">
+
+                    <?php if (session('errors.description')): ?>
+                        <small class="text-danger"><?= session('errors.description') ?></small>
+                    <?php endif; ?>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Estimation de la variation (kg)</label>
-                        <input type="text" class="form-input" placeholder="Ex: -2.5">
+                        <input type="text"
+                            class="form-input <?= session('errors.variation_poids') ? 'is-invalid' : '' ?>"
+                            placeholder="Ex: -2.5" name="variation_poids" value="<?= old('variation_poids') ?>">
+
+                        <?php if (session('errors.variation_poids')): ?>
+                            <small class="text-danger"><?= session('errors.variation_poids') ?></small>
+                        <?php endif; ?>
                     </div>
+
                     <div class="form-group">
                         <label class="form-label">Prix unitaire (€)</label>
-                        <input type="number" class="form-input" placeholder="Ex: 1500">
+                        <input type="number" class="form-input <?= session('errors.prix') ? 'is-invalid' : '' ?>"
+                            placeholder="Ex: 1500" name="prix" value="<?= old('prix') ?>">
+
+                        <?php if (session('errors.prix')): ?>
+                            <small class="text-danger"><?= session('errors.prix') ?></small>
+                        <?php endif; ?>
                     </div>
                 </div>
 
-                <!-- Répartition des aliments -->
                 <div class="food-section">
                     <h3 class="section-title">
                         <span class="title-bar"></span>
@@ -54,32 +79,49 @@
                     </h3>
 
                     <div class="food-grid">
-                        <!-- Viande -->
                         <div class="food-card">
                             <label class="food-label">🥩 Viande</label>
-                            <input type="number" class="food-input" placeholder="0" min="0" max="100">
+                            <input type="number"
+                                class="food-input <?= session('errors.pourcentage_viande') ? 'is-invalid' : '' ?>"
+                                placeholder="0" min="0" max="100" name="pourcentage_viande"
+                                value="<?= old('pourcentage_viande') ?>">
+
+                            <?php if (session('errors.pourcentage_viande')): ?>
+                                <small class="text-danger"><?= session('errors.pourcentage_viande') ?></small>
+                            <?php endif; ?>
                         </div>
 
-                        <!-- Poisson -->
                         <div class="food-card">
                             <label class="food-label">🐟 Poisson</label>
-                            <input type="number" class="food-input" placeholder="0" min="0" max="100">
+                            <input type="number"
+                                class="food-input <?= session('errors.pourcentage_poisson') ? 'is-invalid' : '' ?>"
+                                placeholder="0" min="0" max="100" name="pourcentage_poisson"
+                                value="<?= old('pourcentage_poisson') ?>">
+
+                            <?php if (session('errors.pourcentage_poisson')): ?>
+                                <small class="text-danger"><?= session('errors.pourcentage_poisson') ?></small>
+                            <?php endif; ?>
                         </div>
 
-                        <!-- Volaille -->
                         <div class="food-card">
                             <label class="food-label">🍗 Volaille</label>
-                            <input type="number" class="food-input" placeholder="0" min="0" max="100">
+                            <input type="number"
+                                class="food-input <?= session('errors.pourcentage_volaille') ? 'is-invalid' : '' ?>"
+                                placeholder="0" min="0" max="100" name="pourcentage_volaille"
+                                value="<?= old('pourcentage_volaille') ?>">
+
+                            <?php if (session('errors.pourcentage_volaille')): ?>
+                                <small class="text-danger"><?= session('errors.pourcentage_volaille') ?></small>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Footer -->
         <div class="modal-footer">
             <button type="button" class="btn-cancel">Annuler</button>
-            <button type="submit" class="btn-submit">
+            <button type="submit" class="btn-submit" form="regime-form">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M4.16667 10H15.8333" stroke="white" stroke-width="1.66667" stroke-linecap="round"
                         stroke-linejoin="round" />
@@ -92,13 +134,19 @@
     </div>
 </div>
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
+
         const modalOverlay = document.querySelector('.modal-overlay');
         const openButton = document.getElementById('btn-ajout') || document.getElementById('btn-ajouter');
         const closeButton = document.querySelector('.close-btn');
-        const submitButton = document.querySelector('.btn-submit');
         const cancelButton = document.querySelector('.btn-cancel');
 
+        <?php if (session('errors')): ?>
+            if (modalOverlay) {
+                modalOverlay.style.display = 'flex';
+            }
+        <?php endif; ?>
         if (!modalOverlay) return;
 
         if (openButton) {
@@ -118,14 +166,6 @@
                 this.style.display = 'none';
             }
         });
-
-        if (submitButton) {
-            submitButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                alert('Recette ajoutée !');
-                modalOverlay.style.display = 'none';
-            });
-        }
 
         if (cancelButton) {
             cancelButton.addEventListener('click', function () {
