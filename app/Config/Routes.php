@@ -53,3 +53,4 @@ $routes->post('/signup/health', 'AuthController::storeHealthInfo');
 $routes->get('/signup/goals', 'ObjectifController::showSelection');
 $routes->post('/signup/goals', 'ObjectifController::storeGoals');
 
+$routes->post('/signup/complete', 'AuthController::completeSignup');

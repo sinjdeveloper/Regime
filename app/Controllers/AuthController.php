@@ -131,4 +131,78 @@ class AuthController extends BaseController
 
         return redirect()->to('/signup/goals');
     }
+
+    public function completeSignup()
+    {
+        SessionService::initSignupDraft();
+
+        $draft = SessionService::get('signup_draft');
+
+        // 1. Check completeness
+        if (
+            empty($draft['user']) ||
+            empty($draft['health']) ||
+            empty($draft['goals'])
+        ) {
+            return redirect()->to('/signup')
+                ->with('errors', ['Inscription incomplète']);
+        }
+
+        $userModel = new \App\Models\UserModel();
+        $clientModel = new \App\Models\ClientModel();
+        $objectifModel = new \App\Models\ObjectifModel();
+
+        try {
+            // 2. Create user
+            $userId = $userModel->insert([
+                'username' => $draft['user']['email'], // or custom username
+                'password_hash' => $draft['user']['password_hash'],
+                'role' => 'user'
+            ]);
+
+            if (!$userId) {
+                throw new \Exception("User creation failed");
+            }
+
+            // 3. Create client
+            $clientId = $clientModel->insert([
+                'id_user' => $userId,
+                'email' => $draft['user']['email'],
+                'genre' => $draft['user']['genre'],
+                'dateNaissance' => null,
+                'poids' => $draft['health']['weight'],
+                'taille' => $draft['health']['height'],
+                'estGold' => 0,
+                'argent' => 0
+            ]);
+
+            if (!$clientId) {
+                throw new \Exception("Client creation failed");
+            }
+
+            // 4. Attach goals (max 3 already validated earlier)
+            foreach ($draft['goals'] as $goalId) {
+                $objectifModel->db->table('goalpoids')->insert([
+                    'client_id' => $clientId,
+                    'objectif_id' => $goalId,
+                    'poids_cible' => null,
+                    'duree' => null
+                ]);
+            }
+
+            // 5. Create session
+            SessionService::set('user', [
+                'id' => $userId,
+                'client_id' => $clientId,
+                'role' => 'user'
+            ]);
+
+            // 6. Clear draft
+            SessionService::remove('signup_draft');
+
+            return redirect()->to('/dashboard');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('errors', [$e->getMessage()]);
+        }
+    }
 }
