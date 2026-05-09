@@ -9,11 +9,13 @@ Régimes
 <script src="<?= base_url('assets/js/admin/chart.js') ?>" defer></script>
 
 <main class="main-content">
-    <div style="width: 400px; height: 400px;">
-        <canvas id="repartitionChart"></canvas>
-    </div>
-    <div style="width: 400px; height: 400px;">
-        <canvas id="goldChart"></canvas>
+    <div class="charts-row">
+        <div class="chart-box">
+            <canvas id="repartitionChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="goldChart"></canvas>
+        </div>
     </div>
 
 </main>

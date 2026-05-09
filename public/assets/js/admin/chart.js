@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const datas = result.repartition;
         const labels = datas.map(item => item.libelle);
         const values = datas.map(item => Number(item.nombre));
-        console.log(datas);
         const repartitionChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -45,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'bottom',
