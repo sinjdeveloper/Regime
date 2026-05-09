@@ -54,3 +54,13 @@ button {
   flex-direction: column;
   box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
+.is-invalid {
+    border: 1px solid red;
+}
+
+.text-danger {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}

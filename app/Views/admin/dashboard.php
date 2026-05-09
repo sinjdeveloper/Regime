@@ -81,10 +81,7 @@
             <h1 class="page-title">Régimes</h1>
             <p class="page-subtitle">Gérez vos programmes de nutrition et de sport</p>
           </div>
-          <button class="btn-primary">
-            <img src="<?= base_url('assets/images/admin') ?>/20_576.svg" alt="Ajouter">
-            Ajouter
-          </button>
+
         </div>
 
         <!-- Stats Cards -->
@@ -94,7 +91,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_868.svg" alt="Total régimes">
             </div>
             <div class="stat-info">
-              <div class="stat-value"><?= $regimes?></div>
+              <div class="stat-value"><?= $stats['regimes'] ?></div>
               <div class="stat-label">Total régimes</div>
             </div>
           </div>
@@ -103,7 +100,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_870.svg" alt="Utilisateurs">
             </div>
             <div class="stat-info">
-              <div class="stat-value"><?= $utilisateurs ?></div>
+              <div class="stat-value"><?= $stats['utilisateurs'] ?></div>
               <div class="stat-label">Utilisateurs</div>
             </div>
           </div>
@@ -112,12 +109,12 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_872.svg" alt="Transactions">
             </div>
             <div class="stat-info">
-              <div class="stat-value"><?= $transactions ?></div>
+              <div class="stat-value"><?= $stats['transactions'] ?></div>
               <div class="stat-label">Transactions</div>
             </div>
           </div>
         </div>
-
+        <?= $this->include('components/regime_insert_popup.php') ?>
         <!-- Table Section -->
         <div class="table-section">
           <div class="table-toolbar">
@@ -128,7 +125,7 @@
               <button class="filter-btn">Perte</button>
               <button class="filter-btn">Gain</button>
             </div>
-            <button class="btn-primary btn-new">
+            <button class="btn-primary btn-new" id="btn-ajout">
               + Nouveau régime
             </button>
           </div>
@@ -141,152 +138,58 @@
                   <th>TYPE</th>
                   <th>VARIATION</th>
                   <th>PRIX</th>
-                  <th>DURÉE</th>
-                  <th>STATUS</th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- Row 1 -->
-                <tr>
-                  <td>
-                    <div class="diet-info">
-                      <div class="diet-avatar">P</div>
-                      <div class="diet-details">
-                        <div class="diet-name">Poulet grillé méditerranéen</div>
-                        <div class="diet-date">Créé le 2026-04-15</div>
+                <?php foreach ($regimes as $regime) { ?>
+                  <tr>
+                    <td>
+                      <div class="diet-info">
+                        <div class="diet-avatar">P</div>
+                        <div class="diet-details">
+                          <div class="diet-name"><?= $regime['libelle'] ?></div>
+                          <div class="diet-date">Créé le 2026-04-15</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_647.svg"
-                        alt="">Perte</span></td>
-                  <td class="variation">-2.5 kg</td>
-                  <td class="price">12.50 €</td>
-                  <td class="duration">30 jours</td>
-                  <td><span class="badge-status status-actif">Actif</span></td>
-                  <td>
-                    <div class="actions">
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_661.svg"
-                          alt="View"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_665.svg"
-                          alt="Edit"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_669.svg"
-                          alt="Delete"></button>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Row 2 -->
-                <tr>
-                  <td>
-                    <div class="diet-info">
-                      <div class="diet-avatar">S</div>
-                      <div class="diet-details">
-                        <div class="diet-name">Saumon protéiné complet</div>
-                        <div class="diet-date">Créé le 2026-04-10</div>
+                    </td>
+                    <?php if ($regime['variation_poids'] < 0) { ?>
+                      <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_647.svg"
+                            alt="">Perte</span></td>
+
+                    <?php } else { ?>
+                      <td><span class="badge-type type-gain"><img src="<?= base_url('assets/images/admin') ?>/20_685.svg"
+                            alt="">Gain</span></td>
+                    <?php } ?>
+                    <td class="variation"><?= $regime['variation_poids'] ?> kg</td>
+                    <td class="price"><?= $regime['prix'] ?> Ar</td>
+                    <td>
+                      <div class="actions">
+                        <a class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_661.svg" alt="View"></a>
+
+                        <button
+                          type="button"
+                          class="action-btn js-edit-regime"
+                          data-id="<?= esc($regime['id']) ?>"
+                          data-libelle="<?= esc($regime['libelle']) ?>"
+                          data-description="<?= esc($regime['description']) ?>"
+                          data-variation-poids="<?= esc($regime['variation_poids']) ?>"
+                          data-prix="<?= esc($regime['prix']) ?>"
+                          data-pourcentage-viande="<?= esc($regime['pourcentage_viande']) ?>"
+                          data-pourcentage-poisson="<?= esc($regime['pourcentage_poisson']) ?>"
+                          data-pourcentage-volaille="<?= esc($regime['pourcentage_volaille']) ?>"
+                        >
+                          <img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit">
+                        </button>
+                        <form action="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" method="post">
+                          <button class="action-btn" href="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" type="submit"><img
+                              src="<?= base_url('assets/images/admin') ?>/20_669.svg" alt="Delete"></button>
+                        </form>
                       </div>
-                    </div>
-                  </td>
-                  <td><span class="badge-type type-gain"><img src="<?= base_url('assets/images/admin') ?>/20_685.svg"
-                        alt="">Gain</span></td>
-                  <td class="variation">+1.8 kg</td>
-                  <td class="price">18.00 €</td>
-                  <td class="duration">45 jours</td>
-                  <td><span class="badge-status status-actif">Actif</span></td>
-                  <td>
-                    <div class="actions">
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_699.svg"
-                          alt="View"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_703.svg"
-                          alt="Edit"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_707.svg"
-                          alt="Delete"></button>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Row 3 -->
-                <tr>
-                  <td>
-                    <div class="diet-info">
-                      <div class="diet-avatar">B</div>
-                      <div class="diet-details">
-                        <div class="diet-name">Bowl végétarien équilibré</div>
-                        <div class="diet-date">Créé le 2026-04-20</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_723.svg"
-                        alt="">Perte</span></td>
-                  <td class="variation">-1.2 kg</td>
-                  <td class="price">9.50 €</td>
-                  <td class="duration">21 jours</td>
-                  <td><span class="badge-status status-brouillon">Brouillon</span></td>
-                  <td>
-                    <div class="actions">
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_737.svg"
-                          alt="View"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_741.svg"
-                          alt="Edit"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_745.svg"
-                          alt="Delete"></button>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Row 4 -->
-                <tr>
-                  <td>
-                    <div class="diet-info">
-                      <div class="diet-avatar">B</div>
-                      <div class="diet-details">
-                        <div class="diet-name">Bœuf aux légumes verts</div>
-                        <div class="diet-date">Créé le 2026-03-25</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_761.svg"
-                        alt="">Perte</span></td>
-                  <td class="variation">-3.0 kg</td>
-                  <td class="price">15.00 €</td>
-                  <td class="duration">28 jours</td>
-                  <td><span class="badge-status status-actif">Actif</span></td>
-                  <td>
-                    <div class="actions">
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_775.svg"
-                          alt="View"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_779.svg"
-                          alt="Edit"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_783.svg"
-                          alt="Delete"></button>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Row 5 -->
-                <tr>
-                  <td>
-                    <div class="diet-info">
-                      <div class="diet-avatar">P</div>
-                      <div class="diet-details">
-                        <div class="diet-name">Pâtes complètes sportif</div>
-                        <div class="diet-date">Créé le 2026-03-18</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><span class="badge-type type-gain"><img src="<?= base_url('assets/images/admin') ?>/20_799.svg"
-                        alt="">Gain</span></td>
-                  <td class="variation">+2.5 kg</td>
-                  <td class="price">11.00 €</td>
-                  <td class="duration">60 jours</td>
-                  <td><span class="badge-status status-actif">Actif</span></td>
-                  <td>
-                    <div class="actions">
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_813.svg"
-                          alt="View"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_817.svg"
-                          alt="Edit"></button>
-                      <button class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_821.svg"
-                          alt="Delete"></button>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                <?php } ?>
+
               </tbody>
             </table>
           </div>
@@ -294,7 +197,7 @@
       </main>
 
       <!-- Floating Action Button -->
-      <a class="fab-public" href="<?= site_url('/logout')?>">
+      <a class="fab-public" href="<?= site_url('/logout') ?>">
         <img src="<?= base_url('assets/images/admin') ?>/20_863.svg" alt="Public">
         Public
       </a>
