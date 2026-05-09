@@ -49,3 +49,7 @@ $routes->post('/signup/user', 'AuthController::storeUserInfo');
 
 $routes->get('/signup/health', 'AuthController::showHealthForm');
 $routes->post('/signup/health', 'AuthController::storeHealthInfo');
+
+$routes->get('/signup/goals', 'ObjectifController::showSelection');
+$routes->post('/signup/goals', 'ObjectifController::storeGoals');
+
