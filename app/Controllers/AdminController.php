@@ -48,8 +48,8 @@ class AdminController extends BaseController
                 ->withInput()
                 ->with('errors', $model->errors());
         }
-        return redirect()->to('/admin/sports/dashboard')
-            ->with('success', 'Regime ajouté avec succès');
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport ajouté avec succès');
     }
     public function updateSport($id)
     {
@@ -64,9 +64,19 @@ class AdminController extends BaseController
                 ->with('errors', $model->errors());
         }
 
-        return redirect()->to('/admin/sports/dashboard')
-            ->with('success', 'Regime mis à jour avec succès');
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport mis à jour avec succès');
 
     }
-
+    public function deleteSport($id)
+    {
+        $model = new SportModel();
+        if (!$model->deleteSport($id)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+        return redirect()->to('/admin/sports/index')
+            ->with('success', 'Sport supprimé avec succès');
+    }
 }

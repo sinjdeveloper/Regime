@@ -67,9 +67,11 @@ Sports
                                         type="button" class="action-btn">
                                         <img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit">
                                     </button>
-                                    <button type="button" class="action-btn" disabled>
-                                        <img src="<?= base_url('assets/images/admin') ?>/20_669.svg" alt="Delete">
-                                    </button>
+                                    <form action="<?= site_url('admin/sports/delete/' . $sport['id']) ?>" method="post">
+                                        <button class="action-btn"
+                                            type="submit"><img src="<?= base_url('assets/images/admin') ?>/20_669.svg"
+                                                alt="Delete"></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

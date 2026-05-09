@@ -53,7 +53,8 @@ Régimes
   <div class="table-section">
     <div class="table-toolbar">
       <div class="filters">
-        <button class="filter-btn icon-only"><img src="<?= base_url('assets/images/admin') ?>/20_616.svg" alt="Filter"></button>
+        <button class="filter-btn icon-only"><img src="<?= base_url('assets/images/admin') ?>/20_616.svg"
+            alt="Filter"></button>
         <button class="filter-btn active">Tous</button>
         <button class="filter-btn">Perte</button>
         <button class="filter-btn">Gain</button>
@@ -87,9 +88,11 @@ Régimes
                 </div>
               </td>
               <?php if ($regime['variation_poids'] < 0) { ?>
-                <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_647.svg" alt="">Perte</span></td>
+                <td><span class="badge-type type-perte"><img src="<?= base_url('assets/images/admin') ?>/20_647.svg"
+                      alt="">Perte</span></td>
               <?php } else { ?>
-                <td><span class="badge-type type-gain"><img src="<?= base_url('assets/images/admin') ?>/20_685.svg" alt="">Gain</span></td>
+                <td><span class="badge-type type-gain"><img src="<?= base_url('assets/images/admin') ?>/20_685.svg"
+                      alt="">Gain</span></td>
               <?php } ?>
               <td class="variation"><?= $regime['variation_poids'] ?> kg</td>
               <td class="price"><?= $regime['prix'] ?> Ar</td>
@@ -97,23 +100,17 @@ Régimes
                 <div class="actions">
                   <a class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_661.svg" alt="View"></a>
 
-                  <button
-                    type="button"
-                    class="action-btn js-edit-regime"
-                    data-id="<?= esc($regime['id']) ?>"
-                    data-libelle="<?= esc($regime['libelle']) ?>"
-                    data-description="<?= esc($regime['description']) ?>"
-                    data-variation-poids="<?= esc($regime['variation_poids']) ?>"
-                    data-prix="<?= esc($regime['prix']) ?>"
+                  <button type="button" class="action-btn js-edit-regime" data-id="<?= esc($regime['id']) ?>"
+                    data-libelle="<?= esc($regime['libelle']) ?>" data-description="<?= esc($regime['description']) ?>"
+                    data-variation-poids="<?= esc($regime['variation_poids']) ?>" data-prix="<?= esc($regime['prix']) ?>"
                     data-pourcentage-viande="<?= esc($regime['pourcentage_viande']) ?>"
                     data-pourcentage-poisson="<?= esc($regime['pourcentage_poisson']) ?>"
-                    data-pourcentage-volaille="<?= esc($regime['pourcentage_volaille']) ?>"
-                  >
+                    data-pourcentage-volaille="<?= esc($regime['pourcentage_volaille']) ?>">
                     <img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit">
                   </button>
                   <form action="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" method="post">
-                    <button class="action-btn" href="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" type="submit"><img
-                        src="<?= base_url('assets/images/admin') ?>/20_669.svg" alt="Delete"></button>
+                    <button class="action-btn" type="submit"><img src="<?= base_url('assets/images/admin') ?>/20_669.svg"
+                        alt="Delete"></button>
                   </form>
                 </div>
               </td>

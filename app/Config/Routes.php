@@ -23,6 +23,8 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
         $routes->get('index' , 'AdminController::sportIndex');
         $routes->post('store', 'AdminController::createSport');
         $routes->post('update/(:num)','AdminController::updateSport/$1');
+        $routes->post('delete/(:num)','AdminController::deleteSport/$1');   
+
 
     });
 });
