@@ -216,7 +216,7 @@ class AuthController extends BaseController
 
             session()->remove('signup_draft');
 
-            return redirect()->to('/');
+            return redirect()->to('/dashboard');
         } catch (\Exception $e) {
             log_message('error', 'Signup error: ' . $e->getMessage());
             return redirect()->back()->with('errors', [$e->getMessage()]);
