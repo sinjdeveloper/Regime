@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Page</title>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style id="sections-styles">
+/* CSS for section section:Registration */
+#registration-section {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-gray);
+  }
+
+  .split-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1494px; /* Based on Figma root node width */
+    min-height: 100vh;
+    background-color: var(--white);
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  }
+
+  /* Left Panel Styles */
+  .left-panel {
+    flex: 1;
+    max-width: 765px;
+    background: linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)), url('images/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 448px;
+  }
+
+  .logo-large {
+    font-size: 58px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .text-white { color: var(--white); }
+  .text-yellow { color: var(--accent-color); }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Right Panel Styles */
+  .right-panel {
+    flex: 1;
+    background-color: var(--bg-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .registration-card {
+    width: 100%;
+    max-width: 448px;
+    background-color: var(--white);
+    border-radius: 20px;
+    box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    background-color: var(--primary-color);
+    padding: 32px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    position: relative;
+  }
+
+  .merged-logo-icon {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .icon-part {
+    position: absolute;
+  }
+  .icon-part.base { top: 0; left: 0; width: 38px; height: 39px; }
+  .icon-part.detail-1 { top: 16.5px; left: 15px; width: 8px; height: 13.5px; }
+  .icon-part.detail-2 { top: 12px; left: 16px; width: 3px; height: 6.5px; }
+  .icon-part.detail-3 { top: 11.5px; left: 24px; width: 3.75px; height: 4.625px; }
+  .icon-part.detail-4 { top: 25px; left: 13px; width: 2px; height: 2px; }
+  .icon-part.detail-5 { top: 22px; left: 19px; width: 2px; height: 2px; }
+  .icon-part.detail-6 { top: 20.5px; left: 25px; width: 2px; height: 2px; }
+
+  .logo-small {
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .card-body {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.5;
+  }
+
+  .dot.active {
+    opacity: 1;
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 32px;
+    width: 100%;
+  }
+
+  .form-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+  }
+
+  .form-subtitle {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin: 0;
+  }
+
+  .options-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .goal-option {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.29);
+    border-radius: 10px;
+    background-color: var(--white);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .goal-option:hover {
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  }
+
+  .hidden-checkbox {
+    display: none;
+  }
+
+  .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+
+  .checkbox-inner {
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+  }
+
+  .hidden-checkbox:checked + .custom-checkbox .checkbox-inner {
+    background-color: var(--primary-color);
+  }
+
+  .option-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .option-text {
+    font-size: 14px;
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1), 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.2s ease, transform 0.1s ease;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+  
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .split-layout {
+      flex-direction: column;
+    }
+    
+    .left-panel {
+      max-width: 100%;
+      padding: 60px 20px;
+      min-height: 40vh;
+    }
+
+    .right-panel {
+      padding: 40px 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .logo-large {
+      font-size: 42px;
+    }
+    
+    .card-body {
+      padding: 24px 16px;
+    }
+  }
+  </style>
+  <script src="global.js" defer></script>
+</head>
+<body>
+<section id="registration-section">
+  <div class="split-layout">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <div class="left-content">
+        <h1 class="logo-large">
+          <span class="text-white">Vary</span>
+          <span class="text-yellow">'</span>
+          <span class="text-white">Ena</span>
+        </h1>
+        <p class="subtitle">Rejoignez notre communauté et atteignez vos objectifs de santé</p>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="registration-card">
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="logo-icon-wrapper">
+            <!--merged image-->
+            <div class="merged-logo-icon">
+              <img src="images/76_549.svg" alt="Logo Base" class="icon-part base">
+              <img src="images/76_552.svg" alt="Logo Detail 1" class="icon-part detail-1">
+              <img src="images/76_557.svg" alt="Logo Detail 2" class="icon-part detail-2">
+              <img src="images/76_560.svg" alt="Logo Detail 3" class="icon-part detail-3">
+              <img src="images/76_563.svg" alt="Logo Detail 4" class="icon-part detail-4">
+              <img src="images/76_566.svg" alt="Logo Detail 5" class="icon-part detail-5">
+              <img src="images/76_569.svg" alt="Logo Detail 6" class="icon-part detail-6">
+            </div>
+          </div>
+          <div class="logo-small">
+            <span class="text-white">Vary</span>
+            <span class="text-yellow">'</span>
+            <span class="text-white">Ena</span>
+          </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="pagination">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+          </div>
+          
+          <div class="form-header">
+            <h2 class="form-title">Help us match you to the perfect lifestyle</h2>
+            <p class="form-subtitle">Choisissez jusqu'à 3 objectifs</p>
+          </div>
+
+          <div class="options-list">
+            <!-- Option 1 -->
+            <label class="goal-option">
+              <input type="checkbox" checked class="hidden-checkbox">
+              <span class="custom-checkbox"><span class="checkbox-inner"></span></span>
+              <img src="images/76_594.svg" alt="Increase Weight" class="option-icon">
+              <span class="option-text">Augmenter son poids</span>
+            </label>
+            
+            <!-- Option 2 -->
+            <label class="goal-option">
+              <input type="checkbox" class="hidden-checkbox">
+              <span class="custom-checkbox"><span class="checkbox-inner"></span></span>
+              <img src="images/76_602.svg" alt="Decrease Weight" class="option-icon">
+              <span class="option-text">Réduire son poids</span>
+            </label>
+            
+            <!-- Option 3 -->
+            <label class="goal-option">
+              <input type="checkbox" checked class="hidden-checkbox">
+              <span class="custom-checkbox"><span class="checkbox-inner"></span></span>
+              <img src="images/76_611.svg" alt="BMI" class="option-icon">
+              <span class="option-text">Atteindre son IMC idéal</span>
+            </label>
+            
+            <!-- Option 4 -->
+            <label class="goal-option">
+              <input type="checkbox" class="hidden-checkbox">
+              <span class="custom-checkbox"><span class="checkbox-inner"></span></span>
+              <img src="images/76_619.svg" alt="Diet" class="option-icon">
+              <span class="option-text">L'application suggère les régimes</span>
+            </label>
+          </div>
+
+          <button class="btn-primary">Creer Compte</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
