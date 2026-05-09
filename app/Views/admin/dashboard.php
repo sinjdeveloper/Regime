@@ -81,10 +81,7 @@
             <h1 class="page-title">Régimes</h1>
             <p class="page-subtitle">Gérez vos programmes de nutrition et de sport</p>
           </div>
-          <button class="btn-primary">
-            <img src="<?= base_url('assets/images/admin') ?>/20_576.svg" alt="Ajouter">
-            Ajouter
-          </button>
+          
         </div>
 
         <!-- Stats Cards -->
@@ -94,7 +91,7 @@
               <img src="<?= base_url('assets/images/admin') ?>/20_868.svg" alt="Total régimes">
             </div>
             <div class="stat-info">
-              <div class="stat-value"><?= $regimes?></div>
+              <div class="stat-value"><?= $regimes ?></div>
               <div class="stat-label">Total régimes</div>
             </div>
           </div>
@@ -117,7 +114,7 @@
             </div>
           </div>
         </div>
-
+        <?= $this->include('components/regime_insert_popup.php') ?>
         <!-- Table Section -->
         <div class="table-section">
           <div class="table-toolbar">
@@ -128,7 +125,7 @@
               <button class="filter-btn">Perte</button>
               <button class="filter-btn">Gain</button>
             </div>
-            <button class="btn-primary btn-new">
+            <button class="btn-primary btn-new" id="btn-ajout">
               + Nouveau régime
             </button>
           </div>
@@ -294,7 +291,7 @@
       </main>
 
       <!-- Floating Action Button -->
-      <a class="fab-public" href="<?= site_url('/logout')?>">
+      <a class="fab-public" href="<?= site_url('/logout') ?>">
         <img src="<?= base_url('assets/images/admin') ?>/20_863.svg" alt="Public">
         Public
       </a>
