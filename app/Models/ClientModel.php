@@ -147,4 +147,32 @@ class ClientModel extends Model
             ]
         ];
     }
+
+    public function storeHealthDraft($data)
+    {
+        $errors = [];
+
+        if (!isset($data['poids']) || !is_numeric($data['poids'])) {
+            $errors['poids'] = "Poids invalide";
+        }
+
+        if (!isset($data['taille']) || !is_numeric($data['taille'])) {
+            $errors['taille'] = "Taille invalide";
+        }
+
+        if (!empty($errors)) {
+            return [
+                'status' => false,
+                'errors' => $errors
+            ];
+        }
+
+        return [
+            'status' => true,
+            'data' => [
+                'poids' => (float) $data['poids'],
+                'taille' => (float) $data['taille']
+            ]
+        ];
+    }
 }

@@ -82,4 +82,53 @@ class AuthController extends BaseController
 
         return redirect()->to('/signup/health');
     }
+
+    public function showHealthForm()
+    {
+        SessionService::initSignupDraft();
+
+        $user = SessionService::getNested('signup_draft.user');
+
+        if (empty($user)) {
+            return redirect()->to('/signup');
+        }
+
+        return view('signup/health');
+    }
+
+    public function storeHealthInfo()
+    {
+        $data = $this->request->getPost();
+
+        $clientModel = new \App\Models\ClientModel();
+
+        $result = $clientModel->storeHealthDraft($data);
+
+        if ($result['status'] === false) {
+
+            $flatErrors = [];
+
+            foreach ($result['errors'] as $error) {
+                if (is_array($error)) {
+                    foreach ($error as $msg) {
+                        $flatErrors[] = (string) $msg;
+                    }
+                } else {
+                    $flatErrors[] = (string) $error;
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $flatErrors);
+        }
+
+        SessionService::setNested(
+            'signup_draft.health',
+            $result['data']
+        );
+
+        return redirect()->to('/signup/goals');
+    }
 }
