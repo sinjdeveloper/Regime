@@ -38,10 +38,11 @@ class AdminController extends BaseController
         );
 
     }
-    public function createSport(){
-         $model = new SportModel();
+    public function createSport()
+    {
+        $model = new SportModel();
         $data = $this->request->getPost();
-        
+
         if (!$model->addSport($data)) {
             return redirect()->back()
                 ->withInput()
@@ -49,6 +50,23 @@ class AdminController extends BaseController
         }
         return redirect()->to('/admin/sports/dashboard')
             ->with('success', 'Regime ajouté avec succès');
+    }
+    public function updateSport($id)
+    {
+        $model = new SportModel();
+        $data = $this->request->getPost();
+
+        unset($data['id']);
+
+        if (!$model->updateSport($id, $data)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+
+        return redirect()->to('/admin/sports/dashboard')
+            ->with('success', 'Regime mis à jour avec succès');
+
     }
 
 }

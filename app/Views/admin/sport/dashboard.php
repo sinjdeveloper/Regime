@@ -26,7 +26,7 @@ Sports
                 <button class="filter-btn active">Tous</button>
             </div>
 
-            <button class="btn-primary btn-new" type="button" id="btn-ajout-sport" >
+            <button class="btn-primary btn-new" type="button" id="btn-ajout-sport">
                 + Nouveau sport
             </button>
         </div>
@@ -60,7 +60,11 @@ Sports
                                     <a class="action-btn" href="#" aria-disabled="true">
                                         <img src="<?= base_url('assets/images/admin') ?>/20_661.svg" alt="View">
                                     </a>
-                                    <button type="button" class="action-btn" disabled>
+
+                                    <button type="button" class="action-btn js-edit-sport"
+                                        data-id="<?= esc($sport['id']) ?>" data-libelle="<?= esc($sport['libelle']) ?>"
+                                        data-pourcentage-reduction="<?= esc($sport['pourcentage_reduction']) ?>"
+                                        type="button" class="action-btn">
                                         <img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit">
                                     </button>
                                     <button type="button" class="action-btn" disabled>
