@@ -31,6 +31,7 @@
                 class="recipe-form"
                 action="<?= site_url('admin/regimes/store') ?>"
                 method="post"
+                enctype="multipart/form-data"
                 data-store-action="<?= site_url('admin/regimes/store') ?>"
                 data-update-action-base="<?= site_url('admin/regimes/update') ?>"
             >
@@ -124,6 +125,16 @@
                             <?php endif; ?>
                         </div>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Image (optionnel)</label>
+                    <input type="file" class="form-input <?= session('errors.image') ? 'is-invalid' : '' ?>"
+                        name="image" accept="image/*">
+
+                    <?php if (session('errors.image')): ?>
+                        <small class="text-danger"><?= session('errors.image') ?></small>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>

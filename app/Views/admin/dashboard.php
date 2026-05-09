@@ -84,7 +84,13 @@ Régimes
             <tr>
               <td>
                 <div class="diet-info">
-                  <div class="diet-avatar">P</div>
+                        <div class="diet-avatar">
+                          <?php if (! empty($regime['image'])): ?>
+                            <img src="<?= base_url('assets/images/programs/' . esc($regime['image'])) ?>" alt="<?= esc($regime['libelle']) ?>">
+                          <?php else: ?>
+                            P
+                          <?php endif; ?>
+                        </div>
                   <div class="diet-details">
                     <div class="diet-name"><?= $regime['libelle'] ?></div>
                     <div class="diet-date">Créé le 2026-04-15</div>

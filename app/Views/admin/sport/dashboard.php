@@ -45,7 +45,13 @@ Sports
                         <tr>
                             <td>
                                 <div class="diet-info">
-                                    <div class="diet-avatar">S</div>
+                                    <div class="diet-avatar">
+                                        <?php if (! empty($sport['image'])): ?>
+                                            <img src="<?= base_url('assets/images/programs/' . esc($sport['image'])) ?>" alt="<?= esc($sport['libelle']) ?>">
+                                        <?php else: ?>
+                                            S
+                                        <?php endif; ?>
+                                    </div>
                                     <div class="diet-details">
                                         <div class="diet-name"><?= esc($sport['libelle']) ?></div>
                                         <div class="diet-date">Créé le 2026-04-15</div>
