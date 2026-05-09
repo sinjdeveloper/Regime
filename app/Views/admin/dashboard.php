@@ -167,7 +167,20 @@
                       <div class="actions">
                         <a class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_661.svg" alt="View"></a>
 
-                        <a class="action-btn"><img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit"></a>
+                        <button
+                          type="button"
+                          class="action-btn js-edit-regime"
+                          data-id="<?= esc($regime['id']) ?>"
+                          data-libelle="<?= esc($regime['libelle']) ?>"
+                          data-description="<?= esc($regime['description']) ?>"
+                          data-variation-poids="<?= esc($regime['variation_poids']) ?>"
+                          data-prix="<?= esc($regime['prix']) ?>"
+                          data-pourcentage-viande="<?= esc($regime['pourcentage_viande']) ?>"
+                          data-pourcentage-poisson="<?= esc($regime['pourcentage_poisson']) ?>"
+                          data-pourcentage-volaille="<?= esc($regime['pourcentage_volaille']) ?>"
+                        >
+                          <img src="<?= base_url('assets/images/admin') ?>/20_665.svg" alt="Edit">
+                        </button>
                         <form action="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" method="post">
                           <button class="action-btn" href="<?= site_url('admin/regimes/delete/' . $regime['id']) ?>" type="submit"><img
                               src="<?= base_url('assets/images/admin') ?>/20_669.svg" alt="Delete"></button>

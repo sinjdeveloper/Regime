@@ -12,6 +12,24 @@ class RegimeController extends BaseController
     {
         //
     }
+
+    public function update($id)
+    {
+        $model = new RegimeModel();
+        $data = $this->request->getPost();
+
+        unset($data['id']);
+
+        if (! $model->updateRegime($id, $data)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $model->errors());
+        }
+
+        return redirect()->to('/admin/dashboard')
+            ->with('success', 'Regime mis à jour avec succès');
+    }
+
     public function delete($id){
         $model = new RegimeModel();
         if(!$model->deleteRegime($id)){

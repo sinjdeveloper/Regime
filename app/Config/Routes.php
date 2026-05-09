@@ -16,6 +16,7 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     );
     $routes->group('regimes', function ($routes) {
         $routes->post('store', 'RegimeController::create');
+        $routes->post('update/(:num)', 'RegimeController::update/$1');
         $routes->post('delete/(:num)','RegimeController::delete/$1');   
     });
 });
