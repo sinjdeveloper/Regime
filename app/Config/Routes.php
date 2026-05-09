@@ -43,3 +43,6 @@ $routes->post('api/gold/subscribe', 'GoldController::subscribe');
 // API Routes - Wallet & Codes
 $routes->get('api/wallet/code-popup', 'WalletController::showCodePopup');
 $routes->post('api/wallet/redeem-code', 'WalletController::redeemCode');
+
+$routes->get('/signup', 'AuthController::showSignup');
+$routes->post('/signup/user', 'AuthController::storeUserInfo');

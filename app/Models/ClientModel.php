@@ -105,25 +105,46 @@ class ClientModel extends Model
     {
         $errors = [];
 
-        if (empty($data['prenom'])) $errors['prenom'] = "Prénom requis";
-        if (empty($data['nom'])) $errors['nom'] = "Nom requis";
+        if (empty($data['prenom'])) {
+            $errors[] = "Prénom requis";
+        }
+
+        if (empty($data['nom'])) {
+            $errors[] = "Nom requis";
+        }
 
         if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "Email invalide";
+            $errors[] = "Email invalide";
         }
 
         if (empty($data['genre'])) {
-            $errors['genre'] = "Genre requis";
+            $errors[] = "Genre requis";
         }
 
-        if (strlen($data['password']) < 6) {
-            $errors['password'] = "Mot de passe trop court";
+        if (empty($data['password']) || strlen($data['password']) < 6) {
+            $errors[] = "Mot de passe trop court";
         }
 
-        if ($data['password'] !== $data['password_confirm']) {
-            $errors['password_confirm'] = "Les mots de passe ne correspondent pas";
+        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) {
+            $errors[] = "Les mots de passe ne correspondent pas";
         }
 
-        return $errors;
+        if (!empty($errors)) {
+            return [
+                'status' => false,
+                'errors' => $errors
+            ];
+        }
+
+        return [
+            'status' => true,
+            'data' => [
+                'prenom' => $data['prenom'],
+                'nom' => $data['nom'],
+                'email' => $data['email'],
+                'genre' => $data['genre'],
+                'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT)
+            ]
+        ];
     }
 }

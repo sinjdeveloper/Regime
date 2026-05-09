@@ -27,7 +27,7 @@
         <header class="site-header">
             <div class="container header-inner">
                 <a href="/login" class="logo">
-                    <img src="<?= base_url('assets/images//images/7_677.svg') ?>" alt="Vary'Ena Logo">
+                    <img src="<?= base_url('assets/images/images/7_677.svg') ?>" alt="Vary'Ena Logo">
                     <span class="logo-text">Vary<span class="highlight">'</span>Ena</span>
                 </a>
                 <nav class="main-nav">

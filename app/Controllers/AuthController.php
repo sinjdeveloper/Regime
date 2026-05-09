@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\ClientModel;
+use App\Services\SessionService;
 
 class AuthController extends BaseController
 {
@@ -31,5 +33,53 @@ class AuthController extends BaseController
     {
         session()->destroy();
         return redirect()->to('/login');
+    }
+
+
+
+
+    public function showSignup()
+    {
+        SessionService::initSignupDraft();
+
+        return view('signup/user-info');
+    }
+
+    public function storeUserInfo()
+    {
+        $data = $this->request->getPost();
+
+        $clientModel = new \App\Models\ClientModel();
+
+        $result = $clientModel->validateUserInfo($data);
+
+        if ($result['status'] === false) {
+
+            $flatErrors = [];
+
+            foreach ($result['errors'] as $error) {
+                if (is_array($error)) {
+                    foreach ($error as $msg) {
+                        $flatErrors[] = (string)$msg;
+                    }
+                } else {
+                    $flatErrors[] = (string)$error;
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $flatErrors);
+        }
+
+        SessionService::initSignupDraft();
+
+        SessionService::setNested(
+            'signup_draft.user',
+            $result['data']
+        );
+
+        return redirect()->to('/signup/health');
     }
 }

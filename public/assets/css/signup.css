@@ -12,7 +12,7 @@
 
 .signup-left {
     flex: 1;
-    background: linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)), url('images/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png') center/cover no-repeat;
+    background: linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)), url('signup/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
