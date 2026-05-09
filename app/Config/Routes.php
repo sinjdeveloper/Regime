@@ -28,7 +28,8 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     });
     $routes->group('api', function ($routes) {
         $routes->get('repartition','DashboardController::getRepartition');
-    });
+        $routes->get('gold','DashboardController::getRepartitionGold');
+        });
 });
 
 // API Routes - Profile & Goals

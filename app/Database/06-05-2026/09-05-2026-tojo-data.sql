@@ -30,3 +30,5 @@ INSERT INTO goalpoids (client_id,objectif_id,poids_cible,duree) VALUES
 
 SELECT COUNT(*),o.libelle FROM goalpoids gp JOIN objectif o ON gp.objectif_id = o.id GROUP BY o.id  ;
 ALTER TABLE goalpoids ADD UNIQUE KEY uq_goalpoids_objectif_client (objectif_id, client_id);
+
+SELECT COUNT(*) FROM client GROUP BY estGold;
