@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class GoalPoidsModel extends Model
 {
-    protected $table            = 'goalpoids';
-    protected $primaryKey       = 'id';
+    protected $table = 'goalpoids';
+    protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['client_id', 'objectif_id', 'poids_cible', 'duree'];
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
+    protected $allowedFields = ['client_id', 'objectif_id', 'poids_cible', 'duree'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -22,26 +22,26 @@ class GoalPoidsModel extends Model
 
 
     // Validation
-    protected $validationRules      = [
-        'client_id'    => 'required|integer|greater_than[0]',
-        'objectif_id'  => 'required|integer|greater_than[0]',
-        'poids_cible'  => 'required|numeric|greater_than[0]',
-        'duree'        => 'required|integer|greater_than[0]|less_than_equal_to[365]',
+    protected $validationRules = [
+        'client_id' => 'required|integer|greater_than[0]',
+        'objectif_id' => 'required|integer|greater_than[0]',
+        'poids_cible' => 'required|numeric|greater_than[0]',
+        'duree' => 'required|integer|greater_than[0]|less_than_equal_to[365]',
     ];
-    protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $validationMessages = [];
+    protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $beforeInsert = [];
+    protected $afterInsert = [];
+    protected $beforeUpdate = [];
+    protected $afterUpdate = [];
+    protected $beforeFind = [];
+    protected $afterFind = [];
+    protected $beforeDelete = [];
+    protected $afterDelete = [];
 
     /**
      * Récupère tous les objectifs d'un client avec détails
@@ -79,5 +79,20 @@ class GoalPoidsModel extends Model
     public function countClientGoals(int $clientId): int
     {
         return $this->where('client_id', $clientId)->countAllResults();
+    }
+    public function getRepartitionObjectifs()
+    {
+        $repartition = $this->select('objectif.libelle, COUNT(*) AS nombre')
+            ->join('objectif', 'objectif.id = goalpoids.objectif_id')
+            ->groupBy('goalpoids.objectif_id')
+            ->get()
+            ->getResultArray();
+
+        $total = array_sum(array_column($repartition, 'nombre'));
+
+        return [
+            'repartition' => $repartition,
+            'total' => $total,
+        ];
     }
 }

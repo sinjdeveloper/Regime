@@ -25,10 +25,13 @@ Thumbs.db
 ._*
 
 # Writable directories
+writable/*
+
 writable/cache/*
 writable/logs/*
 writable/session/*
 writable/uploads/*
+
 !writable/cache/.gitkeep
 !writable/logs/.gitkeep
 !writable/session/.gitkeep
