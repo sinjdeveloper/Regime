@@ -12,7 +12,7 @@ class RegimeModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix'];
+    protected $allowedFields    = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix','image'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -48,6 +48,6 @@ class RegimeModel extends Model
 
     public function getDemo()
     {
-        return $this->limit(3)->findAll();
+        return $this->orderBy('RAND()')->limit(3)->findAll();
     }
 }

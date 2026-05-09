@@ -57,19 +57,36 @@
     <section id="section-programs">
         <div class="container programs-inner">
             <div class="filters">
-                <button class="filter-btn active"><img src="<?= base_url('assets/images/images/7_427.svg') ?>" alt=""> Tous les programmes</button>
-                <button class="filter-btn"><img src="<?= base_url('assets/images/images/7_431.svg') ?>" alt=""> Nutrition</button>
-                <button class="filter-btn"><img src="<?= base_url('assets/images/images/7_437.svg') ?>" alt=""> Sport</button>
-                <button class="filter-btn"><img src="<?= base_url('assets/images/images/7_445.svg') ?>" alt=""> Nutrition + Sport</button>
+
+                <button class="filter-btn active" data-filter="all">
+                    <img src="<?= base_url('assets/images/images/7_427.svg') ?>" alt="">
+                    Tous les programmes
+                </button>
+
+                <button class="filter-btn" data-filter="nutrition">
+                    <img src="<?= base_url('assets/images/images/7_431.svg') ?>" alt="">
+                    Nutrition
+                </button>
+
+                <button class="filter-btn" data-filter="sport">
+                    <img src="<?= base_url('assets/images/images/7_437.svg') ?>" alt="">
+                    Sport
+                </button>
+
+                <button class="filter-btn" data-filter="combo">
+                    <img src="<?= base_url('assets/images/images/7_445.svg') ?>" alt="">
+                    Nutrition + Sport
+                </button>
+
             </div>
 
             <div class="program-grid">
 
                 <?php if (!empty($regimes)): ?>
                     <?php foreach ($regimes as $regime): ?>
-                        <article class="card">
+                        <article class="card nutrition">
                             <div class="card-image">
-                                <img src="<?= base_url('assets/images/images/default.png') ?>" alt="Regime">
+                                <img src="<?= base_url('assets/images/programs/' . $regime['image']) ?>" alt="Regime">
                             </div>
 
                             <div class="card-content">
@@ -111,9 +128,9 @@
 
                 <?php if (!empty($sports)): ?>
                     <?php foreach ($sports as $sport): ?>
-                        <article class="card">
+                        <article class="card sport">
                             <div class="card-image">
-                                <img src="<?= base_url('assets/images/images/default.png') ?>" alt="Sport">
+                                <img src="<?= base_url('assets/images/programs/' . $sport['image']) ?>" alt="Sport">
                             </div>
 
                             <div class="card-content">

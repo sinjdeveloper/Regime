@@ -12,7 +12,7 @@ class SportModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['libelle', 'pourcentage_reduction'];
+    protected $allowedFields    = ['libelle', 'pourcentage_reduction','image'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,6 +43,6 @@ class SportModel extends Model
 
     public function getDemo()
     {
-        return $this->limit(3)->findAll();
+        return $this->orderBy('RAND()')->limit(3)->findAll();
     }
 }
