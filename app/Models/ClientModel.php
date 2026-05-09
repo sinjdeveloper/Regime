@@ -100,4 +100,30 @@ class ClientModel extends Model
 
         return $this->update($clientId, ['argent' => $nouveauSolde]);
     }
+
+    public static function validateUserInfo($data)
+    {
+        $errors = [];
+
+        if (empty($data['prenom'])) $errors['prenom'] = "Prénom requis";
+        if (empty($data['nom'])) $errors['nom'] = "Nom requis";
+
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = "Email invalide";
+        }
+
+        if (empty($data['genre'])) {
+            $errors['genre'] = "Genre requis";
+        }
+
+        if (strlen($data['password']) < 6) {
+            $errors['password'] = "Mot de passe trop court";
+        }
+
+        if ($data['password'] !== $data['password_confirm']) {
+            $errors['password_confirm'] = "Les mots de passe ne correspondent pas";
+        }
+
+        return $errors;
+    }
 }
