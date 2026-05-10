@@ -225,7 +225,7 @@ $argent = (float) ($client['argent'] ?? 0);
                 msg.textContent = 'Envoi de la demande...';
 
                 try {
-                    const response = await fetch('<?= site_url('api/redeem-code') ?>', {
+                    const response = await fetch('<?= site_url('wallet/redeem-code') ?>', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

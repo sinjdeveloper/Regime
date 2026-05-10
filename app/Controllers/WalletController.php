@@ -12,49 +12,11 @@ class WalletController extends BaseController
 {
     public function index()
     {
-        
+
     }
     
-    public function showCodePopup()
-    {
-        // Vérifier authentification
-        if (!$this->session->has('user_id')) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
-        }
 
-        return $this->response->setJSON([
-            'success' => true,
-            'data' => [
-                'form' => [
-                    'input_placeholder' => 'Entrez votre code promo',
-                    'button_label' => 'Appliquer le code',
-                    'help_text' => 'Vous recevrez des crédits immédiatement après validation'
-                ]
-            ]
-        ]);
-    }
 
-    /**
-     * API - Valide et applique un code promo
-     * POST /api/wallet/redeem-code
-     *
-     * Body JSON:
-     * {
-     *   "code": "PROMO2024"
-     * }
-     *
-     * Logique:
-     * 1. Valider le code
-     * 2. Vérifier existence du code
-     * 3. Vérifier non utilisé
-     * 4. Ajouter montant au solde
-     * 5. Enregistrer transaction
-     * 6. Marquer code comme utilisé
-     *
-     */
 public function redeemCode()
 {
     $request = $this->request->getJSON();
@@ -127,15 +89,34 @@ public function redeemCode()
 
     try {
         // 1. Passer le code en attente
-        $codeModel->update($codeRecord['id'], [
+        $updated = $codeModel->update($codeRecord['id'], [
             'statut_code_id' => 2
         ]);
+        if ($updated === false) {
+            $db->transRollback();
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Impossible de mettre à jour le statut du code.',
+                'errors'  => $codeModel->errors(),
+            ])->setStatusCode(400);
+        }
 
         // 2. Enregistrer la demande
-        $historiqueModel->insert([
+        $inserted = $historiqueModel->insert([
             'client_id' => $client['id'],
-            'code_id'   => $codeRecord['id']
+            'code_id'   => $codeRecord['id'],
+
         ]);
+        if ($inserted === false) {
+            $db->transRollback();
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Impossible d’enregistrer la demande.',
+                'errors'  => $historiqueModel->errors(),
+            ])->setStatusCode(400);
+        }
 
         if (!$db->transStatus()) {
             $db->transRollback();
@@ -158,7 +139,8 @@ public function redeemCode()
 
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur interne du serveur.'
+            'message' => $e->getMessage(),
+            'record' => $codeRecord
         ])->setStatusCode(500);
     }
 }
