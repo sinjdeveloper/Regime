@@ -8,7 +8,7 @@ class UserModel extends Model
 {
     protected $table            = 'user';
     protected $primaryKey       = 'id';
-    protected $allowedFields    = ['usename','password_hash','role'];
+    protected $allowedFields    = ['username','password_hash','role'];
 
     public function checkAccess(string $username, string $password): ?array
     {

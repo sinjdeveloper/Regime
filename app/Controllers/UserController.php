@@ -18,12 +18,14 @@ class UserController extends BaseController
         $user = $userModel->checkAccess($username, $password);
 
         if ($user) {
-            // Set session data or token for authenticated user
-            session()->set('user_id', $user['id']);
-            session()->set('username', $user['username']);
-            session()->set('role', $user['role']);
+            // Set session data like AuthController does
+            session()->set('user', [
+                'id' => $user['id'],
+                'username' => $user['username'],
+                'role' => $user['role'],
+            ]);
 
-            return redirect()->to('/dashboard'); // Redirect to a protected area
+            return redirect()->to('/dashboard');
         } else {
             return redirect()->back()->with('error', 'Invalid username or password');
         }

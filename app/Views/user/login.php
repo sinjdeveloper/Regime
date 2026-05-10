@@ -40,7 +40,6 @@
               <label for="username">Nom d'utilisateur</label>
               <div class="input-wrapper">
                 <img src="<?= base_url('assets/images/login/28_120.svg') ?>" alt="" class="icon-left">
-                <?= csrf_field() ?>
                 <input type="text" id="username" placeholder="Votre nom d'utilisateur" name="username" value="<?= old('username') ?>">
               </div>
             </div>
