@@ -11,14 +11,14 @@ class UserController extends BaseController
 
     public function login()
     {
-        $email = $this->request->getPost('email');
+        $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
         $userModel = new UserModel();
-        $user = $userModel->checkViaEmail($email, $password);
+        $user = $userModel->checkAccess($username, $password);
 
         if ($user) {
-            // Set session data like AuthController does
+            // Set session data
             session()->set('user', [
                 'id' => $user['id'],
                 'username' => $user['username'],
@@ -27,7 +27,7 @@ class UserController extends BaseController
 
             return redirect()->to('/dashboard');
         } else {
-            return redirect()->back()->with('error', 'Invalid username or password');
+            return redirect()->back()->with('error', 'Identifiant ou mot de passe incorrect');
         }
     }
 

@@ -12,6 +12,8 @@ use App\Models\SportModel;
 use App\Models\TransactionModel;
 use App\Models\SuggestionModel;
 use App\Models\GoalPoidsModel;
+use App\Helpers\HealthHelper;
+use App\Helpers\PricingHelper;
 
 class ClientController extends BaseController
 {
@@ -129,6 +131,82 @@ class ClientController extends BaseController
         return view('client/wallet', [
             'client' => $client,
             'isGold' => (bool) ($client['estGold'] ?? false),
+        ]);
+    }
+
+    public function suggestions()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        $clientId = $client['id'];
+        $poids = $client['poids'];
+        $taille = $client['taille'];
+        $isGold = (bool) $client['estGold'];
+
+        // Récupérer les objectifs
+        $goalPoidsModel = new GoalPoidsModel();
+        $objectif = $goalPoidsModel->where('client_id', $clientId)->first();
+
+        $suggestions = [];
+
+        if ($objectif) {
+            // Calcul de l'écart de poids
+            $tolerance = ($poids * 10) / 100;
+            $poidsObjectif = $objectif['poids_cible'];
+            $ecart = abs($poids - $poidsObjectif);
+
+            // Récupérer régimes adaptés
+            $regimeModel = new RegimeModel();
+            $regimes = $regimeModel
+                ->where('variation_poids >=', $ecart - $tolerance)
+                ->where('variation_poids <=', $ecart + $tolerance)
+                ->findAll();
+
+            // Récupérer meilleur sport
+            $sportModel = new SportModel();
+            $bestSport = $sportModel->orderBy('pourcentage_reduction', 'DESC')->first();
+
+            // Formater les suggestions
+            foreach ($regimes as $regime) {
+                $prix = $regime['prix'];
+                $reduction = 0;
+                $prixFinal = $prix;
+
+                if ($isGold) {
+                    $reduction = 15;
+                    $prixFinal = round($prix * 0.85, 2);
+                }
+
+                $suggestions[] = [
+                    'regime' => [
+                        'id' => $regime['id'],
+                        'libelle' => $regime['libelle'],
+                        'description' => $regime['description'],
+                        'pourcentage_viande' => $regime['pourcentage_viande'],
+                        'pourcentage_poisson' => $regime['pourcentage_poisson'],
+                        'pourcentage_volaille' => $regime['pourcentage_volaille'],
+                        'prix_original' => $prix,
+                        'prix_final' => $prixFinal,
+                        'reduction_appliquee' => $reduction
+                    ],
+                    'sport' => $bestSport ? [
+                        'id' => $bestSport['id'],
+                        'libelle' => $bestSport['libelle'],
+                        'effet' => $bestSport['pourcentage_reduction'] . '%'
+                    ] : null
+                ];
+            }
+        }
+
+        return view('client/suggestions_new', [
+            'client' => $client,
+            'suggestions' => $suggestions,
+            'isGold' => $isGold,
+            'objectif' => $objectif
         ]);
     }
 

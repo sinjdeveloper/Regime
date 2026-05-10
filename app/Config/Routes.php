@@ -13,7 +13,6 @@ $routes->post('/admin/login', 'AuthController::loginAdmin');
 $routes->get('/user/login', 'UserController::loginPage');
 $routes->post('/user/login', 'UserController::login');
 $routes->get('/logout', 'AuthController::logout');
-$routes->get('/logout','AuthController::logout');
 
 // Client Dashboard
 $routes->get('/dashboard', 'ClientController::dashboard');
@@ -22,6 +21,7 @@ $routes->get('/dashboard', 'ClientController::dashboard');
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/imc', 'ClientController::imc');
     $routes->get('/suivi', 'ClientController::suivi');
+    $routes->get('/suggestions', 'ClientController::suggestions');
     $routes->get('/gold', 'ClientController::gold');
     $routes->get('/wallet', 'ClientController::wallet');
 

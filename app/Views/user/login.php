@@ -44,8 +44,8 @@
                 <label for="username">Nom d'utilisateur</label>
                 <div class="input-wrapper">
                   <img src="<?= base_url('assets/images/login/28_120.svg') ?>" alt="" class="icon-left">
-                  <input type="email" id="email" placeholder="jean@email.com" name="email"
-                    value="<?= old('email') ?>">
+                  <input type="text" id="username" placeholder="test1" name="username"
+                    value="<?= old('username') ?>">
                 </div>
               </div>
               <div class="form-group">
@@ -76,7 +76,7 @@
           © 2026 Vary'Ena. All rights reserved.
         </div>
       </div>
-      <a class="btn-admin" href="<?= site_url('/login') ?>">
+      <a class="btn-admin" href="<?= site_url('/admin/login') ?>">
         <img src="<?= base_url('assets/images/login') ?>/28_160.svg" alt="" class="admin-icon">
         <span>Admin</span>
       </a>
