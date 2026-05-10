@@ -223,6 +223,10 @@ body {
     background: var(--primary-color);
 }
 
+.hidden-checkbox:checked ~ .goal-extra {
+    display: grid;
+}
+
 /* SELECTED STATE */
 .goal-option:has(.hidden-checkbox:checked) {
     border-color: var(--primary-color);

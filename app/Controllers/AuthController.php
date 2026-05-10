@@ -103,43 +103,23 @@ class AuthController extends BaseController
 
     public function completeSignup()
     {
-
-
         $draft         = session()->get('signup_draft') ?? [];
         $userSession   = $draft['user']   ?? [];
         $healthSession = $draft['health'] ?? [];
-
-        // Debug — remove after confirming it works
-        log_message('debug', 'signup_draft: ' . json_encode($draft));
 
         if (empty($userSession) || empty($healthSession)) {
             return redirect()->to('/signup')
                 ->with('errors', ['Session expirée, veuillez recommencer.']);
         }
 
-        // Filter only selected goals
-        $rawGoals = $this->request->getPost('goals') ?? [];
-        $goals = array_values(array_filter($rawGoals, fn($g) => !empty($g['selected']) && $g['selected'] === '1'));
+        // Single goal from radio button
+        $selectedId = $this->request->getPost('goals_selected');
+        $poidsCible = $this->request->getPost('goals_poids_cible');
+        $duree      = $this->request->getPost('goals_duree');
 
-        if (empty($goals)) {
+        if (empty($selectedId)) {
             return redirect()->to('/signup/goals')
-                ->with('errors', ['Veuillez sélectionner au moins 1 objectif.']);
-        }
-
-        if (count($goals) > 3) {
-            return redirect()->to('/signup/goals')
-                ->with('errors', ['Maximum 3 objectifs autorisés.']);
-        }
-
-        foreach ($goals as $i => $g) {
-            if (empty($g['poids_cible']) || (float)$g['poids_cible'] <= 0) {
-                return redirect()->to('/signup/goals')
-                    ->with('errors', ["Objectif #" . ($i + 1) . " : poids cible invalide."]);
-            }
-            if (empty($g['duree']) || (int)$g['duree'] <= 0) {
-                return redirect()->to('/signup/goals')
-                    ->with('errors', ["Objectif #" . ($i + 1) . " : durée invalide."]);
-            }
+                ->with('errors', ['Veuillez sélectionner un objectif.']);
         }
 
         $userModel     = new UserModel();
@@ -147,7 +127,6 @@ class AuthController extends BaseController
         $objectifModel = new ObjectifModel();
 
         try {
-            // Build username — fallback to email prefix if prenom/nom missing
             $prenom = $userSession['prenom'] ?? '';
             $nom    = $userSession['nom']    ?? '';
 
@@ -157,18 +136,17 @@ class AuthController extends BaseController
                         preg_replace('/[^a-z0-9]/i', '', $nom)
                 );
             } else {
-                // Fallback: use part before @ in email
                 $base = strtolower(preg_replace('/[^a-z0-9.]/i', '', explode('@', $userSession['email'])[0]));
             }
 
-            $base = $base ?: 'user'; // last resort
+            $base     = $base ?: 'user';
+            $username = $base;
+            $counter  = 1;
+            while ($userModel->where('username', $username)->first()) {
+                $username = $base . $counter;
+                $counter++;
+            }
 
-            // Guarantee uniqueness
-            do {
-                $username = $base . '_' . rand(1000, 9999);
-            } while ($userModel->where('username', $username)->first());
-
-            // Insert user
             $userId = $userModel->insert([
                 'username'      => $username,
                 'password_hash' => $userSession['password_hash'],
@@ -179,8 +157,6 @@ class AuthController extends BaseController
                 throw new \Exception('Erreur création utilisateur: ' . implode(', ', $userModel->errors()));
             }
 
-            // Insert client
-            // REPLACE WITH THIS:
             $clientModel->skipValidation(true)->insert([
                 'id_user'       => $userId,
                 'email'         => $userSession['email'],
@@ -197,17 +173,28 @@ class AuthController extends BaseController
                 throw new \Exception('Erreur création client: ' . implode(', ', $clientModel->errors()));
             }
 
-            // Insert goals
-            foreach ($goals as $g) {
-                $objectifModel->db->table('goalpoids')->insert([
-                    'client_id'   => $clientId,
-                    'objectif_id' => (int)$g['objectif_id'],
-                    'poids_cible' => (float)$g['poids_cible'],
-                    'duree'       => (int)$g['duree']
-                ]);
+            // Check if goal needs poids/duree
+            $objectif     = $objectifModel->find((int)$selectedId);
+            $needsDetails = strtolower(trim($objectif['libelle'] ?? '')) !== 'calculer imc idéal';
+
+            if ($needsDetails) {
+                if (empty($poidsCible) || (float)$poidsCible <= 0) {
+                    return redirect()->to('/signup/goals')
+                        ->with('errors', ['Poids cible invalide.']);
+                }
+                if (empty($duree) || (int)$duree <= 0) {
+                    return redirect()->to('/signup/goals')
+                        ->with('errors', ['Durée invalide.']);
+                }
             }
 
-            // Set session
+            $objectifModel->db->table('goalpoids')->insert([
+                'client_id'   => $clientId,
+                'objectif_id' => (int)$selectedId,
+                'poids_cible' => $needsDetails ? (float)$poidsCible : 0,
+                'duree'       => $needsDetails ? (int)$duree : 0,
+            ]);
+
             session()->set('user', [
                 'id'        => $userId,
                 'client_id' => $clientId,

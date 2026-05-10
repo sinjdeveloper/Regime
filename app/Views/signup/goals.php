@@ -66,39 +66,33 @@
                             <?= csrf_field() ?>
 
                             <div class="options-list">
-
                                 <?php foreach (($goals ?? []) as $i => $goal): ?>
-
                                     <label class="goal-option">
                                         <span class="option-text">
                                             <?= esc((string)($goal['libelle'] ?? '')) ?>
                                         </span>
-
-                                        <input type="checkbox"
-                                            name="goals[<?= $i ?>][selected]"
-                                            value="1"
-                                            class="hidden-checkbox">
-
+                                        <input type="radio"
+                                            name="goals_selected"
+                                            value="<?= $goal['id'] ?>"
+                                            class="hidden-checkbox"
+                                            data-needs-details="<?= strtolower(trim($goal['libelle'] ?? '')) !== 'calculer imc idéal' ? '1' : '0' ?>">
                                         <span class="custom-checkbox">
                                             <span class="checkbox-inner"></span>
                                         </span>
-
                                     </label>
-
-                                    <div class="goal-extra" id="extra-<?= $i ?>">
-                                        <input type="number"
-                                            name="goals[<?= $i ?>][poids_cible]"
-                                            step="0.1" min="20" max="300"
-                                            placeholder="Poids cible (kg)">
-                                        <input type="number"
-                                            name="goals[<?= $i ?>][duree]"
-                                            min="1" max="730"
-                                            placeholder="Durée (jours)">
-                                        <input type="hidden" name="goals[<?= $i ?>][objectif_id]" value="<?= $goal['id'] ?>">
-                                    </div>
-
                                 <?php endforeach; ?>
+                            </div>
 
+                            <!-- Single shared extra fields div -->
+                            <div class="goal-extra" id="shared-extra" style="display:none;">
+                                <input type="number"
+                                    name="goals_poids_cible"
+                                    step="0.1" min="20" max="300"
+                                    placeholder="Poids cible (kg)">
+                                <input type="number"
+                                    name="goals_duree"
+                                    min="1" max="730"
+                                    placeholder="Durée (jours)">
                             </div>
 
                             <button type="submit" class="btn-primary">
@@ -114,10 +108,45 @@
         </div>
     </section>
     <script>
-    document.getElementById('goals-form').addEventListener('submit', function(e) {
-        // TEMP: disabled for testing
-    });
-</script>
+        document.querySelectorAll('.hidden-checkbox').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                const extra = document.getElementById('shared-extra');
+                if (this.dataset.needsDetails === '1') {
+                    extra.style.display = 'grid';
+                } else {
+                    extra.style.display = 'none';
+                    // Clear values so they don't interfere
+                    extra.querySelectorAll('input').forEach(i => i.value = '');
+                }
+            });
+        });
+
+        document.getElementById('goals-form').addEventListener('submit', function(e) {
+            const selected = document.querySelector('.hidden-checkbox:checked');
+            if (!selected) {
+                e.preventDefault();
+                alert('Veuillez sélectionner un objectif.');
+                return;
+            }
+
+            if (selected.dataset.needsDetails === '1') {
+                const poids = document.querySelector('input[name="goals_poids_cible"]');
+                const duree = document.querySelector('input[name="goals_duree"]');
+                if (!poids.value || parseFloat(poids.value) <= 0) {
+                    e.preventDefault();
+                    alert('Veuillez saisir un poids cible valide.');
+                    poids.focus();
+                    return;
+                }
+                if (!duree.value || parseInt(duree.value) <= 0) {
+                    e.preventDefault();
+                    alert('Veuillez saisir une durée valide en jours.');
+                    duree.focus();
+                    return;
+                }
+            }
+        });
+    </script>
 
 </body>
 
