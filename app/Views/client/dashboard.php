@@ -234,7 +234,7 @@
                 <li>🏆 Déverrouille les succès et les badges</li>
                 <li>💰 Gérez votre porte-monnaie et vos codes promo</li>
             </ul>
-            <a href="/" class="btn btn-gold btn-large">Commencer</a>
+            <a href="/" class="btn btn-gold btn-large">Retourner à l'accueil</a>
 
         </div>
 
