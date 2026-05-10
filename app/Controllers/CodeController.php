@@ -79,6 +79,8 @@ class CodeController extends BaseController
             $txOk = $transactionModel->insert([
                 'client_id' => (int) $client['id'],
                 'code_id' => (int) $code['id'],
+                'type' =>'credit',
+                'montant'=>$code['montant']
             ]);
 
             if ($txOk === false) {
