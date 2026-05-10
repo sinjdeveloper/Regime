@@ -39,7 +39,7 @@
     <script src="<?= base_url('assets/js/global.js') ?>" defer></script>
 </head>
 
-<body>
+<body data-auth="<?= $isLoggedIn ? '1' : '0' ?>" data-role="<?= esc((string)($userSession['role'] ?? '')) ?>" data-username="<?= esc((string)($userSession['username'] ?? '')) ?>">
     <section id="section-header">
         <header class="site-header">
             <div class="container header-inner">

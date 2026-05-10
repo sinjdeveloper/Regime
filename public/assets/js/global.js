@@ -1,6 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-   
+    const auth = document.body?.dataset?.auth === '1';
+    const role = document.body?.dataset?.role || '';
+    const username = document.body?.dataset?.username || '';
+    const isAdmin = role === 'admin';
+
+    const urls = {
+        login: '/user/login',
+        logout: '/logout',
+        dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
+        profile: isAdmin ? '/admin/dashboard' : '/profile',
+        imc: isAdmin ? '/admin/dashboard' : '/imc',
+        suivi: isAdmin ? '/admin/dashboard' : '/suivi',
+        gold: isAdmin ? '/admin/dashboard' : '/gold',
+    };
+
+    function buildProfilePopupHtml() {
+        if (!auth) {
+            return `
+                <a href="${urls.login}">Se connecter</a>
+                <div class="popup-divider"></div>
+                <a href="${urls.login}">Mon IMC</a>
+                <a href="${urls.login}">Suivi</a>
+                <a href="${urls.login}">Offre Gold</a>
+            `;
+        }
+
+        if (isAdmin) {
+            return `
+                <a href="${urls.dashboard}">Administration</a>
+                <div class="popup-divider"></div>
+                <a href="${urls.logout}">Déconnexion</a>
+            `;
+        }
+
+        const label = username ? `Connecté: ${username}` : 'Mon compte';
+        return `
+            <a href="${urls.profile}">${label}</a>
+            <div class="popup-divider"></div>
+            <a href="${urls.imc}">Mon IMC</a>
+            <a href="${urls.suivi}">Modifier objectifs</a>
+            <a href="${urls.suivi}">Modifier durée</a>
+            <a href="${urls.gold}">Entrer code</a>
+            <div class="popup-divider"></div>
+            <a href="${urls.logout}">Déconnexion</a>
+        `;
+    }
 
     const profileBtn = document.querySelector(".btn-icon");
     if (profileBtn) {
@@ -8,13 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const popup = document.createElement("div");
         popup.className = "profile-popup";
 
-        popup.innerHTML = `
-            <a href="/login"> Non connecté</a>
-            <div class="popup-divider"></div>
-            <a href="/login"> Modifier objectifs</a>
-            <a href="/login">Modifier durée</a>
-            <a href="/login"> Entrer code</a>
-        `;
+        popup.innerHTML = buildProfilePopupHtml();
 
         document.body.appendChild(popup);
 
@@ -29,6 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         profileBtn.addEventListener("click", (e) => {
             e.preventDefault();
+
+            // Rebuild content in case auth state changed
+            popup.innerHTML = buildProfilePopupHtml();
 
             isOpen = !isOpen;
 

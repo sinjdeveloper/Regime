@@ -34,7 +34,8 @@
               <?php $errors = session('errors'); ?>
 
               <?php if (!empty($errors) && is_array($errors)): ?>
-                <div style="margin-bottom:12px;padding:10px 12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
+                <div
+                  style="margin-bottom:12px;padding:10px 12px;border:1px solid #f5c2c7;background:#f8d7da;color:#842029;border-radius:8px;">
                   <?php foreach ($errors as $error): ?>
                     <div><?= esc($error) ?></div>
                   <?php endforeach; ?>
@@ -85,10 +86,10 @@
         </div>
       </div>
 
-      <button class="btn-admin">
+      <a class="btn-admin" href="<?= site_url('/user/login') ?>">
         <img src="<?= base_url('assets/images/login') ?>/28_160.svg" alt="" class="admin-icon">
-        <span>Admin</span>
-      </button>
+        <span>Public</span>
+      </a>
     </div>
   </section>
 </body>

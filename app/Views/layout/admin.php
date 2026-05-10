@@ -16,7 +16,12 @@
 </head>
 
 
-<body>
+<?php
+$userSession = session()->get('user');
+$isLoggedIn = is_array($userSession) && !empty($userSession['id']);
+?>
+
+<body data-auth="<?= $isLoggedIn ? '1' : '0' ?>" data-role="<?= esc((string)($userSession['role'] ?? '')) ?>" data-username="<?= esc((string)($userSession['username'] ?? '')) ?>">
     <section id="section-header" class="app-wrapper">
         <header class="admin-header">
             <div class="header-left">
