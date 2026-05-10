@@ -31,3 +31,6 @@ INSERT INTO code (token, montant, statut_code_id) VALUES
 ('VAR013-200000', 200000, 1),
 ('VAR014-250000', 250000, 1),
 ('VAR015-500000', 500000, 1);
+
+INSERT INTO StatutCode (libelle) VALUES 
+('Refusé');

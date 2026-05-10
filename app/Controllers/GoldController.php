@@ -17,21 +17,6 @@ class GoldController extends BaseController
         //
     }
 
-    /**
-     * API - Subscribe to Gold membership
-     * POST /api/gold/subscribe
-     *
-     * Logique:
-     * 1. Vérifier authentification
-     * 2. Charger client
-     * 3. Vérifier pas déjà Gold
-     * 4. Vérifier solde suffisant
-     * 5. Débiter wallet
-     * 6. Marquer estGold = true
-     * 7. Enregistrer transaction
-     *
-     * @return string JSON
-     */
     public function subscribe()
     {
         // Vérifier authentification

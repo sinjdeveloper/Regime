@@ -55,6 +55,12 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
         $routes->get('gold','DashboardController::getRepartitionGold');
         $routes->get('regimes','DashboardController::getPopularRegimes');
         });
+    $routes->group('codes',function ($routes){
+        $routes->get('index','CodeController::index');
+        $routes->post('validate/(:num)','CodeController::validateCode/$1');
+        $routes->post('reject/(:num)','CodeController::reject');
+
+    });
 });
 
 // API Routes - Profile & Goals
