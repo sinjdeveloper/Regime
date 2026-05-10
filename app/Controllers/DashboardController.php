@@ -39,7 +39,6 @@ class DashboardController extends BaseController
                 }
             }
         } catch (\Throwable $e) {
-            // Si la table regimeclient n'existe pas encore, on affichera des zéros.
             $regimeObjectifCounts = [];
         }
 
