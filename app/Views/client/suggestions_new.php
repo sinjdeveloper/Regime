@@ -288,6 +288,300 @@
             margin: 0 0 24px 0;
         }
 
+        /* Navbar Styles */
+        nav.navbar {
+            background: linear-gradient(135deg, #663366 0%, #4d2d4d 100%);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar-logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-logo .highlight {
+            color: var(--accent);
+        }
+
+        .navbar-center {
+            display: flex;
+            gap: 32px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .navbar-center a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+
+        .navbar-center a:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-gold-offer {
+            background-color: var(--accent);
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-gold-offer:hover {
+            opacity: 0.9;
+        }
+
+        .profile-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+            color: var(--text-dark);
+        }
+
+        .modal-section {
+            margin-bottom: 24px;
+        }
+
+        .modal-section label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-section p {
+            margin: 0;
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .modal-section input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.8;
+        }
+
+        .gold-badge {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #333;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .price-gold {
+            font-size: 32px;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .btn-code {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-left: 8px;
+        }
+
+        .btn-code:hover {
+            opacity: 0.9;
+        }
+
+        .modal-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .modal-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-input-group button {
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .modal-input-group button:hover {
+            opacity: 0.9;
+        }
+
+        .code-message {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .code-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .code-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         @media (max-width: 768px) {
             .program-grid {
                 grid-template-columns: 1fr;
@@ -300,29 +594,165 @@
             .suggestions-status {
                 flex-direction: column;
             }
+
+            .navbar-center {
+                display: none;
+            }
+
+            .modal-input-group {
+                flex-direction: column;
+            }
+
+            .modal-input-group button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <section id="section-header">
-        <header class="site-header">
-            <div class="container header-inner">
-                <a href="<?= base_url('/') ?>" class="logo">
-                    <span class="logo-text">Vary<span class="highlight">'</span>Ena</span>
-                </a>
-                <nav class="main-nav">
-                    <a href="<?= base_url('/dashboard') ?>">Dashboard</a>
-                    <a href="<?= base_url('/suivi') ?>">Suivi</a>
-                    <a href="<?= base_url('/wallet') ?>">Wallet</a>
-                </nav>
-                <div class="header-actions">
-                    <a href="<?= base_url('/gold') ?>" class="btn btn-gold">Offre Gold</a>
-                    <a href="<?= base_url('/logout') ?>" class="btn btn-icon">👤</a>
-                </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <a href="<?= base_url('/') ?>" class="navbar-logo">
+                Vary<span class="highlight">'</span>Ena
+            </a>
+
+            <!-- Center Links -->
+            <div class="navbar-center">
+                <a href="<?= base_url('/dashboard') ?>">Programmes</a>
+                <a href="<?= base_url('/imc') ?>">Mon IMC</a>
+                <a href="<?= base_url('/suivi') ?>">Suivi</a>
             </div>
-        </header>
-    </section>
+
+            <!-- Right Actions -->
+            <div class="navbar-right">
+                <button class="btn-gold-offer" onclick="openGoldModal()">Offre Gold</button>
+                <button class="btn-code" onclick="openCodeModal()">💳 Code</button>
+                <div class="profile-icon" onclick="openProfileModal()">👤</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()">✕</button>
+            <h2 class="modal-title">Mon Profil</h2>
+
+            <div class="modal-section">
+                <label>Utilisateur</label>
+                <p><?= esc($client['name'] ?? 'Client') ?></p>
+            </div>
+
+            <div class="modal-section">
+                <label>Email</label>
+                <p><?= esc($client['email'] ?? 'N/A') ?></p>
+            </div>
+
+            <div class="modal-section">
+                <label>Poids Actuel</label>
+                <p><?= (int)$client['poids'] ?>kg</p>
+            </div>
+
+            <div class="modal-section">
+                <label>Taille</label>
+                <p><?= (int)$client['taille'] ?>cm</p>
+            </div>
+
+            <div class="modal-section">
+                <label>Statut</label>
+                <p><?= $isGold ? '⭐ Membre GOLD' : 'Membre Standard' ?></p>
+            </div>
+
+            <div class="modal-section">
+                <label>Porte-monnaie</label>
+                <p><?= number_format($argent ?? 0, 2) ?>€</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeProfileModal()">Fermer</button>
+                <button class="btn-primary" onclick="window.location.href='<?= base_url('/logout') ?>'">Déconnexion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gold Modal -->
+    <div id="goldModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeGoldModal()">✕</button>
+            <h2 class="modal-title">Offre GOLD</h2>
+
+            <div class="gold-badge">✨ Devenir Membre GOLD</div>
+
+            <div class="modal-section">
+                <label>Avantages GOLD</label>
+                <ul style="margin: 8px 0 0 0; padding-left: 20px; color: var(--text-dark);">
+                    <li>15% de réduction sur tous les régimes</li>
+                    <li>Accès prioritaire aux nouveaux programmes</li>
+                    <li>Suivi personnalisé illimité</li>
+                    <li>Support client 24/7</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <label>Prix</label>
+                <div class="price-gold">49.99€</div>
+                <p style="font-size: 14px; color: #999;">Accès illimité pendant 1 mois</p>
+            </div>
+
+            <?php if (!$isGold): ?>
+                <div class="modal-section">
+                    <label>Votre Porte-monnaie</label>
+                    <p><?= number_format($argent ?? 0, 2) ?>€</p>
+                </div>
+            <?php endif; ?>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeGoldModal()">Annuler</button>
+                <?php if ($isGold): ?>
+                    <button class="btn-primary" style="background-color: #999; cursor: not-allowed;" disabled>Déjà GOLD ✓</button>
+                <?php else: ?>
+                    <button class="btn-primary" onclick="subscribeToGold()">S'abonner Maintenant</button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Promo Modal -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCodeModal()">✕</button>
+            <h2 class="modal-title">Ajouter du Crédit</h2>
+
+            <div id="codeMessage"></div>
+
+            <div class="modal-section">
+                <label>Porte-monnaie Actuel</label>
+                <p><strong><?= number_format($argent ?? 0, 2) ?>€</strong></p>
+            </div>
+
+            <div class="modal-section">
+                <label>Code Promo</label>
+                <div class="modal-input-group">
+                    <input 
+                        type="text" 
+                        id="codeInput" 
+                        placeholder="Entrez votre code promo"
+                        onkeypress="if(event.key === 'Enter') validateCode()"
+                    >
+                    <button onclick="validateCode()">Valider</button>
+                </div>
+                <p style="font-size: 12px; color: #999; margin: 8px 0 0 0;">
+                    📌 Ex: CODE100, CODE50, WELCOME20...
+                </p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeCodeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Suggestions Intro -->
     <section id="suggestions-intro">
@@ -429,9 +859,106 @@
     </section>
 
     <script>
+        // Modal Functions
+        function openProfileModal() {
+            document.getElementById('profileModal').classList.add('active');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
+
+        function openGoldModal() {
+            document.getElementById('goldModal').classList.add('active');
+        }
+
+        function closeGoldModal() {
+            document.getElementById('goldModal').classList.remove('active');
+        }
+
+        function openCodeModal() {
+            document.getElementById('codeModal').classList.add('active');
+            document.getElementById('codeMessage').innerHTML = '';
+            document.getElementById('codeInput').value = '';
+        }
+
+        function closeCodeModal() {
+            document.getElementById('codeModal').classList.remove('active');
+        }
+
+        function subscribeToGold() {
+            alert('Redirection vers la page de paiement pour l\'abonnement GOLD...');
+            // window.location.href = '<?= base_url('/subscribe-gold') ?>';
+        }
+
+        function validateCode() {
+            const code = document.getElementById('codeInput').value.trim();
+            const messageDiv = document.getElementById('codeMessage');
+
+            if (!code) {
+                messageDiv.innerHTML = '<div class="code-message error">❌ Veuillez entrer un code promo</div>';
+                return;
+            }
+
+            // Appel AJAX pour valider le code
+            fetch('<?= base_url('/validate-code') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.innerHTML = `<div class="code-message success">✓ ${data.message}<br><strong>+${data.amount}€ ajoutés!</strong></div>`;
+                    document.getElementById('codeInput').value = '';
+                    // Rafraîchir la page après 2 secondes
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = `<div class="code-message error">❌ ${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                messageDiv.innerHTML = '<div class="code-message error">❌ Erreur lors de la validation</div>';
+                console.error('Error:', error);
+            });
+        }
+
         function selectRegime(regimeId) {
             alert('Régime ' + regimeId + ' sélectionné!');
         }
+
+        // Close modals when clicking outside
+        document.getElementById('profileModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProfileModal();
+            }
+        });
+
+        document.getElementById('goldModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGoldModal();
+            }
+        });
+
+        document.getElementById('codeModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCodeModal();
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProfileModal();
+                closeGoldModal();
+                closeCodeModal();
+            }
+        });
     </script>
 </body>
 </html>

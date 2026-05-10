@@ -27,6 +27,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('/profile', 'ClientController::profile');
 
+    $routes->post('/validate-code', 'ClientController::validateCode');
+
     $routes->get('/programs/regime/(:num)', 'ProgramController::regime/$1');
     $routes->get('/programs/sport/(:num)', 'ProgramController::sport/$1');
 });

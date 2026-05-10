@@ -206,7 +206,57 @@ class ClientController extends BaseController
             'client' => $client,
             'suggestions' => $suggestions,
             'isGold' => $isGold,
-            'objectif' => $objectif
+            'objectif' => $objectif,
+            'argent' => $client['argent'] ?? 0
+        ]);
+    }
+
+
+    public function validateCode()
+    {
+        $session = session();
+        $user = $session->get('user');
+
+        if (!$user) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Non authentifié']);
+        }
+
+        $json = $this->request->getJSON();
+        $codeValue = $json->code ?? '';
+
+        if (empty($codeValue)) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Code vide']);
+        }
+
+        $codeModel = new CodeModel();
+        $code = $codeModel->where('num', $codeValue)->first();
+
+        if (!$code) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Code invalide']);
+        }
+
+        if ($code['utilise']) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Code déjà utilisé']);
+        }
+
+        $clientModel = new ClientModel();
+        $client = $clientModel->where('id_user', $user['id'])->first();
+
+        if (!$client) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Client non trouvé']);
+        }
+
+        // Mettre à jour l'argent du client
+        $nvelArgent = $client['argent'] + $code['montant'];
+        $clientModel->update($client['id'], ['argent' => $nvelArgent]);
+
+        // Marquer le code comme utilisé
+        $codeModel->update($code['id'], ['utilise' => true]);
+
+        return $this->response->setJSON([
+            'success' => true, 
+            'message' => 'Code validé avec succès !',
+            'amount' => $code['montant']
         ]);
     }
 
