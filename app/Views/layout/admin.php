@@ -21,7 +21,8 @@ $userSession = session()->get('user');
 $isLoggedIn = is_array($userSession) && !empty($userSession['id']);
 ?>
 
-<body data-auth="<?= $isLoggedIn ? '1' : '0' ?>" data-role="<?= esc((string)($userSession['role'] ?? '')) ?>" data-username="<?= esc((string)($userSession['username'] ?? '')) ?>">
+<body data-auth="<?= $isLoggedIn ? '1' : '0' ?>" data-role="<?= esc((string) ($userSession['role'] ?? '')) ?>"
+    data-username="<?= esc((string) ($userSession['username'] ?? '')) ?>">
     <section id="section-header" class="app-wrapper">
         <header class="admin-header">
             <div class="header-left">
@@ -51,6 +52,8 @@ $isLoggedIn = is_array($userSession) && !empty($userSession['id']);
     $isDashboard = strpos($path, 'admin/dashboard') === 0;
     $isSports = strpos($path, 'admin/sports') === 0;
     $isSettings = strpos($path, 'admin/settings') === 0;
+    $isCodes = strpos($path, 'admin/codes') === 0;
+
     ?>
 
     <section id="section-dashboard" class="app-wrapper">
@@ -68,6 +71,10 @@ $isLoggedIn = is_array($userSession) && !empty($userSession['id']);
                     <a href="<?= site_url('admin/sports/index') ?>" class="nav-item<?= $isSports ? ' active' : '' ?>">
                         <img src="<?= base_url('assets/images/admin') ?>/20_546.svg" alt="Sports">
                         <span>Sports</span>
+                    </a>
+                    <a href="<?= site_url('admin/codes/index') ?>" class="nav-item<?= $isCodes ? ' active' : '' ?>">
+                        <img src="<?= base_url('assets/images/admin') ?>/20_546.svg" alt="Codes">
+                        <span>Codes</span>
                     </a>
                     <a href="<?= site_url('admin/settings') ?>" class="nav-item<?= $isSettings ? ' active' : '' ?>">
                         <img src="<?= base_url('assets/images/admin') ?>/20_555.svg" alt="Paramètres">
