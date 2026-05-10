@@ -810,7 +810,7 @@
                                     <div class="price-display">
                                         <?php if ($suggestion['regime']['reduction_appliquee'] > 0): ?>
                                             <span class="price-original">
-                                                <?= number_format($suggestion['regime']['prix_original'], 2) ?>€
+                                                <?= number_format($suggestion['regime']['prix_original'], 2) ?> Ar
                                             </span>
                                             <span class="discount-badge">
                                                 -<?= (int)$suggestion['regime']['reduction_appliquee'] ?>%
@@ -819,7 +819,7 @@
                                         <span class="price-value">
                                             <?= number_format($suggestion['regime']['prix_final'], 2) ?>
                                         </span>
-                                        <span class="price-currency">€</span>
+                                        <span class="price-currency">Ar</span>
                                     </div>
                                 </div>
 
