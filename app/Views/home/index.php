@@ -3,6 +3,15 @@
 /** @var array $regimes */ ?>
 <?php /** @var array $sports */ ?>
 
+<?php
+    $userSession = session()->get('user');
+    $isLoggedIn = is_array($userSession) && ! empty($userSession['id']);
+    $isAdmin = $isLoggedIn && (($userSession['role'] ?? null) === 'admin');
+    $loginUrl = site_url('/user/login');
+    $featuresUrl = $isAdmin ? site_url('/admin/dashboard') : site_url('/dashboard');
+    $guardedUrl = $isLoggedIn ? $featuresUrl : $loginUrl;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,12 +41,12 @@
                 </a>
                 <nav class="main-nav">
                     <a href="#section-programs">Programmes</a>
-                    <a href="/login">Mon IMC</a>
-                    <a href="/login">Suivi</a>
+                    <a href="<?= $guardedUrl ?>">Mon IMC</a>
+                    <a href="<?= $guardedUrl ?>">Suivi</a>
                 </nav>
                 <div class="header-actions">
-                    <a href="/login" class="btn btn-gold">Offre Gold</a>
-                    <a href="/login" class="btn btn-icon"><img src="<?= base_url('assets/images/images/7_703.svg') ?>" alt="User Profile"></a>
+                    <a href="<?= $guardedUrl ?>" class="btn btn-gold">Offre Gold</a>
+                    <a href="<?= $guardedUrl ?>" class="btn btn-icon"><img src="<?= base_url('assets/images/images/7_703.svg') ?>" alt="User Profile"></a>
                 </div>
             </div>
         </header>
@@ -48,7 +57,7 @@
                 <h1 class="hero-title">Atteignez vos objectifs avec Vary'Ena</h1>
                 <p class="hero-subtitle">Des programmes personnalisés de nutrition et de sport pour transformer votre vie</p>
                 <div class="hero-buttons">
-                    <a href="/login" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
+                    <a href="<?= $guardedUrl ?>" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
                     <a href="#section-programs" class="btn btn-outline">Découvrir les programmes</a>
                 </div>
             </div>
@@ -117,7 +126,7 @@
                                     Prix : <?= esc((string)$regime['prix']) ?> Ar
                                 </div>
 
-                                <a href="/login" class="btn btn-card">
+                                <a href="<?= $guardedUrl ?>" class="btn btn-card">
                                     Voir Détails
                                 </a>
                             </div>
@@ -140,7 +149,7 @@
                                     Réduction : <?= esc((string)$sport['pourcentage_reduction']) ?>%
                                 </p>
 
-                                <a href="/login" class="btn btn-card">
+                                <a href="<?= $guardedUrl ?>" class="btn btn-card">
                                     Voir Détails
                                 </a>
                             </div>
@@ -156,7 +165,7 @@
             <div class="cta-box">
                 <h2 class="cta-title">Prêt à commencer votre transformation ?</h2>
                 <p class="cta-desc">Rejoignez des milliers de personnes qui ont atteint leurs objectifs avec Vary'Ena</p>
-                <a href="/login" class="btn btn-gold btn-large">Démarrer gratuitement</a>
+                <a href="<?= $guardedUrl ?>" class="btn btn-gold btn-large">Démarrer gratuitement</a>
             </div>
         </div>
     </section>

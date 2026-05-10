@@ -20,7 +20,7 @@ class ClientController extends BaseController
         $userSession = session()->get('user');
         
         if(!$userSession){
-            return redirect()->to('/login');
+            return redirect()->to('/user/login');
         }
         $userId = $userSession['id'];
 
@@ -28,7 +28,7 @@ class ClientController extends BaseController
         $client = $clientModel->where('id_user', $userId)->first();
 
         if(!$client){
-            return redirect()->to('/login');
+            return redirect()->to('/user/login');
         }
 
         $clientId = $client['id'];
