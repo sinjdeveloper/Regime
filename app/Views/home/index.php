@@ -8,8 +8,16 @@
     $isLoggedIn = is_array($userSession) && ! empty($userSession['id']);
     $isAdmin = $isLoggedIn && (($userSession['role'] ?? null) === 'admin');
     $loginUrl = site_url('/user/login');
-    $featuresUrl = $isAdmin ? site_url('/admin/dashboard') : site_url('/dashboard');
-    $guardedUrl = $isLoggedIn ? $featuresUrl : $loginUrl;
+    $signupUrl = site_url('/signup');
+
+    $adminHomeUrl = site_url('/admin/dashboard');
+
+    $imcUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/imc') : $loginUrl);
+    $suiviUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/suivi') : $loginUrl);
+    $goldUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/gold') : $loginUrl);
+    $profileUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/profile') : $loginUrl);
+
+    $ctaUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/dashboard') : $signupUrl);
 ?>
 
 <!DOCTYPE html>
@@ -35,18 +43,18 @@
     <section id="section-header">
         <header class="site-header">
             <div class="container header-inner">
-                <a href="/login" class="logo">
+                <a href="<?= site_url('/') ?>" class="logo">
                     <img src="<?= base_url('assets/images/images/7_677.svg') ?>" alt="Vary'Ena Logo">
                     <span class="logo-text">Vary<span class="highlight">'</span>Ena</span>
                 </a>
                 <nav class="main-nav">
                     <a href="#section-programs">Programmes</a>
-                    <a href="<?= $guardedUrl ?>">Mon IMC</a>
-                    <a href="<?= $guardedUrl ?>">Suivi</a>
+                    <a href="<?= $imcUrl ?>">Mon IMC</a>
+                    <a href="<?= $suiviUrl ?>">Suivi</a>
                 </nav>
                 <div class="header-actions">
-                    <a href="<?= $guardedUrl ?>" class="btn btn-gold">Offre Gold</a>
-                    <a href="<?= $guardedUrl ?>" class="btn btn-icon"><img src="<?= base_url('assets/images/images/7_703.svg') ?>" alt="User Profile"></a>
+                    <a href="<?= $goldUrl ?>" class="btn btn-gold">Offre Gold</a>
+                    <a href="<?= $profileUrl ?>" class="btn btn-icon"><img src="<?= base_url('assets/images/images/7_703.svg') ?>" alt="User Profile"></a>
                 </div>
             </div>
         </header>
@@ -57,7 +65,7 @@
                 <h1 class="hero-title">Atteignez vos objectifs avec Vary'Ena</h1>
                 <p class="hero-subtitle">Des programmes personnalisés de nutrition et de sport pour transformer votre vie</p>
                 <div class="hero-buttons">
-                    <a href="<?= $guardedUrl ?>" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
+                    <a href="<?= $imcUrl ?>" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
                     <a href="#section-programs" class="btn btn-outline">Découvrir les programmes</a>
                 </div>
             </div>
@@ -126,7 +134,7 @@
                                     Prix : <?= esc((string)$regime['prix']) ?> Ar
                                 </div>
 
-                                <a href="<?= $guardedUrl ?>" class="btn btn-card">
+                                <a href="<?= $isLoggedIn ? site_url('programs/regime/' . $regime['id']) : $loginUrl ?>" class="btn btn-card">
                                     Voir Détails
                                 </a>
                             </div>
@@ -149,7 +157,7 @@
                                     Réduction : <?= esc((string)$sport['pourcentage_reduction']) ?>%
                                 </p>
 
-                                <a href="<?= $guardedUrl ?>" class="btn btn-card">
+                                <a href="<?= $isLoggedIn ? site_url('programs/sport/' . $sport['id']) : $loginUrl ?>" class="btn btn-card">
                                     Voir Détails
                                 </a>
                             </div>
@@ -165,7 +173,7 @@
             <div class="cta-box">
                 <h2 class="cta-title">Prêt à commencer votre transformation ?</h2>
                 <p class="cta-desc">Rejoignez des milliers de personnes qui ont atteint leurs objectifs avec Vary'Ena</p>
-                <a href="<?= $guardedUrl ?>" class="btn btn-gold btn-large">Démarrer gratuitement</a>
+                <a href="<?= $ctaUrl ?>" class="btn btn-gold btn-large">Démarrer gratuitement</a>
             </div>
         </div>
     </section>

@@ -35,14 +35,15 @@ class GoldController extends BaseController
     public function subscribe()
     {
         // Vérifier authentification
-        if (!$this->session->has('user_id')) {
+        $userSession = session()->get('user');
+        if (!is_array($userSession) || empty($userSession['id'])) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Non authentifié'
             ])->setStatusCode(401);
         }
 
-        $userId = $this->session->get('user_id');
+        $userId = (int) $userSession['id'];
         $clientModel = new ClientModel();
         $transactionModel = new TransactionModel();
 

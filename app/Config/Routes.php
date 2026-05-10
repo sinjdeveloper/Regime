@@ -16,6 +16,17 @@ $routes->get('/logout','AuthController::logout');
 // Client Dashboard
 $routes->get('/dashboard', 'ClientController::dashboard');
 
+// Pages fonctionnalités (utilisateur connecté)
+$routes->group('', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/imc', 'ClientController::imc');
+    $routes->get('/suivi', 'ClientController::suivi');
+    $routes->get('/gold', 'ClientController::gold');
+    $routes->get('/profile', 'ClientController::profile');
+
+    $routes->get('/programs/regime/(:num)', 'ProgramController::regime/$1');
+    $routes->get('/programs/sport/(:num)', 'ProgramController::sport/$1');
+});
+
 $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('infos','DashboardController::index');
     $routes->get(

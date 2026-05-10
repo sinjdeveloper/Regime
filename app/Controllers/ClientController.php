@@ -15,6 +15,23 @@ use App\Models\GoalPoidsModel;
 
 class ClientController extends BaseController
 {
+    private function getClientOrRedirect()
+    {
+        $userSession = session()->get('user');
+        if (!is_array($userSession) || empty($userSession['id'])) {
+            return redirect()->to('/user/login');
+        }
+
+        $clientModel = new ClientModel();
+        $client = $clientModel->where('id_user', (int) $userSession['id'])->first();
+
+        if (!$client) {
+            return redirect()->to('/user/login');
+        }
+
+        return [$userSession, $client];
+    }
+
     public function dashboard()
     {
         $userSession = session()->get('user');
@@ -51,6 +68,69 @@ class ClientController extends BaseController
             'argent' => $argent
         ];
         return view('client/dashboard', $data);
+    }
+
+    public function imc()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        $poids = (float) $client['poids'];
+        $taille = (float) $client['taille'];
+        $imc = $poids / (($taille / 100) ** 2);
+
+        return view('client/imc', [
+            'client' => $client,
+            'imc' => round($imc, 2),
+        ]);
+    }
+
+    public function suivi()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        $goalPoidsModel = new GoalPoidsModel();
+        $objectifs = $goalPoidsModel->getClientGoalsWithDetails((int) $client['id']);
+
+        return view('client/suivi', [
+            'client' => $client,
+            'objectifs' => $objectifs,
+        ]);
+    }
+
+    public function gold()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        return view('client/gold', [
+            'client' => $client,
+            'isGold' => (bool) ($client['estGold'] ?? false),
+        ]);
+    }
+
+    public function profile()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        return view('client/profile', [
+            'client' => $client,
+            'user' => $userSession,
+        ]);
     }
 
     /**

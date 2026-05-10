@@ -138,7 +138,7 @@
         <!-- Header -->
         <div class="dashboard-header">
             <div>
-                <h1>Bienvenue, <?= esc((string)($client['email'] ?? 'User')) ?></h1>
+                <h1>Bienvenue, <?= esc((string) ($client['email'] ?? 'User')) ?></h1>
                 <p class="welcome-message">Votre tableau de bord personnel Vary'Ena</p>
             </div>
             <a href="/logout" class="logout-btn">Déconnexion</a>
@@ -168,14 +168,14 @@
             <!-- Weight Card -->
             <div class="card">
                 <h2>Poids Actuel</h2>
-                <div class="card-value"><?= (int)$client['poids'] ?></div>
+                <div class="card-value"><?= (int) $client['poids'] ?></div>
                 <div class="card-label">kg</div>
             </div>
 
             <!-- Height Card -->
             <div class="card">
                 <h2>Taille</h2>
-                <div class="card-value"><?= (int)$client['taille'] ?></div>
+                <div class="card-value"><?= (int) $client['taille'] ?></div>
                 <div class="card-label">cm</div>
             </div>
 
@@ -234,7 +234,10 @@
                 <li>🏆 Déverrouille les succès et les badges</li>
                 <li>💰 Gérez votre porte-monnaie et vos codes promo</li>
             </ul>
+            <a href="/" class="btn btn-gold btn-large">Commencer</a>
+
         </div>
+
     </div>
 </body>
 
