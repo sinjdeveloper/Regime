@@ -697,7 +697,7 @@
 
             <div class="modal-section">
                 <label>Prix</label>
-                <div class="price-gold">49.99€</div>
+                <div class="price-gold"><?= number_format(\App\Controllers\GoldController::getGoldPrice(), 2) ?>€</div>
                 <p style="font-size: 14px; color: #999;">Accès illimité pendant 1 mois</p>
             </div>
 

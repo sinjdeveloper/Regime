@@ -53,7 +53,7 @@ Codes
                 <tbody>
                     <?php foreach ($codes as $code) { ?>
                         
-                    <?= $code['id']?><tr>
+                    <tr>
                             <td>
                                 <div class="diet-info">
                                     <div class="diet-details">

@@ -50,6 +50,7 @@ $isLoggedIn = is_array($userSession) && !empty($userSession['id']);
     $path = (string) service('uri')->getPath();
     $isDashboard = strpos($path, 'admin/dashboard') === 0;
     $isSports = strpos($path, 'admin/sports') === 0;
+    $isSettings = strpos($path, 'admin/settings') === 0;
     ?>
 
     <section id="section-dashboard" class="app-wrapper">
@@ -68,7 +69,7 @@ $isLoggedIn = is_array($userSession) && !empty($userSession['id']);
                         <img src="<?= base_url('assets/images/admin') ?>/20_546.svg" alt="Sports">
                         <span>Sports</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="<?= site_url('admin/settings') ?>" class="nav-item<?= $isSettings ? ' active' : '' ?>">
                         <img src="<?= base_url('assets/images/admin') ?>/20_555.svg" alt="Paramètres">
                         <span>Paramètres</span>
                     </a>

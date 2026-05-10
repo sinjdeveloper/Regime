@@ -6,11 +6,14 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ClientModel;
 use App\Models\TransactionModel;
+use App\Services\AppSettingsService;
 
 class GoldController extends BaseController
 {
-    // Prix de l'abonnement Gold (€)
-    private const GOLD_PRICE = 49.99;
+    private static function goldPrice(): float
+    {
+        return AppSettingsService::getGoldPrice();
+    }
 
     public function index()
     {
@@ -42,14 +45,16 @@ class GoldController extends BaseController
             ])->setStatusCode(400);
         }
 
-        if ($client['argent'] < self::GOLD_PRICE) {
+        $goldPrice = self::goldPrice();
+
+        if ($client['argent'] < $goldPrice) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Solde insuffisant',
                 'data' => [
                     'solde_actuel' => $client['argent'],
-                    'prix_gold' => self::GOLD_PRICE,
-                    'manque' => self::GOLD_PRICE - $client['argent']
+                    'prix_gold' => $goldPrice,
+                    'manque' => $goldPrice - $client['argent']
                 ]
             ])->setStatusCode(400);
         }
@@ -58,7 +63,7 @@ class GoldController extends BaseController
         $db->transStart();
 
         try {
-            $nouveauSolde = $client['argent'] - self::GOLD_PRICE;
+            $nouveauSolde = $client['argent'] - $goldPrice;
             $updateResult = $clientModel->update($clientId, [
                 'argent' => $nouveauSolde,
                 'estGold' => 1
@@ -102,7 +107,7 @@ class GoldController extends BaseController
                 'message' => 'Abonnement Gold activé !',
                 'data' => [
                     'nouveau_solde' => $nouveauSolde,
-                    'prix_gold' => self::GOLD_PRICE,
+                    'prix_gold' => $goldPrice,
                     'reduction_appliquee' => '15%'
                 ]
             ]);
@@ -124,6 +129,6 @@ class GoldController extends BaseController
      */
     public static function getGoldPrice(): float
     {
-        return self::GOLD_PRICE;
+        return self::goldPrice();
     }
 }
