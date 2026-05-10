@@ -43,11 +43,11 @@
               <?php endif; ?>
 
               <div class="form-group">
-                <label for="email">E-mail</label>
+                <label for="username">Nom d'utilisateur</label>
                 <div class="input-wrapper">
                   <img src="<?= base_url('assets/images/login') ?>/28_120.svg" alt="" class="icon-left">
                   <?= csrf_field() ?>
-                  <input type="email" id="email" placeholder="admin@example.com" name="email" value="<?= old('email') ?>">
+                  <input type="text" id="username" placeholder="admin" name="username" value="<?= old('username') ?>">
                 </div>
               </div>
               <div class="form-group">
@@ -81,7 +81,6 @@
         </div>
         <div class="copyright-text">
           © 2026 Vary'Ena. All rights reserved.
-          <?= password_hash('admin', PASSWORD_DEFAULT) ?>
 
         </div>
       </div>

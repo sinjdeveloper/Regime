@@ -41,11 +41,11 @@
               <?php endif; ?>
 
               <div class="form-group">
-                <label for="username">Nom d'utilisateur</label>
+                <label for="email">E-mail</label>
                 <div class="input-wrapper">
                   <img src="<?= base_url('assets/images/login/28_120.svg') ?>" alt="" class="icon-left">
-                  <input type="text" id="username" placeholder="test1" name="username"
-                    value="<?= old('username') ?>">
+                  <input type="email" id="email" placeholder="test@example.com" name="email"
+                    value="<?= old('email') ?>">
                 </div>
               </div>
               <div class="form-group">
