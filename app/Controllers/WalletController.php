@@ -12,188 +12,136 @@ class WalletController extends BaseController
 {
     public function index()
     {
-        //
+
+    }
+    
+
+
+public function redeemCode()
+{
+    $request = $this->request->getJSON();
+
+    if (!$request || empty($request->code)) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Code promo requis'
+        ])->setStatusCode(400);
     }
 
-    /**
-     * API - Affiche formulaire pour entrer un code promo
-     * GET /api/wallet/code-popup
-     *
-     * @return string JSON
-     */
-    public function showCodePopup()
-    {
-        // Vérifier authentification
-        if (!$this->session->has('user_id')) {
+    $token = trim($request->code);
+
+    $clientModel = new ClientModel();
+    $codeModel = new CodeModel();
+    $historiqueModel = new TransactionModel();
+
+    // Client connecté
+    $client = $clientModel
+        ->where('id_user', session()->get('user')['id'])
+        ->first();
+
+    if (!$client) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Client introuvable'
+        ])->setStatusCode(404);
+    }
+
+    $codeRecord = $codeModel
+        ->where('token', $token)
+        ->first();
+
+    if (!$codeRecord) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Code promo invalide'
+        ])->setStatusCode(400);
+    }
+
+    /*
+        1 = Valide
+        2 = En attente de validation
+        3 = Utilisé
+    */
+
+    if ((int)$codeRecord['statut_code_id'] === 2) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Ce code est déjà en attente de validation.'
+        ])->setStatusCode(400);
+    }
+
+    if ((int)$codeRecord['statut_code_id'] === 3) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Ce code a déjà été utilisé.'
+        ])->setStatusCode(400);
+    }
+
+    if ((int)$codeRecord['statut_code_id'] !== 1) {
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => 'Ce code ne peut pas être utilisé.'
+        ])->setStatusCode(400);
+    }
+
+    $db = \Config\Database::connect();
+    $db->transBegin();
+
+    try {
+        // 1. Passer le code en attente
+        $updated = $codeModel->update($codeRecord['id'], [
+            'statut_code_id' => 2
+        ]);
+        if ($updated === false) {
+            $db->transRollback();
+
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
+                'message' => 'Impossible de mettre à jour le statut du code.',
+                'errors'  => $codeModel->errors(),
+            ])->setStatusCode(400);
         }
+
+        // 2. Enregistrer la demande
+        $inserted = $historiqueModel->insert([
+            'client_id' => $client['id'],
+            'code_id'   => $codeRecord['id'],
+
+        ]);
+        if ($inserted === false) {
+            $db->transRollback();
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Impossible d’enregistrer la demande.',
+                'errors'  => $historiqueModel->errors(),
+            ])->setStatusCode(400);
+        }
+
+        if (!$db->transStatus()) {
+            $db->transRollback();
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Erreur lors de l’enregistrement.'
+            ])->setStatusCode(500);
+        }
+
+        $db->transCommit();
 
         return $this->response->setJSON([
             'success' => true,
-            'data' => [
-                'form' => [
-                    'input_placeholder' => 'Entrez votre code promo',
-                    'button_label' => 'Appliquer le code',
-                    'help_text' => 'Vous recevrez des crédits immédiatement après validation'
-                ]
-            ]
+            'message' => 'Votre demande a été envoyée. Un administrateur doit valider ce code.'
         ]);
+
+    } catch (\Exception $e) {
+        $db->transRollback();
+
+        return $this->response->setJSON([
+            'success' => false,
+            'message' => $e->getMessage(),
+            'record' => $codeRecord
+        ])->setStatusCode(500);
     }
-
-    /**
-     * API - Valide et applique un code promo
-     * POST /api/wallet/redeem-code
-     *
-     * Body JSON:
-     * {
-     *   "code": "PROMO2024"
-     * }
-     *
-     * Logique:
-     * 1. Valider le code
-     * 2. Vérifier existence du code
-     * 3. Vérifier non utilisé
-     * 4. Ajouter montant au solde
-     * 5. Enregistrer transaction
-     * 6. Marquer code comme utilisé
-     *
-     * @return string JSON
-     */
-    public function redeemCode()
-    {
-        // Vérifier authentification
-        if (!$this->session->has('user_id')) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
-        }
-
-        // Récupérer les données POST
-        $request = $this->request->getJSON();
-        $code = $request->code ?? '';
-
-        // Validation: code requis
-        if (empty($code)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Code promo requis'
-            ])->setStatusCode(400);
-        }
-
-        $userId = $this->session->get('user_id');
-        $clientModel = new ClientModel();
-        $codeModel = new CodeModel();
-        $transactionModel = new TransactionModel();
-
-        // Récupérer client
-        $client = $clientModel->where('id_user', $userId)->first();
-        if (!$client) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Client introuvable'
-            ])->setStatusCode(404);
-        }
-
-        $clientId = $client['id'];
-
-        // Vérifier existence du code
-        $codeRecord = $codeModel->where('token', $code)->first();
-        if (!$codeRecord) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Code promo invalide'
-            ])->setStatusCode(400);
-        }
-
-        // Vérifier non utilisé
-        if ($codeRecord['utilisé']) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Ce code a déjà été utilisé'
-            ])->setStatusCode(400);
-        }
-
-        // Démarrer transaction BD
-        $db = \Config\Database::connect();
-        $db->transStart();
-
-        try {
-            // 1. Ajouter le montant au solde
-            $montant = $codeRecord['montant'];
-            $nouveauSolde = $client['argent'] + $montant;
-
-            $updateResult = $clientModel->update($clientId, [
-                'argent' => $nouveauSolde
-            ]);
-
-            if (!$updateResult) {
-                $db->transRollback();
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Erreur lors de la mise à jour du solde'
-                ])->setStatusCode(500);
-            }
-
-            // 2. Enregistrer la transaction
-            $transactionData = [
-                'client_id' => $clientId,
-                'code_id' => $codeRecord['id'],
-                'type' => 'code_redemption',
-                'montant' => $montant
-            ];
-
-            if (!$transactionModel->insert($transactionData)) {
-                $db->transRollback();
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Erreur lors de l\'enregistrement de la transaction'
-                ])->setStatusCode(500);
-            }
-
-            // 3. Marquer le code comme utilisé
-            $codeUpdateResult = $codeModel->update($codeRecord['id'], [
-                'utilisé' => true
-            ]);
-
-            if (!$codeUpdateResult) {
-                $db->transRollback();
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Erreur lors de la mise à jour du code'
-                ])->setStatusCode(500);
-            }
-
-            // Compléter la transaction
-            $db->transComplete();
-
-            if (!$db->transStatus()) {
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Erreur lors du traitement'
-                ])->setStatusCode(500);
-            }
-
-            // Succès
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Code appliqué avec succès !',
-                'data' => [
-                    'montant_ajoute' => $montant,
-                    'nouveau_solde' => $nouveauSolde,
-                    'ancien_solde' => $client['argent']
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            $db->transRollback();
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Erreur serveur: ' . $e->getMessage()
-            ])->setStatusCode(500);
-        }
-    }
+}
 }

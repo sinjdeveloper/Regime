@@ -35,8 +35,8 @@ class ClientController extends BaseController
     public function dashboard()
     {
         $userSession = session()->get('user');
-        
-        if(!$userSession){
+
+        if (!$userSession) {
             return redirect()->to('/user/login');
         }
         $userId = $userSession['id'];
@@ -44,7 +44,7 @@ class ClientController extends BaseController
         $clientModel = new ClientModel();
         $client = $clientModel->where('id_user', $userId)->first();
 
-        if(!$client){
+        if (!$client) {
             return redirect()->to('/user/login');
         }
 
@@ -118,6 +118,20 @@ class ClientController extends BaseController
             'isGold' => (bool) ($client['estGold'] ?? false),
         ]);
     }
+    public function wallet()
+    {
+        $result = $this->getClientOrRedirect();
+        if (!is_array($result)) {
+            return $result;
+        }
+        [$userSession, $client] = $result;
+
+        return view('client/wallet', [
+            'client' => $client,
+            'isGold' => (bool) ($client['estGold'] ?? false),
+        ]);
+    }
+
 
     public function profile()
     {
@@ -186,7 +200,7 @@ class ClientController extends BaseController
                 'taille' => $taille,
                 'imc' => $imc,
                 'interpretation' => $interpretation,
-                'estGold' => (bool)$client['estGold'],
+                'estGold' => (bool) $client['estGold'],
                 'argent' => $client['argent']
             ]
         ]);

@@ -12,7 +12,7 @@ class CodeModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['token', 'montant', 'utilisé'];
+    protected $allowedFields    = ['token', 'montant', 'utilisé', 'statut_code_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -27,6 +27,7 @@ class CodeModel extends Model
         'token'   => 'required|string|is_unique[code.token]|min_length[5]',
         'montant' => 'required|numeric|greater_than[0]',
         'utilisé' => 'boolean',
+        'statut_code_id' => 'permit_empty|integer',
     ];
     protected $validationMessages   = [
         'token' => ['is_unique' => 'Ce code existe déjà'],

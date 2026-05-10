@@ -21,6 +21,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/imc', 'ClientController::imc');
     $routes->get('/suivi', 'ClientController::suivi');
     $routes->get('/gold', 'ClientController::gold');
+    $routes->get('/wallet', 'ClientController::wallet');
+
     $routes->get('/profile', 'ClientController::profile');
 
     $routes->get('/programs/regime/(:num)', 'ProgramController::regime/$1');
@@ -63,8 +65,8 @@ $routes->get('api/suggestion/client/(:num)', 'SuggestionController::getSuggestio
 $routes->post('api/gold/subscribe', 'GoldController::subscribe');
 
 // API Routes - Wallet & Codes
-$routes->get('api/wallet/code-popup', 'WalletController::showCodePopup');
-$routes->post('api/wallet/redeem-code', 'WalletController::redeemCode');
+$routes->get('/wallet','');
+$routes->post('/wallet/redeem-code', 'WalletController::redeemCode');
 
 $routes->get('/signup', 'AuthController::showSignup');
 $routes->post('/signup/user', 'AuthController::storeUserInfo');
