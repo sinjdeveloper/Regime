@@ -34,3 +34,6 @@ INSERT INTO code (token, montant, statut_code_id) VALUES
 
 INSERT INTO StatutCode (libelle) VALUES 
 ('Refusé');
+
+ALTER TABLE historiquetransaction ADD COLUMN type ENUM('debit','credit');
+ALTER TABLE historiquetransaction ADD COLUMN montant DECIMAL(9,2);

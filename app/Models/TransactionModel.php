@@ -12,7 +12,7 @@ class TransactionModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['client_id', 'code_id'];
+    protected $allowedFields    = ['client_id', 'code_id','type','montant'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

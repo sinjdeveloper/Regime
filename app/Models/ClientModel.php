@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class ClientModel extends Model
 {
-    protected $table            = 'client';
-    protected $primaryKey       = 'id';
+    protected $table = 'client';
+    protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['id_user', 'email', 'genre', 'dateNaissance', 'poids', 'taille', 'estGold', 'argent'];
+    protected $returnType = 'array';
+    protected $useSoftDeletes = false;
+    protected $protectFields = true;
+    protected $allowedFields = ['id_user', 'email', 'genre', 'dateNaissance', 'poids', 'taille', 'estGold', 'argent'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -22,32 +22,32 @@ class ClientModel extends Model
 
 
     // Validation
-    protected $validationRules      = [
-        'id_user'       => 'required|integer|greater_than[0]',
-        'email'         => 'required|valid_email|is_unique[client.email]',
+    protected $validationRules = [
+        'id_user' => 'required|integer|greater_than[0]',
+        'email' => 'required|valid_email|is_unique[client.email]',
         'genre' => 'required|in_list[homme,femme,autre]',
         'dateNaissance' => 'required|valid_date[Y-m-d]',
-        'poids'         => 'required|numeric|greater_than[0]',
-        'taille'        => 'required|numeric|greater_than[0]',
-        'estGold'       => 'boolean',
-        'argent'        => 'numeric|greater_than_equal_to[0]',
+        'poids' => 'required|numeric|greater_than[0]',
+        'taille' => 'required|numeric|greater_than[0]',
+        'estGold' => 'permit_empty|in_list[0,1]',
+        'argent' => 'numeric|greater_than_equal_to[0]',
     ];
-    protected $validationMessages   = [
+    protected $validationMessages = [
         'email' => ['is_unique' => 'Cet email est déjà utilisé'],
     ];
-    protected $skipValidation       = false;
+    protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
-    protected $beforeFind     = [];
-    protected $afterFind      = [];
-    protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $beforeInsert = [];
+    protected $afterInsert = [];
+    protected $beforeUpdate = [];
+    protected $afterUpdate = [];
+    protected $beforeFind = [];
+    protected $afterFind = [];
+    protected $beforeDelete = [];
+    protected $afterDelete = [];
 
     /**
      * Récupère tous les objectifs du client
@@ -105,12 +105,18 @@ class ClientModel extends Model
     {
         $errors = [];
 
-        if (empty($data['prenom'])) $errors[] = "Prénom requis";
-        if (empty($data['nom']))    $errors[] = "Nom requis";
-        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors[] = "Email invalide";
-        if (empty($data['genre'])) $errors[] = "Genre requis";
-        if (empty($data['password'])) $errors[] = "Mot de passe requis";
-        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) $errors[] = "Les mots de passe ne correspondent pas";
+        if (empty($data['prenom']))
+            $errors[] = "Prénom requis";
+        if (empty($data['nom']))
+            $errors[] = "Nom requis";
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+            $errors[] = "Email invalide";
+        if (empty($data['genre']))
+            $errors[] = "Genre requis";
+        if (empty($data['password']))
+            $errors[] = "Mot de passe requis";
+        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null))
+            $errors[] = "Les mots de passe ne correspondent pas";
 
         if (!empty($errors)) {
             return ['status' => false, 'errors' => $errors];
@@ -119,10 +125,10 @@ class ClientModel extends Model
         return [
             'status' => true,
             'data' => [
-                'prenom'        => $data['prenom'],   // must be here
-                'nom'           => $data['nom'],       // must be here
-                'email'         => $data['email'],
-                'genre'         => $data['genre'],
+                'prenom' => $data['prenom'],   // must be here
+                'nom' => $data['nom'],       // must be here
+                'email' => $data['email'],
+                'genre' => $data['genre'],
                 'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT)
             ]
         ];

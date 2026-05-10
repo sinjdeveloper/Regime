@@ -19,20 +19,12 @@ class GoldController extends BaseController
 
     public function subscribe()
     {
-        // Vérifier authentification
         $userSession = session()->get('user');
-        if (!is_array($userSession) || empty($userSession['id'])) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
-        }
 
         $userId = (int) $userSession['id'];
         $clientModel = new ClientModel();
         $transactionModel = new TransactionModel();
 
-        // Récupérer client
         $client = $clientModel->where('id_user', $userId)->first();
         if (!$client) {
             return $this->response->setJSON([
@@ -43,15 +35,13 @@ class GoldController extends BaseController
 
         $clientId = $client['id'];
 
-        // Vérifier déjà Gold
-        if ($client['estGold']) {
+        if ($client['estGold'] == 1) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Vous avez déjà un abonnement Gold'
             ])->setStatusCode(400);
         }
 
-        // Vérifier solde suffisant
         if ($client['argent'] < self::GOLD_PRICE) {
             return $this->response->setJSON([
                 'success' => false,
@@ -64,16 +54,14 @@ class GoldController extends BaseController
             ])->setStatusCode(400);
         }
 
-        // Démarrer transaction BD
         $db = \Config\Database::connect();
         $db->transStart();
 
         try {
-            // 1. Débiter le wallet
             $nouveauSolde = $client['argent'] - self::GOLD_PRICE;
             $updateResult = $clientModel->update($clientId, [
                 'argent' => $nouveauSolde,
-                'estGold' => true
+                'estGold' => 1
             ]);
 
             if (!$updateResult) {
@@ -85,22 +73,21 @@ class GoldController extends BaseController
             }
 
             // 2. Enregistrer la transaction
-            $transactionData = [
-                'client_id' => $clientId,
-                'code_id' => null,
-                'type' => 'gold_subscription',
-                'montant' => self::GOLD_PRICE
-            ];
+            // $transactionData = [
+            //     'client_id' => $clientId,
+            //     'code_id' => null,
+            //     'type' => 'debit',
+            //     'montant' => self::GOLD_PRICE
+            // ];
 
-            if (!$transactionModel->insert($transactionData)) {
-                $db->transRollback();
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Erreur lors de l\'enregistrement de la transaction'
-                ])->setStatusCode(500);
-            }
+            // if (!$transactionModel->insert($transactionData)) {
+            //     $db->transRollback();
+            //     return $this->response->setJSON([
+            //         'success' => false,
+            //         'message' => 'Erreur lors de l\'enregistrement de la transaction'
+            //     ])->setStatusCode(500);
+            // }
 
-            // Compléter la transaction
             $db->transComplete();
 
             if (!$db->transStatus()) {
@@ -110,7 +97,6 @@ class GoldController extends BaseController
                 ])->setStatusCode(500);
             }
 
-            // Succès
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Abonnement Gold activé !',
