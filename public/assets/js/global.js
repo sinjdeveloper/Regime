@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imc: isAdmin ? '/admin/dashboard' : '/imc',
         suivi: isAdmin ? '/admin/dashboard' : '/suivi',
         gold: isAdmin ? '/admin/dashboard' : '/gold',
+        wallet: '/wallet'
     };
 
     function buildProfilePopupHtml() {
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="${urls.imc}">Mon IMC</a>
             <a href="${urls.suivi}">Modifier objectifs</a>
             <a href="${urls.suivi}">Modifier durée</a>
-            <a href="${urls.gold}">Entrer code</a>
+            <a href="${urls.wallet}">Entrer code</a>
             <div class="popup-divider"></div>
             <a href="${urls.logout}">Déconnexion</a>
         `;
