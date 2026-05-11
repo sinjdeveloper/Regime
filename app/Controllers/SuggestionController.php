@@ -16,20 +16,7 @@ class SuggestionController extends BaseController
         //
     }
 
-    /**
-     * API - Retourne les suggestions personnalisées pour un client
-     * GET /api/suggestion/client/:id
-     *
-     * Logique:
-     * 1. Récupérer objectifs du client
-     * 2. Calculer écart poids: différence = poids objectif - poids actuel
-     * 3. Sélectionner régime avec variation_poids proche
-     * 4. Sélectionner sport avec meilleur pourcentage_reduction
-     * 5. Appliquer réduction 15% si Gold
-     *
-     * @param int $idClient ID du client
-     * @return string JSON
-     */
+
     public function getSuggestionsByClient($idClient = null)
     {
         if (!$idClient) {
@@ -40,14 +27,14 @@ class SuggestionController extends BaseController
         }
 
         // Vérifier authentification et que le client est le sien
-        if (!$this->session->has('user_id')) {
+        if (!session()->has('user_id')) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Non authentifié'
             ])->setStatusCode(401);
         }
 
-        $userId = $this->session->get('user_id');
+        $userId = session()->get('user_id');
         $clientModel = new ClientModel();
         $goalPoidsModel = new GoalPoidsModel();
         $regimeModel = new RegimeModel();

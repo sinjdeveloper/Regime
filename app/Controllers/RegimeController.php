@@ -5,9 +5,114 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\RegimeModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ClientModel;
+use App\Models\TransactionModel;
+use App\Services\AppSettingsService;
 
 class RegimeController extends BaseController
 {
+
+    public function acheterRegime(){
+        $request = $this->request;
+
+        $regimeId = (int) $request->getPost('regime_id');
+        if ($regimeId <= 0) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Régime invalide'])->setStatusCode(400);
+        }
+
+        $user = session()->get('user');
+        if (empty($user) || empty($user['id'])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Utilisateur non connecté'])->setStatusCode(401);
+        }
+
+        $clientModel = new ClientModel();
+        $regimeModel = new RegimeModel();
+        $transactionModel = new TransactionModel();
+
+        // Récupérer le client
+        $client = null;
+        if (!empty($user['client_id'])) {
+            $client = $clientModel->find((int) $user['client_id']);
+        }
+        if (!$client) {
+            $client = $clientModel->where('id_user', $user['id'])->first();
+        }
+
+        if (!$client) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Client introuvable'])->setStatusCode(404);
+        }
+
+        $regime = $regimeModel->find($regimeId);
+        if (!$regime) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Régime introuvable'])->setStatusCode(404);
+        }
+
+        $prix = (float) ($regime['prix'] ?? 0);
+
+        // Appliquer réduction Gold si applicable (15%)
+        $isGold = (int) ($client['estGold'] ?? 0) === 1;
+        $finalPrice = $isGold ? round($prix * 0.85, 2) : $prix;
+
+        // Transaction DB
+        $db = \Config\Database::connect();
+        $db->transBegin();
+
+        try {
+            // Vérifier solde et débiter
+            $ok = $clientModel->updateBalance((int)$client['id'], -$finalPrice);
+            if (!$ok) {
+                $db->transRollback();
+                return $this->response->setJSON(['success' => false, 'message' => 'Solde insuffisant'])->setStatusCode(400);
+            }
+
+            // Enregistrer l'achat dans la table relationnelle
+            $db->table('regimeclient')->insert([
+                'client_id' => (int)$client['id'],
+                'regime_id' => (int)$regimeId,
+            ]);
+
+            // Enregistrer la transaction
+            $txOk = $transactionModel->insert([
+                'client_id' => (int)$client['id'],
+                'code_id' => null,
+                'type' => 'debit',
+                'montant' => $finalPrice,
+            ]);
+
+            if ($txOk === false) {
+                $db->transRollback();
+                return $this->response->setJSON(['success' => false, 'message' => 'Erreur en enregistrant la transaction'])->setStatusCode(500);
+            }
+
+            if (!$db->transStatus()) {
+                $db->transRollback();
+                return $this->response->setJSON(['success' => false, 'message' => 'Erreur lors du traitement'])->setStatusCode(500);
+            }
+
+            $db->transCommit();
+
+            $clientAfter = $clientModel->find((int)$client['id']);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Régime acheté avec succès',
+                'data' => [
+                    'regime_id' => $regimeId,
+                    'montant' => $finalPrice,
+                    'nouveau_solde' => $clientAfter['argent'] ?? null,
+                ]
+            ]);
+
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            log_message('error', 'Achat régime error: ' . $e->getMessage());
+            return $this->response->setJSON(['success' => false, 'message' => 'Erreur serveur'])->setStatusCode(500);
+        }
+    }
+
+
+
+
     private function storeUploadedImage(string $fieldName, string $prefix): ?string
     {
         $file = $this->request->getFile($fieldName);

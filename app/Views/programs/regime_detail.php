@@ -147,7 +147,7 @@ if (!empty($regime['image'])) {
                     </div>
                     <div class="pill">
                         <div class="label">Prix</div>
-                        <div class="value"><?= esc((string)($regime['prix'] ?? '')) ?> Ar</div>
+                            <div class="value" id="regime-price"><?= esc((string)($regime['prix'] ?? '')) ?> Ar</div>
                     </div>
                     <div class="pill">
                         <div class="label">Répartition</div>
@@ -157,8 +157,51 @@ if (!empty($regime['image'])) {
                     </div>
                 </div>
             </div>
+            <div style="padding:18px;">
+                <button id="btn-buy-regime" class="btn-action" data-id="<?= (int)($regime['id'] ?? 0) ?>" style="background:#663366;color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:800;">Acheter ce régime</button>
+                <div id="buy-msg" style="margin-top:10px; display:none;
+                    padding:10px; border-radius:8px;
+                    background:#f7f7f7;
+                "></div>
+            </div>
         </div>
     </div>
+    <script>
+        (function(){
+            const btn = document.getElementById('btn-buy-regime');
+            const msg = document.getElementById('buy-msg');
+            if (!btn) return;
+            btn.addEventListener('click', async function(){
+                const id = btn.getAttribute('data-id');
+                btn.disabled = true;
+                msg.style.display = 'block';
+                msg.textContent = 'Traitement...';
+                try {
+                    const res = await fetch('<?= site_url('/regime/buy') ?>', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'regime_id=' + encodeURIComponent(id)
+                    });
+                    const data = await res.json().catch(()=>null);
+                    if (!res.ok || !data) {
+                        msg.textContent = 'Erreur lors de l\'achat.';
+                        btn.disabled = false;
+                        return;
+                    }
+                    if (data.success) {
+                        msg.textContent = data.message || 'Achat réussi';
+                        setTimeout(()=> location.reload(), 800);
+                    } else {
+                        msg.textContent = data.message || 'Achat échoué';
+                        btn.disabled = false;
+                    }
+                } catch (e) {
+                    msg.textContent = 'Erreur réseau';
+                    btn.disabled = false;
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>
