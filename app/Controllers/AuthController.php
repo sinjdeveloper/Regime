@@ -112,7 +112,6 @@ class AuthController extends BaseController
                 ->with('errors', ['Session expirée, veuillez recommencer.']);
         }
 
-        // Single goal from radio button
         $selectedId = $this->request->getPost('goals_selected');
         $poidsCible = $this->request->getPost('goals_poids_cible');
         $duree      = $this->request->getPost('goals_duree');
@@ -173,7 +172,6 @@ class AuthController extends BaseController
                 throw new \Exception('Erreur création client: ' . implode(', ', $clientModel->errors()));
             }
 
-            // Check if goal needs poids/duree
             $objectif     = $objectifModel->find((int)$selectedId);
             $needsDetails = strtolower(trim($objectif['libelle'] ?? '')) !== 'calculer imc idéal';
 

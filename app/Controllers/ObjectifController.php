@@ -194,13 +194,11 @@ class ObjectifController extends BaseController
     {
         $model = new ObjectifModel();
 
-        // Get raw result and force flat associative arrays
         $raw   = $model->findAll();
         $goals = array_map(function ($g) {
             return is_array($g) ? $g : (array)$g;
         }, $raw);
 
-        // Dump to log so we can see exactly what the view receives
         log_message('debug', 'GOALS DUMP: ' . json_encode($goals));
 
         return view('signup/goals', ['goals' => $goals]);
@@ -220,7 +218,6 @@ class ObjectifController extends BaseController
 
     public function storeGoals()
 {
-    // Just forward to AuthController::completeSignup
     $auth = new AuthController();
     return $auth->completeSignup();
 }

@@ -67,11 +67,6 @@ UPDATE sport SET image = 'hiit.jpg' WHERE libelle = 'HIIT Extreme';
 UPDATE sport SET image = 'pilates.jpg' WHERE libelle = 'Pilates Core';
 UPDATE sport SET image = 'musculation.jpg' WHERE libelle = 'Musculation Pro';
 
-INSERT INTO objectif (libelle) VALUES
-('Augmenter son poids'),
-('Réduire son poids'),
-('Atteindre son IMC idéal');
-
 -- Run these on your DB so signup doesn't hard-fail on NOT NULL
 ALTER TABLE client MODIFY dateNaissance DATE NULL;
 ALTER TABLE goalpoids MODIFY poids_cible FLOAT NULL;
