@@ -6,3 +6,6 @@ CREATE TABLE `app_settings` (
 
 INSERT INTO `app_settings` (`libelle`, `value`)
 VALUES ('gold_price',150000);
+
+INSERT INTO `app_settings` (`libelle`, `value`) VALUES
+('gold_discount', '15');

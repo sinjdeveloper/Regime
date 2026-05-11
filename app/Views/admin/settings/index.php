@@ -47,10 +47,25 @@ Paramètres
                         min="0"
                         id="gold_price"
                         name="gold_price"
-                        value="<?= esc(old('gold_price') ?? ($settings['gold_price'] ?? '')) ?>"
+                        value="<?= esc((string)(old('gold_price') ?? ($settings['gold_price'] ?? ''))) ?>"
                         style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,.15);"
                     />
                     <div style="margin-top: 6px; font-size: 12px; opacity: .8;">Valeur utilisée pour l'activation Gold.</div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 14px;">
+                    <label for="gold_discount" style="display:block; font-weight: 700; margin-bottom: 6px;">Réduction Gold (%)</label>
+                    <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        max="100"
+                        id="gold_discount"
+                        name="gold_discount"
+                        value="<?= esc((string)(old('gold_discount') ?? ($settings['gold_discount'] ?? ''))) ?>"
+                        style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,.15);"
+                    />
+                    <div style="margin-top: 6px; font-size: 12px; opacity: .8;">Pourcentage de réduction appliqué aux clients Gold (0-100).</div>
                 </div>
 
                 <button type="submit" class="btn-submit" style="padding: 10px 14px; border-radius: 8px; border: 0; font-weight: 800; cursor: pointer;">

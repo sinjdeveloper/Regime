@@ -128,7 +128,7 @@ $argent = (float)($client['argent'] ?? 0);
                         </span>
                     </div>
                 </div>
-                <div style="text-align:right; color:#333; font-weight:700;">Réduction Gold: 15%</div>
+                <div style="text-align:right; color:#333; font-weight:700;">Réduction Gold: <?= \App\Services\AppSettingsService::getGoldDiscount() ?>%</div>
             </div>
 
             <div style="margin-top:14px; color:#333;">

@@ -177,8 +177,9 @@ class ClientController extends BaseController
                 $prixFinal = $prix;
 
                 if ($isGold) {
-                    $reduction = 15;
-                    $prixFinal = round($prix * 0.85, 2);
+                    $reduction = \App\Services\AppSettingsService::getGoldDiscount();
+                    $multiplier = 1 - ($reduction / 100);
+                    $prixFinal = round($prix * $multiplier, 2);
                 }
 
                 $suggestions[] = [

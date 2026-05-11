@@ -108,7 +108,7 @@ class GoldController extends BaseController
                 'data' => [
                     'nouveau_solde' => $nouveauSolde,
                     'prix_gold' => $goldPrice,
-                    'reduction_appliquee' => '15%'
+                    'reduction_appliquee' => \App\Services\AppSettingsService::getGoldDiscount() . '%'
                 ]
             ]);
 

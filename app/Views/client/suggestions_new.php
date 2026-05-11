@@ -688,7 +688,7 @@
             <div class="modal-section">
                 <label>Avantages GOLD</label>
                 <ul style="margin: 8px 0 0 0; padding-left: 20px; color: var(--text-dark);">
-                    <li>15% de réduction sur tous les régimes</li>
+                    <li><?= \App\Services\AppSettingsService::getGoldDiscount() ?>% de réduction sur tous les régimes</li>
                     <li>Accès prioritaire aux nouveaux programmes</li>
                     <li>Suivi personnalisé illimité</li>
                     <li>Support client 24/7</li>
@@ -768,7 +768,7 @@
                 </div>
                 <?php if ($isGold): ?>
                     <div class="status-badge gold">
-                        ⭐ Membre GOLD - 15% de réduction
+                        ⭐ Membre GOLD - <?= \App\Services\AppSettingsService::getGoldDiscount() ?>% de réduction
                     </div>
                 <?php endif; ?>
             </div>

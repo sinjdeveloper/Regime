@@ -7,11 +7,8 @@ namespace App\Helpers;
  */
 class PricingHelper
 {
-    // Constante pour réduction Gold
-    private const GOLD_DISCOUNT_PERCENTAGE = 15;
-
     /**
-     * Applique la réduction Gold (15%) sur un prix si applicable
+     * Applique la réduction Gold sur un prix si applicable (en utilisant le taux dynamique)
      *
      * @param float $prix    Prix original
      * @param bool  $estGold Si le client a l'abonnement Gold
@@ -23,7 +20,8 @@ class PricingHelper
             return round($prix, 2);
         }
 
-        $reduction = ($prix * self::GOLD_DISCOUNT_PERCENTAGE) / 100;
+        $discountPercent = \App\Services\AppSettingsService::getGoldDiscount();
+        $reduction = ($prix * $discountPercent) / 100;
         $prixFinal = $prix - $reduction;
         return round($prixFinal, 2);
     }
@@ -36,7 +34,8 @@ class PricingHelper
      */
     public static function calculateGoldDiscount(float $prix): float
     {
-        $discount = ($prix * self::GOLD_DISCOUNT_PERCENTAGE) / 100;
+        $discountPercent = \App\Services\AppSettingsService::getGoldDiscount();
+        $discount = ($prix * $discountPercent) / 100;
         return round($discount, 2);
     }
 
@@ -47,7 +46,7 @@ class PricingHelper
      */
     public static function getGoldDiscountPercentage(): int
     {
-        return self::GOLD_DISCOUNT_PERCENTAGE;
+        return \App\Services\AppSettingsService::getGoldDiscount();
     }
 
     /**

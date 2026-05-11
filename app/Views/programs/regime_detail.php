@@ -182,7 +182,7 @@ if (!empty($regime['image'])) {
                             <span style="font-size:22px; font-weight:800; color:#663366;">
                                 <?= esc((string)($regime['prix'] ?? '')) ?> Ar
                             </span>
-                            <span style="font-size:13px; color:#888;">(réduction 15% avec option Gold)</span>
+                            <span style="font-size:13px; color:#888;">(réduction <?= \App\Services\AppSettingsService::getGoldDiscount() ?>% avec option Gold)</span>
                         </div>
                     </div>
                 <?php endif; ?>

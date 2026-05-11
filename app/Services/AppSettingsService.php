@@ -8,11 +8,9 @@ class AppSettingsService
 {
     private const DEFAULTS = [
         'gold_price' => 49.99,
+        'gold_discount' => 15,
     ];
 
-    /**
-     * @return array{gold_price: float}
-     */
     public static function getAll(): array
     {
         $model = new AppSettingModel();
@@ -24,15 +22,12 @@ class AppSettingsService
         }
 
         $settings = [];
+
         foreach ($rows as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-            $key = (string) ($row['libelle'] ?? '');
-            if ($key === '') {
-                continue;
-            }
-            $settings[$key] = $row['value'] ?? null;
+            $key = $row['libelle'] ?? null;
+            if (!$key) continue;
+
+            $settings[$key] = (float) $row['value'];
         }
 
         return array_merge(self::DEFAULTS, $settings);
@@ -40,31 +35,27 @@ class AppSettingsService
 
     public static function getGoldPrice(): float
     {
-        $settings = self::getAll();
-        $value = $settings['gold_price'] ?? self::DEFAULTS['gold_price'];
-        return (float) $value;
+        return (float)(self::getAll()['gold_price']);
     }
 
     public static function setGoldPrice(float $price): bool
     {
-        if (!is_finite($price) || $price <= 0) {
-            return false;
-        }
+        if ($price <= 0) return false;
 
         $model = new AppSettingModel();
+        return $model->setSetting('gold_price', $price);
+    }
 
-        try {
-            $existing = $model->where('libelle', 'gold_price')->first();
-            if ($existing) {
-                $id = (int) ($existing['id'] ?? 0);
-                if ($id > 0) {
-                    return (bool) $model->update($id, ['value' => (string) $price]);
-                }
-            }
+    public static function getGoldDiscount(): int
+    {
+        return (int)(self::getAll()['gold_discount']);
+    }
 
-            return (bool) $model->insert(['libelle' => 'gold_price', 'value' => (string) $price]);
-        } catch (\Throwable $e) {
-            return false;
-        }
+    public static function setGoldDiscount(int $discount): bool
+    {
+        if ($discount < 0 || $discount > 100) return false;
+
+        $model = new AppSettingModel();
+        return $model->setSetting('gold_discount', (float)$discount);
     }
 }

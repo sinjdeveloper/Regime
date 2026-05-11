@@ -66,7 +66,7 @@ class ClientModel extends Model
     }
 
     /**
-     * Applique la réduction Gold (15%) au prix si applicable
+     * Applique la réduction Gold (dynamique) au prix si applicable
      *
      * @param float $prix Prix original
      * @return float Prix avec réduction si Gold, sinon prix original
@@ -74,7 +74,9 @@ class ClientModel extends Model
     public function applyGoldDiscount(float $prix): float
     {
         if ($this->estGold) {
-            return round($prix * 0.85, 2);
+            $discountPercent = \App\Services\AppSettingsService::getGoldDiscount();
+            $multiplier = 1 - ($discountPercent / 100);
+            return round($prix * $multiplier, 2);
         }
         return round($prix, 2);
     }

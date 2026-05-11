@@ -49,9 +49,15 @@ class RegimeController extends BaseController
 
         $prix = (float) ($regime['prix'] ?? 0);
 
-        // Appliquer réduction Gold si applicable (15%)
+        // Appliquer réduction Gold si applicable
         $isGold = (int) ($client['estGold'] ?? 0) === 1;
-        $finalPrice = $isGold ? round($prix * 0.85, 2) : $prix;
+        if ($isGold) {
+            $discountPercent = \App\Services\AppSettingsService::getGoldDiscount();
+            $multiplier = 1 - ($discountPercent / 100);
+            $finalPrice = round($prix * $multiplier, 2);
+        } else {
+            $finalPrice = $prix;
+        }
 
         // Transaction DB
         $db = \Config\Database::connect();
