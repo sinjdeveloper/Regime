@@ -7,14 +7,12 @@
 
 $pageTitle = 'Dashboard - Vary\'Ena';
 
-// Helpers safe
 $email  = (string)($client['email'] ?? 'User');
 $poids  = (string)($client['poids'] ?? '');
 $taille = (string)($client['taille'] ?? '');
 
 $statutLabel = $isGold ? 'GOLD' : 'STANDARD';
 
-// Objectif (robuste)
 $objectifLabel = '';
 $objectifPoidsCible = '';
 $objectifDuree = '';
@@ -165,7 +163,7 @@ if ($objectifLabel === '' && !empty($objectif)) {
 
         <div class="action-buttons">
             <button class="btn-back" type="button" onclick="window.location.href='<?= site_url('/') ?>'">
-                Retour vers l'acceuil
+                Retour vers l'accueil
             </button>
         </div>
     </div>
