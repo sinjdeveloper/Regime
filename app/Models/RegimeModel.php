@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Models;
-
 use CodeIgniter\Model;
-
 class RegimeModel extends Model
 {
     protected $table = 'regime';
@@ -13,14 +10,10 @@ class RegimeModel extends Model
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = ['libelle', 'description', 'variation_poids', 'pourcentage_viande', 'pourcentage_poisson', 'pourcentage_volaille', 'prix', 'image'];
-
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
-
     protected array $casts = [];
     protected array $castHandlers = [];
-
-
     // Validation
     protected $validationRules = [
         'libelle' => 'required|min_length[3]|max_length[255]|is_unique[regime.libelle]',
@@ -38,40 +31,34 @@ class RegimeModel extends Model
             'max_length' => 'Le nom de la recette ne doit pas dépasser 255 caractères.',
             'is_unique' => 'Ce régime existe déjà.',
         ],
-
         'description' => [
             'required' => 'La description est obligatoire.',
             'min_length' => 'La description doit contenir au moins 10 caractères.',
         ],
-
         'variation_poids' => [
             'required' => 'La variation de poids est obligatoire.',
             'numeric' => 'La variation de poids doit être un nombre.',
             'greater_than_equal_to' => 'La variation de poids doit être supérieure ou égale à -100.',
             'less_than_equal_to' => 'La variation de poids doit être inférieure ou égale à 100.',
         ],
-
         'pourcentage_viande' => [
             'required' => 'Le pourcentage de viande est obligatoire.',
             'numeric' => 'Le pourcentage de viande doit être un nombre.',
             'greater_than_equal_to' => 'Le pourcentage de viande doit être supérieur ou égal à 0.',
             'less_than_equal_to' => 'Le pourcentage de viande ne peut pas dépasser 100.',
         ],
-
         'pourcentage_poisson' => [
             'required' => 'Le pourcentage de poisson est obligatoire.',
             'numeric' => 'Le pourcentage de poisson doit être un nombre.',
             'greater_than_equal_to' => 'Le pourcentage de poisson doit être supérieur ou égal à 0.',
             'less_than_equal_to' => 'Le pourcentage de poisson ne peut pas dépasser 100.',
         ],
-
         'pourcentage_volaille' => [
             'required' => 'Le pourcentage de volaille est obligatoire.',
             'numeric' => 'Le pourcentage de volaille doit être un nombre.',
             'greater_than_equal_to' => 'Le pourcentage de volaille doit être supérieur ou égal à 0.',
             'less_than_equal_to' => 'Le pourcentage de volaille ne peut pas dépasser 100.',
         ],
-
         'prix' => [
             'required' => 'Le prix est obligatoire.',
             'numeric' => 'Le prix doit être un nombre.',
@@ -80,7 +67,6 @@ class RegimeModel extends Model
     ];
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
-
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert = [];
@@ -91,7 +77,6 @@ class RegimeModel extends Model
     protected $afterFind = [];
     protected $beforeDelete = [];
     protected $afterDelete = [];
-
     public function getDemo()
     {
         return $this->orderBy('RAND()')->limit(3)->findAll();
@@ -100,17 +85,14 @@ class RegimeModel extends Model
     {
         return $this->insert($data);
     }
-
     public function deleteRegime($id)
     {
         return $this->delete($id);
     }
-
     public function updateRegime($id, $data)
     {
         return $this->update($id, $data);
     }
-
     public function findAllRegime()
     {
         return $this->findAll();
@@ -125,7 +107,21 @@ class RegimeModel extends Model
             ->limit(5)
             ->get()
             ->getResultArray();
-
         return $result;
+    }
+    /**
+     * Vérifie si un client a déjà acheté un régime donné.
+     *
+     * @param int $clientId ID du client
+     * @param int $regimeId ID du régime
+     * @return bool true si l'achat existe, false sinon
+     */
+    public function hasPurchased(int $clientId, int $regimeId): bool
+    {
+        $row = $this->db->table('regimeclient')
+            ->where('client_id', $clientId)
+            ->where('regime_id', $regimeId)
+            ->countAllResults();
+        return $row > 0;
     }
 }
