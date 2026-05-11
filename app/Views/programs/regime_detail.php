@@ -1,5 +1,6 @@
 <?php
 /** @var array $regime */
+/** @var bool  $isPurchased */
 
 $imageUrl = '';
 if (!empty($regime['image'])) {
@@ -108,6 +109,33 @@ if (!empty($regime['image'])) {
             color: #333;
         }
 
+        .locked-overlay {
+            position: relative;
+        }
+
+        .locked-overlay .lock-msg {
+            background: rgba(102, 51, 102, 0.08);
+            border: 2px dashed #663366;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 14px;
+            text-align: center;
+            color: #663366;
+            font-weight: 600;
+        }
+
+        .badge-purchased {
+            display: inline-block;
+            background: #22c55e;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
         @media (max-width: 800px) {
             .grid { grid-template-columns: 1fr; }
         }
@@ -118,7 +146,12 @@ if (!empty($regime['image'])) {
     <div class="container-page">
         <div class="top">
             <div>
-                <h1><?= esc((string)($regime['libelle'] ?? 'Régime')) ?></h1>
+                <h1>
+                    <?= esc((string)($regime['libelle'] ?? 'Régime')) ?>
+                    <?php if ($isPurchased): ?>
+                        <span class="badge-purchased">✓ Acheté</span>
+                    <?php endif; ?>
+                </h1>
                 <div style="opacity:.9;">Programme Nutrition</div>
             </div>
             <div style="display:flex; gap:10px;">
@@ -135,37 +168,74 @@ if (!empty($regime['image'])) {
             </div>
 
             <div class="content">
-                <div style="font-weight:700; color:#333;">Description</div>
-                <div style="margin-top:8px; color:#444;">
-                    <?= esc((string)($regime['description'] ?? '')) ?>
-                </div>
+                <?php if ($isPurchased): ?>
+                    <!-- Contenu complet : réservé aux acheteurs -->
+                    <div style="font-weight:700; color:#333;">Description</div>
+                    <div style="margin-top:8px; color:#444;">
+                        <?= esc((string)($regime['description'] ?? '')) ?>
+                    </div>
 
-                <div class="grid">
-                    <div class="pill">
-                        <div class="label">Variation</div>
-                        <div class="value"><?= esc((string)($regime['variation_poids'] ?? '')) ?> kg</div>
-                    </div>
-                    <div class="pill">
-                        <div class="label">Prix</div>
+                    <div class="grid">
+                        <div class="pill">
+                            <div class="label">Variation de poids</div>
+                            <div class="value"><?= esc((string)($regime['variation_poids'] ?? '')) ?> kg</div>
+                        </div>
+                        <div class="pill">
+                            <div class="label">Prix payé</div>
                             <div class="value" id="regime-price"><?= esc((string)($regime['prix'] ?? '')) ?> Ar</div>
-                    </div>
-                    <div class="pill">
-                        <div class="label">Répartition</div>
-                        <div class="value">
-                            <?= esc((string)($regime['pourcentage_viande'] ?? '')) ?>% / <?= esc((string)($regime['pourcentage_poisson'] ?? '')) ?>% / <?= esc((string)($regime['pourcentage_volaille'] ?? '')) ?>%
+                        </div>
+                        <div class="pill">
+                            <div class="label">Répartition (viande / poisson / volaille)</div>
+                            <div class="value">
+                                <?= esc((string)($regime['pourcentage_viande'] ?? '')) ?>%
+                                / <?= esc((string)($regime['pourcentage_poisson'] ?? '')) ?>%
+                                / <?= esc((string)($regime['pourcentage_volaille'] ?? '')) ?>%
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php else: ?>
+                    <!-- Aperçu limité : visible avant achat -->
+                    <div class="locked-overlay">
+                        <div style="font-weight:700; color:#333; margin-bottom:6px;">Aperçu du régime</div>
+                        <div style="color:#444;">
+                            Achetez ce régime pour accéder à la description complète, la répartition
+                            alimentaire (viande / poisson / volaille) et la variation de poids prévue.
+                        </div>
+
+                        <div class="lock-msg">
+                            <span role="img" aria-label="Contenu verrouillé">🔒</span> Contenu réservé aux acheteurs
+                        </div>
+
+                        <div style="margin-top:16px; display:flex; align-items:center; gap:12px;">
+                            <span style="font-size:22px; font-weight:800; color:#663366;">
+                                <?= esc((string)($regime['prix'] ?? '')) ?> Ar
+                            </span>
+                            <span style="font-size:13px; color:#888;">(réduction 15% avec option Gold)</span>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
+
             <div style="padding:18px;">
-                <button id="btn-buy-regime" class="btn-action" data-id="<?= (int)($regime['id'] ?? 0) ?>" style="background:#663366;color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:800;">Acheter ce régime</button>
-                <div id="buy-msg" style="margin-top:10px; display:none;
-                    padding:10px; border-radius:8px;
-                    background:#f7f7f7;
-                "></div>
+                <?php if ($isPurchased): ?>
+                    <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:12px; color:#166534; font-weight:600;">
+                        ✓ Vous avez déjà acheté ce régime. Profitez de votre programme !
+                    </div>
+                <?php else: ?>
+                    <button id="btn-buy-regime" class="btn-action" data-id="<?= (int)($regime['id'] ?? 0) ?>"
+                        style="background:#663366;color:#fff;border:0;padding:10px 14px;border-radius:8px;font-weight:800;">
+                        Acheter ce régime
+                    </button>
+                    <div id="buy-msg" style="margin-top:10px; display:none;
+                        padding:10px; border-radius:8px;
+                        background:#f7f7f7;">
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
+
+    <?php if (!$isPurchased): ?>
     <script>
         (function(){
             const btn = document.getElementById('btn-buy-regime');
@@ -202,6 +272,7 @@ if (!empty($regime['image'])) {
             });
         })();
     </script>
+    <?php endif; ?>
 </body>
 
 </html>

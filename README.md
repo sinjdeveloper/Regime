@@ -1,61 +1,66 @@
-# CodeIgniter 4 Framework
+# Vary'Ena – Application de Régime Alimentaire
 
-## What is CodeIgniter?
+Application web développée avec **PHP / CodeIgniter 4** permettant à des utilisateurs de sélectionner un régime alimentaire adapté à leurs objectifs de santé.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Fichier de spécification
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Le fichier de spécification du projet se trouve à la racine du dépôt : **`Regime.pdf`**.  
+Il décrit le cahier des charges complet (fonctionnalités front-office, back-office, technologies utilisées).
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+---
 
-## Important Change with index.php
+## Logique métier principale
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+### 1. Accès aux détails d'un régime (contrôle d'accès par achat)
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Conformément au PDF, les régimes ont un **prix** et doivent être **achetés** avant que l'utilisateur puisse accéder à leur contenu complet.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+| État | Contenu affiché |
+|------|-----------------|
+| Non acheté | Nom, image, prix, message "🔒 Contenu réservé aux acheteurs", bouton **Acheter** |
+| Acheté | Nom, image, description complète, variation de poids, répartition alimentaire (viande / poisson / volaille) |
 
-## Repository Management
+Ce contrôle est appliqué **côté serveur** dans `ProgramController::regime()` : la méthode vérifie l'existence d'un enregistrement dans la table `regimeclient` pour le couple `(client_id, regime_id)` avant de transmettre le drapeau `$isPurchased` à la vue.
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 2. Option Gold
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+Les utilisateurs peuvent souscrire une option **Gold** (paiement unique).  
+Avec l'option Gold, ils bénéficient d'une **réduction de 15 %** sur tous les régimes lors de l'achat.
 
-## Contributing
+### 3. Structure d'un programme / suggestion
 
-We welcome contributions from the community.
+Selon le PDF : *"L'application suggère les régimes et l'activité sportive nécessaire pendant une durée."*  
+Un programme comprend donc **toujours** :
+- **Un régime alimentaire** (répartition viande / poisson / volaille, variation de poids, durée)
+- **Une activité sportive** complémentaire
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+Le `SuggestionController` implémente cette logique : chaque suggestion retournée associe un régime et un sport à un objectif de poids et une durée calculée.
 
-## Server Requirements
+---
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+## Prérequis serveur
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+PHP 8.2 ou supérieur avec les extensions :
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+- `intl`
+- `mbstring`
+- `json` (activé par défaut)
+- `mysqlnd` (pour MySQL)
+- `libcurl` (pour `HTTP\CURLRequest`)
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+---
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## Installation
+
+```bash
+cp env .env
+# Configurer la base de données dans .env
+composer install
+php spark migrate
+php spark db:seed DatabaseSeeder
+```
+
+Le serveur web doit pointer vers le dossier **`public/`**.
+

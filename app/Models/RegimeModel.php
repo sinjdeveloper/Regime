@@ -128,4 +128,21 @@ class RegimeModel extends Model
 
         return $result;
     }
+
+    /**
+     * Vérifie si un client a déjà acheté un régime donné.
+     *
+     * @param int $clientId ID du client
+     * @param int $regimeId ID du régime
+     * @return bool true si l'achat existe, false sinon
+     */
+    public function hasPurchased(int $clientId, int $regimeId): bool
+    {
+        $row = $this->db->table('regimeclient')
+            ->where('client_id', $clientId)
+            ->where('regime_id', $regimeId)
+            ->countAllResults();
+
+        return $row > 0;
+    }
 }
