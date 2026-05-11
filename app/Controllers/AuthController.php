@@ -130,12 +130,26 @@ class AuthController extends BaseController
                 ->with('errors', ['Veuillez sélectionner un objectif.']);
         }
 
-        // Validate goal logic before touching the DB
         $objectifModel = new ObjectifModel();
         $objectif      = $objectifModel->find((int)$selectedId);
         $libelle = strtolower(trim($objectif['libelle'] ?? ''));
 
         $isImcGoal = str_contains($libelle, 'imc');
+        $poidsFinal = null;
+
+        if ($isImcGoal) {
+            $tailleCm = (float)($healthSession['taille']);
+
+            $tailleM = $tailleCm / 100;
+
+            $imcIdeal = 22;
+
+            $poidsFinal = $imcIdeal * ($tailleM * $tailleM);
+
+            $poidsFinal = round($poidsFinal, 1);
+        } else {
+            $poidsFinal = $poidsCible;
+        }
         $needsPoids = !$isImcGoal;
 
         $poidsActuel = $healthSession['poids'] ?? 0;
@@ -233,7 +247,7 @@ class AuthController extends BaseController
             $objectifModel->db->table('goalpoids')->insert([
                 'client_id'   => $clientId,
                 'objectif_id' => (int)$selectedId,
-                'poids_cible' => $needsPoids ? (float)$poidsCible : 0,
+                'poids_cible' => $poidsFinal,
                 'duree' => (int)$duree,
             ]);
 
