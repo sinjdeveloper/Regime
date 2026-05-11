@@ -32,6 +32,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/programs/regime/(:num)', 'ProgramController::regime/$1');
     $routes->get('/programs/sport/(:num)', 'ProgramController::sport/$1');
     $routes->post('/regime/buy', 'RegimeController::acheterRegime');
+    $routes->get('/programs/regime/(:num)/pdf', 'ProgramController::regimePdf/$1');
 });
 
 $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
