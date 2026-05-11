@@ -442,3 +442,318 @@ body {
         padding: 8px 24px;
     }
 }
+/* Dashboard content only (does not change navbar) */
+
+/* HERO v2 (dashboard only) */
+.hero-section {
+    background: #636;
+    color: white;
+    padding: 48px 0;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.hero-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.hero-text h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+.hero-text p {
+    margin: 0;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* MAIN */
+.main-content {
+    padding: 48px 0;
+}
+
+/* GRID */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 32px;
+    margin-bottom: 48px;
+}
+
+/* Cards ONLY inside dashboard grid (avoid homepage cards) */
+.dashboard-grid .card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    padding: 0;            /* important: override homepage card padding */
+    max-width: none;       /* override old dashboard css if present */
+    margin: 0;             /* override old dashboard css if present */
+    width: auto;
+    display: block;        /* override homepage .card display:flex */
+}
+
+.dashboard-grid .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-grid .card-header {
+    background: rgba(163, 161, 1, 0.03);
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    margin: 0;
+}
+
+.dashboard-grid .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0f172b;
+    margin: 0;
+}
+
+.dashboard-grid .card-content {
+    padding: 24px;
+}
+
+/* INFO */
+.info-section {
+    margin-bottom: 24px;
+}
+
+.info-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* STATUS */
+.status-badge-container {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.29);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+}
+
+.status-badge {
+    padding: 6px 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 21px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+    display: inline-block;
+}
+
+/* STATS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.stat-value-container {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.29);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 51px;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+
+.stat-value.secondary {
+    color: rgba(0, 0, 0, 0.27);
+}
+
+.stat-unit {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.27);
+}
+
+/* OBJECTIVES */
+.objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.objective-item {
+    text-align: center;
+}
+
+.objective-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.objective-value {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.29);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 51px;
+    position: relative;
+}
+
+.objective-value span {
+    font-size: 16px;
+    color: #000;
+}
+
+.edit-icon {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.edit-icon:hover {
+    opacity: 0.7;
+}
+
+/* ACTIONS */
+.action-section {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 48px;
+}
+
+.btn-primary {
+    padding: 12px 32px;
+    background: #669;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background: #558;
+}
+
+.btn-secondary {
+    padding: 12px 32px;
+    background: transparent;
+    color: #669;
+    border: 2px solid #669;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #669;
+    color: white;
+}
+
+/* FOOTER */
+.footer {
+    background: #1e293b;
+    color: #cbd5e1;
+    padding: 32px 0;
+    margin-top: 80px;
+}
+
+.footer .container {
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid,
+    .objectives-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 28px;
+    }
+
+    .action-section {
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-grid .card {
+        border-radius: 16px;
+    }
+
+    .dashboard-grid .card-content {
+        padding: 16px;
+    }
+}
