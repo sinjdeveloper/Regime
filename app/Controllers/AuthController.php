@@ -99,10 +99,10 @@ class AuthController extends BaseController
             foreach ($result['errors'] as $error) {
                 $flatErrors[] = (string)$error;
             }
-            return redirect()->back()->withInput()->with('errors', $flatErrors);
+            return redirect()->back()->withInput()->with('errors', $flatErrors)
+                ->with('field_errors', $result['field_errors'] ?? []);
         }
 
-        // FIX: same nested array approach
         $draft = session()->get('signup_draft') ?? [];
         $draft['health'] = $result['data'];
         session()->set('signup_draft', $draft);
@@ -130,9 +130,48 @@ class AuthController extends BaseController
                 ->with('errors', ['Veuillez sélectionner un objectif.']);
         }
 
-        $userModel     = new UserModel();
-        $clientModel   = new ClientModel();
+        // Validate goal logic before touching the DB
         $objectifModel = new ObjectifModel();
+        $objectif      = $objectifModel->find((int)$selectedId);
+        $libelle       = strtolower(trim($objectif['libelle'] ?? ''));
+        $needsDetails  = $libelle !== 'calculer imc idéal';
+
+        if ($needsDetails) {
+            $poidsActuel = $healthSession['poids'] ?? 0;
+
+            if (empty($poidsCible) || (float)$poidsCible <= 0) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Poids cible invalide.']);
+            }
+
+            if ((float)$poidsCible < 20 || (float)$poidsCible > 300) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Poids cible irréaliste (entre 20 et 300 kg).']);
+            }
+
+            if (str_contains($libelle, 'réduire') && (float)$poidsCible >= $poidsActuel) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Pour une perte de poids, le poids cible doit être inférieur à votre poids actuel (' . $poidsActuel . ' kg).']);
+            }
+
+            if ((str_contains($libelle, 'augmenter') || str_contains($libelle, 'masse')) && (float)$poidsCible <= $poidsActuel) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Pour une prise de masse, le poids cible doit être supérieur à votre poids actuel (' . $poidsActuel . ' kg).']);
+            }
+
+            if (empty($duree) || (int)$duree <= 0) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Durée invalide.']);
+            }
+
+            if ((int)$duree > 730) {
+                return redirect()->to('/signup/goals')
+                    ->with('errors', ['Durée irréaliste (maximum 730 jours).']);
+            }
+        }
+
+        $userModel   = new UserModel();
+        $clientModel = new ClientModel();
 
         try {
             $prenom = $userSession['prenom'] ?? '';
@@ -179,20 +218,6 @@ class AuthController extends BaseController
 
             if (!$clientId) {
                 throw new \Exception('Erreur création client: ' . implode(', ', $clientModel->errors()));
-            }
-
-            $objectif     = $objectifModel->find((int)$selectedId);
-            $needsDetails = strtolower(trim($objectif['libelle'] ?? '')) !== 'calculer imc idéal';
-
-            if ($needsDetails) {
-                if (empty($poidsCible) || (float)$poidsCible <= 0) {
-                    return redirect()->to('/signup/goals')
-                        ->with('errors', ['Poids cible invalide.']);
-                }
-                if (empty($duree) || (int)$duree <= 0) {
-                    return redirect()->to('/signup/goals')
-                        ->with('errors', ['Durée invalide.']);
-                }
             }
 
             $objectifModel->db->table('goalpoids')->insert([

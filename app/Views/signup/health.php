@@ -78,43 +78,50 @@
                             </div>
                         <?php endif; ?>
 
-                        <!-- FORM -->
+                        <?php $fieldErrors = session()->getFlashdata('field_errors') ?? []; ?>
+
                         <form class="form-grid" method="POST" action="<?= base_url('/signup/health') ?>">
 
                             <div class="form-group">
                                 <label class="form-label">Height (cm)</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['taille']) ? 'input-error' : '' ?>">
                                     <div class="input-icon">
                                         <img src="<?= base_url('assets/images/signup/76_290.svg') ?>">
                                     </div>
                                     <input type="number" name="taille" class="form-input"
-                                        placeholder="175"
-                                        value="<?= old('taille') ?>">
+                                        placeholder="175" value="<?= old('taille') ?>">
                                 </div>
+                                <?php if (isset($fieldErrors['taille'])): ?>
+                                    <span class="field-error-msg">Taille irréaliste</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Weight (kg)</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['poids']) ? 'input-error' : '' ?>">
                                     <div class="input-icon">
                                         <img src="<?= base_url('assets/images/signup/76_301.svg') ?>">
                                     </div>
                                     <input type="number" name="poids" class="form-input"
-                                        placeholder="70"
-                                        value="<?= old('poids') ?>">
+                                        placeholder="70" value="<?= old('poids') ?>">
                                 </div>
+                                <?php if (isset($fieldErrors['poids'])): ?>
+                                    <span class="field-error-msg">Poids irréaliste</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Age</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['age']) ? 'input-error' : '' ?>">
                                     <div class="input-icon">
                                         <img src="<?= base_url('assets/images/signup/76_312.svg') ?>">
                                     </div>
                                     <input type="number" name="age" class="form-input"
-                                        placeholder="25"
-                                        value="<?= old('age') ?>">
+                                        placeholder="25" value="<?= old('age') ?>">
                                 </div>
+                                <?php if (isset($fieldErrors['age'])): ?>
+                                    <span class="field-error-msg">Âge irréaliste</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
@@ -132,9 +139,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn-primary">
-                                Continue
-                            </button>
+                            <button type="submit" class="btn-primary">Continue</button>
 
                         </form>
 

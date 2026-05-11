@@ -152,27 +152,46 @@ class ClientModel extends Model
     public function storeHealthDraft($data)
     {
         $errors = [];
+        $fieldErrors = [];
 
-        if (!isset($data['poids']) || !is_numeric($data['poids'])) {
-            $errors['poids'] = "Poids invalide";
+        $poids = $data['poids'] ?? null;
+        $taille = $data['taille'] ?? null;
+        $age = $data['age'] ?? null;
+
+        if (!isset($poids) || !is_numeric($poids)) {
+            $errors[] = "Poids invalide";
+            $fieldErrors['poids'] = true;
+        } elseif ((float)$poids < 20 || (float)$poids > 300) {
+            $errors[] = "Poids irréaliste (doit être entre 20 et 300 kg)";
+            $fieldErrors['poids'] = true;
         }
 
-        if (!isset($data['taille']) || !is_numeric($data['taille'])) {
-            $errors['taille'] = "Taille invalide";
+        if (!isset($taille) || !is_numeric($taille)) {
+            $errors[] = "Taille invalide";
+            $fieldErrors['taille'] = true;
+        } elseif ((float)$taille < 50 || (float)$taille > 250) {
+            $errors[] = "Taille irréaliste (doit être entre 50 et 250 cm)";
+            $fieldErrors['taille'] = true;
+        }
+
+        if (!isset($age) || !is_numeric($age)) {
+            $errors[] = "Âge invalide";
+            $fieldErrors['age'] = true;
+        } elseif ((int)$age < 10 || (int)$age > 120) {
+            $errors[] = "Âge irréaliste (doit être entre 10 et 120 ans)";
+            $fieldErrors['age'] = true;
         }
 
         if (!empty($errors)) {
-            return [
-                'status' => false,
-                'errors' => $errors
-            ];
+            return ['status' => false, 'errors' => $errors, 'field_errors' => $fieldErrors];
         }
 
         return [
             'status' => true,
             'data' => [
-                'poids' => (float) $data['poids'],
-                'taille' => (float) $data['taille']
+                'poids'  => (float)$poids,
+                'taille' => (float)$taille,
+                'age'    => (int)$age,
             ]
         ];
     }
