@@ -1,80 +1,49 @@
 <?php
+/** @var array $regimes */
+/** @var array $sports */
 
-/** @var array $regimes */ ?>
-<?php /** @var array $sports */ ?>
-
-<?php
-    $userSession = session()->get('user');
-    $isLoggedIn = is_array($userSession) && ! empty($userSession['id']);
-    $isAdmin = $isLoggedIn && (($userSession['role'] ?? null) === 'admin');
-    $loginUrl = site_url('/user/login');
-    $signupUrl = site_url('/signup');
-
-    $adminHomeUrl = site_url('/admin/dashboard');
-
-    $imcUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/imc') : $loginUrl);
-    $suiviUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/suivi') : $loginUrl);
-    $goldUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/gold') : $loginUrl);
-    $profileUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/profile') : $loginUrl);
-
-    $ctaUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/dashboard') : $signupUrl);
+$pageTitle = 'Accueil - Vary\'Ena';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('layouts/main') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generated Page</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/global.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+<?= $this->section('title') ?>Generated Page<?= $this->endSection() ?>
 
+<?= $this->section('page_js') ?>
+<script src="<?= base_url('assets/js/global.js') ?>" defer></script>
+<?= $this->endSection() ?>
 
-    <script src="<?= base_url('assets/js/global.js') ?>" defer></script>
-</head>
+<?= $this->section('content') ?>
+    <!-- IMPORTANT:
+         J'ai supprimé ton <section id="section-header">...navbar...</section>
+         car la navbar est maintenant dans le layout.
+    -->
 
-<body data-auth="<?= $isLoggedIn ? '1' : '0' ?>" data-role="<?= esc((string)($userSession['role'] ?? '')) ?>" data-username="<?= esc((string)($userSession['username'] ?? '')) ?>">
-    <section id="section-header">
-        <header class="site-header">
-            <div class="container header-inner">
-                <a href="<?= site_url('/') ?>" class="logo">
-                    <img src="<?= base_url('assets/images/images/7_677.svg') ?>" alt="Vary'Ena Logo">
-                    <span class="logo-text">Vary<span class="highlight">'</span>Ena</span>
-                </a>
-                <nav class="main-nav">
-                    <a href="#section-programs">Programmes</a>
-                    <a href="<?= $imcUrl ?>">Mon IMC</a>
-                    <a href="<?= $suiviUrl ?>">Suivi</a>
-                </nav>
-                <div class="header-actions">
-                    <a href="<?= $goldUrl ?>" class="btn btn-gold">Offre Gold</a>
-                    <a href="<?= $profileUrl ?>" class="btn btn-icon"><img src="<?= base_url('assets/images/images/7_703.svg') ?>" alt="User Profile"></a>
-                </div>
-            </div>
-        </header>
-    </section>
     <section id="section-hero">
         <div class="hero">
             <div class="container hero-inner">
                 <h1 class="hero-title">Atteignez vos objectifs avec Vary'Ena</h1>
                 <p class="hero-subtitle">Des programmes personnalisés de nutrition et de sport pour transformer votre vie</p>
                 <div class="hero-buttons">
+                    <?php
+                        // On refait la logique de liens protégés ici aussi (comme avant), ou tu peux utiliser ceux du layout.
+                        $userSession = session()->get('user');
+                        $isLoggedIn = is_array($userSession) && ! empty($userSession['id']);
+                        $isAdmin = $isLoggedIn && (($userSession['role'] ?? null) === 'admin');
+                        $loginUrl = site_url('/user/login');
+                        $adminHomeUrl = site_url('/admin/dashboard');
+                        $imcUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/imc') : $loginUrl);
+                    ?>
                     <a href="<?= $imcUrl ?>" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
                     <a href="#section-programs" class="btn btn-outline">Découvrir les programmes</a>
                 </div>
             </div>
         </div>
     </section>
+
     <section id="section-programs">
         <div class="container programs-inner">
             <div class="filters">
-
                 <button class="filter-btn active" data-filter="all">
                     <img src="<?= base_url('assets/images/images/7_427.svg') ?>" alt="">
                     Tous les programmes
@@ -94,10 +63,13 @@
                     <img src="<?= base_url('assets/images/images/7_445.svg') ?>" alt="">
                     Nutrition + Sport
                 </button>
-
             </div>
 
             <div class="program-grid">
+                <?php
+                    $signupUrl = site_url('/signup');
+                    $ctaUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/dashboard') : $signupUrl);
+                ?>
 
                 <?php if (!empty($regimes)): ?>
                     <?php foreach ($regimes as $regime): ?>
@@ -142,7 +114,6 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
 
-
                 <?php if (!empty($sports)): ?>
                     <?php foreach ($sports as $sport): ?>
                         <article class="card sport">
@@ -164,10 +135,10 @@
                         </article>
                     <?php endforeach; ?>
                 <?php endif; ?>
-
             </div>
         </div>
     </section>
+
     <section id="section-cta">
         <div class="container">
             <div class="cta-box">
@@ -177,6 +148,7 @@
             </div>
         </div>
     </section>
+
     <section id="section-footer">
         <footer class="site-footer">
             <div class="container footer-inner">
@@ -184,6 +156,4 @@
             </div>
         </footer>
     </section>
-</body>
-
-</html>
+<?= $this->endSection() ?>

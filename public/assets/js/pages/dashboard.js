@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // IMPORTANT:
-    // On ne peut plus utiliser <?= base_url(...) ?> dans un fichier .js statique.
-    // Donc on lit les URLs depuis des attributs data-* (injectés dans la vue).
     const popupUrl = openBtn.getAttribute('data-popup-url');
     const updateUrl = openBtn.getAttribute('data-update-url');
 
@@ -79,12 +76,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const checkbox = item.querySelector('.goal-checkbox');
             checkbox.addEventListener('change', function () {
                 if (this.checked) {
-                    const selectedCount = goalsContainer.querySelectorAll('.goal-checkbox:checked').length;
-                    if (selectedCount > 3) {
-                        this.checked = false;
-                        alert('Vous ne pouvez sélectionner que 3 objectifs maximum.');
-                        return;
-                    }
+                    goalsContainer.querySelectorAll('.goal-selection-item').forEach(otherItem => {
+                        const otherCheckbox = otherItem.querySelector('.goal-checkbox');
+                        if (otherCheckbox && otherCheckbox !== this) {
+                            otherCheckbox.checked = false;
+                            otherItem.classList.remove('selected');
+                        }
+                    });
+
                     item.classList.add('selected');
                 } else {
                     item.classList.remove('selected');
