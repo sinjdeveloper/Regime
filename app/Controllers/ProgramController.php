@@ -64,7 +64,6 @@ class ProgramController extends BaseController
             $pdf->SetAutoPageBreak(true, 15);
             $pdf->AddPage();
 
-            // Titre
             $pdf->SetFont('Arial', 'B', 16);
             $pdf->SetTextColor(102, 51, 102);
             $pdf->Cell(0, 10, $this->toLatin('Programme Régime'), 0, 1, 'L');
@@ -74,25 +73,34 @@ class ProgramController extends BaseController
             $pdf->Cell(0, 6, $this->toLatin('Généré le : ' . date('d/m/Y H:i')), 0, 1, 'L');
             $pdf->Ln(2);
 
-            // Image (optionnel)
             if (!empty($regime['image'])) {
                 $imagePath = FCPATH . 'assets/images/programs/' . basename((string) $regime['image']);
                 if (is_file($imagePath)) {
                     $ext = strtolower((string) pathinfo($imagePath, PATHINFO_EXTENSION));
                     if (in_array($ext, ['jpg', 'jpeg', 'png'], true)) {
-                        $pdf->Image($imagePath, 15, $pdf->GetY(), 180);
-                        $pdf->Ln(95);
+                        $imgWidthMm = 80; 
+                        $imgSize = @getimagesize($imagePath);
+                        if ($imgSize && $imgSize[0] > 0) {
+                            $imgWidthPx = (float) $imgSize[0];
+                            $imgHeightPx = (float) $imgSize[1];
+                            $imgHeightMm = $imgHeightPx / $imgWidthPx * $imgWidthMm;
+                        } else {
+                            $imgHeightMm = 50; 
+                        }
+
+                        $x = (210 - $imgWidthMm) / 2;
+                        $y = $pdf->GetY();
+                        $pdf->Image($imagePath, $x, $y, $imgWidthMm);
+                        $pdf->SetY($y + $imgHeightMm + 6);
                     }
                 }
             }
 
-            // Nom
             $pdf->SetTextColor(30, 30, 30);
             $pdf->SetFont('Arial', 'B', 14);
             $pdf->MultiCell(0, 8, $this->toLatin((string) ($regime['libelle'] ?? 'Régime')));
             $pdf->Ln(2);
 
-            // Description
             $pdf->SetFont('Arial', 'B', 11);
             $pdf->Cell(0, 7, $this->toLatin('Description'), 0, 1);
 
@@ -129,10 +137,17 @@ class ProgramController extends BaseController
                 $slug = 'regime-' . (int) $id;
             }
 
-            return $this->response
-                ->setHeader('Content-Type', 'application/pdf')
-                ->setHeader('Content-Disposition', 'attachment; filename="' . $slug . '.pdf"')
-                ->setBody($pdf->Output('S'));
+                $pdfContent = $pdf->Output('S');
+
+                while (ob_get_level() > 0) {
+                    @ob_end_clean();
+                }
+
+                return $this->response
+                    ->setHeader('Content-Type', 'application/pdf')
+                    ->setHeader('Content-Disposition', 'attachment; filename="' . $slug . '.pdf"')
+                    ->setHeader('Content-Length', (string) strlen($pdfContent))
+                    ->setBody($pdfContent);
         } catch (\Throwable $e) {
             log_message('error', 'Erreur export PDF régime (FPDF): ' . $e->getMessage());
             return redirect()->to('/programs/regime/' . (int) $id)
@@ -160,7 +175,10 @@ class ProgramController extends BaseController
 
         $candidates = [
             ROOTPATH . 'fpdf/fpdf.php',
-            APPPATH . 'ThirdParty/fpdf/fpdf.php',
+            ROOTPATH . 'fpdf186/fpdf.php',
+            FCPATH   . 'fpdf/fpdf.php',
+            FCPATH   . 'fpdf186/fpdf.php',
+            APPPATH  . 'ThirdParty/fpdf/fpdf.php',
             ROOTPATH . 'app/ThirdParty/fpdf/fpdf.php',
             ROOTPATH . 'public/fpdf/fpdf.php',
         ];
