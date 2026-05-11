@@ -11,14 +11,15 @@ class UserController extends BaseController
 
     public function login()
     {
-        $email = $this->request->getPost('email');
+        $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
         $userModel = new UserModel();
-        $user = $userModel->checkViaEmail((string) $email, (string) $password);
+        $user = $userModel->checkViaUsername((string) $username, (string) $password);
 
         if ($user) {
             // Set session data
+            session()->set('user_id', $user['id']);
             session()->set('user', [
                 'id' => $user['id'],
                 'username' => $user['username'],

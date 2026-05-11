@@ -130,6 +130,148 @@
             font-size: 18px;
             margin-bottom: 30px;
         }
+
+        .btn-gold {
+            background-color: #FFD700;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-small {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #663366;
+        }
+
+        .goal-selection-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .goal-selection-item.selected {
+            border-color: #663366;
+            background-color: rgba(102, 51, 102, 0.05);
+        }
+
+        .goal-checkbox {
+            margin-right: 10px;
+        }
+
+        .goal-inputs {
+            display: none;
+            margin-top: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .goal-selection-item.selected .goal-inputs {
+            display: grid;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .modal-footer {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: #663366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #4a254a;
+        }
+
+        .btn-secondary {
+            background: #eee;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
