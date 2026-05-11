@@ -1,543 +1,176 @@
 <?php
-
 /** @var array $client */
 /** @var float $imc */
 /** @var array $objectif */
 /** @var bool $isGold */
 /** @var float $argent */
 
+$email  = (string)($client['email'] ?? 'User');
+$poids  = (string)($client['poids'] ?? '');
+$taille = (string)($client['taille'] ?? '');
+
+$statutLabel = $isGold ? 'GOLD' : 'STANDARD';
+
+// Objectif (robuste)
+$objectifLabel = '';
+$objectifPoidsCible = '';
+$objectifDuree = '';
+
+if (!empty($objectif)) {
+    $first = $objectif;
+    if (array_is_list($objectif)) {
+        $first = $objectif[0] ?? [];
+    }
+    if (is_array($first)) {
+        $objectifLabel = (string)($first['libelle'] ?? $first['objectif_libelle'] ?? '');
+        $objectifPoidsCible = (string)($first['poids_cible'] ?? $first['poidsCible'] ?? '');
+        $objectifDuree = (string)($first['duree'] ?? '');
+    }
+}
+if ($objectifLabel === '' && !empty($objectif)) {
+    $objectifLabel = 'Objectif sélectionné';
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('layouts/main') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard - Vary'Ena</title>
+<?= $this->section('title') ?>Dashboard - Vary'Ena<?= $this->endSection() ?>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<?= $this->section('page_css') ?>
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/dashboard.css') ?>">
+<?= $this->endSection() ?>
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/global.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+<?= $this->section('page_js') ?>
+<script src="<?= base_url('assets/js/pages/dashboard_new.js') ?>" defer></script>
+<?= $this->endSection() ?>
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #663366 0%, #333333 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+<?= $this->section('content') ?>
 
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .dashboard-header {
-            color: white;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard-header h1 {
-            font-size: 32px;
-            margin: 0;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card h2 {
-            font-size: 14px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .card-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #663366;
-            margin-bottom: 10px;
-        }
-
-        .card-label {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-gold {
-            background: #ffd700;
-            color: #333;
-        }
-
-        .status-regular {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .gold-badge {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #333;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .welcome-message {
-            color: white;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-
-        .btn-gold {
-            background-color: #FFD700;
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .btn-small {
-            padding: 5px 12px;
-            font-size: 12px;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 30px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close-modal:hover {
-            color: #333;
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: #663366;
-        }
-
-        .goal-selection-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .goal-selection-item.selected {
-            border-color: #663366;
-            background-color: rgba(102, 51, 102, 0.05);
-        }
-
-        .goal-checkbox {
-            margin-right: 10px;
-        }
-
-        .goal-inputs {
-            display: none;
-            margin-top: 15px;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .goal-selection-item.selected .goal-inputs {
-            display: grid;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .form-group input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .modal-footer {
-            margin-top: 30px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background-color: #663366;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .btn-primary:hover {
-            background-color: #4a254a;
-        }
-
-        .btn-secondary {
-            background: #eee;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div>
-                <h1>Bienvenue, <?= esc((string) ($client['email'] ?? 'User')) ?></h1>
-                <p class="welcome-message">Votre tableau de bord personnel Vary'Ena</p>
+<!-- HERO (v2) -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-icon" aria-hidden="true">
+                <svg width="32" height="28" viewBox="0 0 26 21" fill="none">
+                    <path d="M1 7.8L13 1L25 7.8V18.2C25 18.7835 24.7682 19.3431 24.3556 19.7556C23.9431 20.1682 23.3835 20.4 22.8 20.4H3.2C2.61652 20.4 2.05695 20.1682 1.64437 19.7556C1.23179 19.3431 1 18.7835 1 18.2V7.8Z" fill="white" stroke="white" stroke-width="2"/>
+                    <path d="M9.39999 20.4V10.6H16.6V20.4" stroke="#636" stroke-width="2"/>
+                </svg>
             </div>
-            <a href="/logout" class="logout-btn">Déconnexion</a>
+            <div class="hero-text">
+                <h1>Bienvenue, <?= esc($email) ?></h1>
+                <p>Votre tableau de bord personnel Vary'Ena</p>
+            </div>
         </div>
+    </div>
+</section>
 
-        <!-- Stats Grid -->
+<!-- MAIN (v2) -->
+<main class="main-content">
+    <div class="container">
+
         <div class="dashboard-grid">
-            <!-- IMC Card -->
+            <!-- Card 1 -->
             <div class="card">
-                <h2>Votre IMC</h2>
-                <div class="card-value"><?= number_format($imc, 1) ?></div>
-                <div class="card-label">
-                    <?php
-                    if ($imc < 18.5) {
-                        echo 'Poids insuffisant';
-                    } elseif ($imc < 25) {
-                        echo 'Poids normal';
-                    } elseif ($imc < 30) {
-                        echo 'Surpoids';
-                    } else {
-                        echo 'Obésité';
-                    }
-                    ?>
+                <div class="card-header">
+                    <h2 class="card-title">À propos de vous</h2>
+                </div>
+
+                <div class="card-content">
+                    <div class="info-section">
+                        <label class="info-label">Statut Compte</label>
+                        <div class="status-badge-container">
+                            <div class="status-badge"><?= esc($statutLabel) ?></div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <label class="stat-label">Poids Actuel</label>
+                            <div class="stat-value-container">
+                                <span class="stat-value"><?= esc($poids) ?></span>
+                                <span class="stat-unit">kg</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <label class="stat-label">Taille</label>
+                            <div class="stat-value-container">
+                                <span class="stat-value"><?= esc($taille) ?></span>
+                                <span class="stat-unit">cm</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <label class="stat-label">Votre IMC</label>
+                            <div class="stat-value-container">
+                                <span class="stat-value"><?= esc(number_format((float)$imc, 1)) ?></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <label class="info-label">Mon Porte-Monnaie</label>
+                        <div class="stat-value-container">
+                            <span class="stat-value secondary"><?= esc(number_format((float)$argent, 2, '.', '')) ?></span>
+                            <span class="stat-unit">Ar</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Weight Card -->
+            <!-- Card 2 -->
             <div class="card">
-                <h2>Poids Actuel</h2>
-                <div class="card-value"><?= (int) $client['poids'] ?></div>
-                <div class="card-label">kg</div>
-            </div>
-
-            <!-- Height Card -->
-            <div class="card">
-                <h2>Taille</h2>
-                <div class="card-value"><?= (int) $client['taille'] ?></div>
-                <div class="card-label">cm</div>
-            </div>
-
-            <!-- Account Status Card -->
-            <div class="card">
-                <h2>Statut du Compte</h2>
-                <div class="card-value">
-                    <span class="status-badge <?= $isGold ? 'status-gold' : 'status-regular' ?>">
-                        <?= $isGold ? 'GOLD' : 'STANDARD' ?>
-                    </span>
+                <div class="card-header">
+                    <h2 class="card-title">Mes Objectifs</h2>
                 </div>
-                <div class="card-label">
-                    <?= $isGold ? 'Profitez des avantages Premium' : 'Passez à Gold pour plus d\'avantages' ?>
-                </div>
-            </div>
 
-            <!-- Wallet Card -->
-            <div class="card">
-                <h2>Mon Porte-monnaie</h2>
-                <div class="card-value"><?= number_format($argent, 2) ?></div>
-                <div class="card-label">Ar</div>
-            </div>
+                <div class="card-content">
+                    <div class="objectives-grid">
+                        <div class="objective-item">
+                            <label class="objective-label">Objectif</label>
+                            <div class="objective-value">
+                                <span><?= esc($objectifLabel) ?></span>
+                                <svg class="edit-icon" id="btn-edit-objectif" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-label="Modifier objectif">
+                                    <path d="M7.33333 2.66667H2.66667C2.31304 2.66667 1.97391 2.80714 1.72386 3.05719C1.47381 3.30724 1.33333 3.64638 1.33333 4V13.3333C1.33333 13.687 1.47381 14.0261 1.72386 14.2761C1.97391 14.5262 2.31304 14.6667 2.66667 14.6667H12C12.3536 14.6667 12.6928 14.5262 12.9428 14.2761C13.1929 14.0261 13.3333 13.687 13.3333 13.3333V8.66667" stroke="#B5B5B5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12.3333 1.66665C12.5985 1.40144 12.9582 1.25244 13.3333 1.25244C13.7085 1.25244 14.0681 1.40144 14.3333 1.66665C14.5985 1.93187 14.7475 2.29158 14.7475 2.66665C14.7475 3.04173 14.5985 3.40144 14.3333 3.66665L8 9.99999L5.33333 10.6667L6 7.99999L12.3333 1.66665Z" stroke="#B5B5B5" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
 
-            <!-- Goals Card -->
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <h2>Mes Objectifs</h2>
-                    <button class="btn btn-gold btn-small" id="openGoalModal" style="padding: 5px 10px; font-size: 12px; cursor: pointer;">Modifier</button>
+                        <div class="objective-item">
+                            <label class="objective-label">Poids Cible</label>
+                            <div class="objective-value">
+                                <span><?= esc($objectifPoidsCible !== '' ? ($objectifPoidsCible . ' kg') : '') ?></span>
+                            </div>
+                        </div>
+
+                        <div class="objective-item">
+                            <label class="objective-label">Durée</label>
+                            <div class="objective-value">
+                                <span><?= esc($objectifDuree !== '' ? ($objectifDuree . ' jours') : '') ?></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-value">
-                    <?php
-                    if ($objectif) {
-                        echo count($objectif);
-                    } else {
-                        echo '0';
-                    }
-                    ?>
-                </div>
-                <div class="card-label">Objectifs sélectionnés</div>
             </div>
         </div>
 
-        <!-- Modal pour modification d'objectifs -->
-        <div id="goalModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <div class="modal-header">
-                    <h3>Modifier mes objectifs</h3>
-                    <p style="font-size: 14px; color: #666; margin-top: 5px;">Sélectionnez jusqu'à 3 objectifs (poids cible et durée).</p>
-                </div>
-                <form id="updateGoalForm">
-                    <div id="goalsContainer">
-                        <p style="text-align: center;">Chargement des objectifs...</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-secondary" id="closeGoalModal">Annuler</button>
-                        <button type="submit" class="btn-primary">Enregistrer les modifications</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Additional Info -->
-        <?php if ($isGold): ?>
-            <div class="gold-badge">
-                ⭐ Vous êtes un membre GOLD - Profitez de réductions exclusives!
-            </div>
-        <?php endif; ?>
-
-        <!-- Placeholder for future sections -->
-        <div class="card">
-            <h2>Prochaines Étapes</h2>
-            <p>
-                Bienvenue dans Vary'Ena! Voici ce que vous pouvez faire ensuite:
-            </p>
-            <ul>
-                <li>👀 Explorez nos programmes de nutrition et de sport</li>
-                <li>💪 Suivez vos progrès et objectifs</li>
-                <li>🏆 Déverrouille les succès et les badges</li>
-                <li>💰 Gérez votre porte-monnaie et vos codes promo</li>
-            </ul>
-            <a href="/" class="btn btn-gold btn-large">Retourner à l'accueil</a>
-
+        <div class="action-section">
+            <button class="btn-secondary" type="button" onclick="window.location.href='<?= site_url('/') ?>'">
+                Retour vers l'accueil
+            </button>
+            <button class="btn-primary" type="button" onclick="window.location.href='<?= site_url('/logout') ?>'">
+                Déconnexion
+            </button>
         </div>
 
     </div>
+</main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('goalModal');
-            const openBtn = document.getElementById('openGoalModal');
-            const closeBtn = document.querySelector('.close-modal');
-            const cancelBtn = document.getElementById('closeGoalModal');
-            const goalsContainer = document.getElementById('goalsContainer');
-            const goalForm = document.getElementById('updateGoalForm');
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2026 Vary'Ena. Tous droits réservés.</p>
+    </div>
+</footer>
 
-            // Ouvrir la modal et charger les données
-            openBtn.onclick = function() {
-                modal.style.display = "block";
-                loadGoalsData();
-            }
-
-            // Fermer la modal
-            const closeModal = () => {
-                modal.style.display = "none";
-            };
-            closeBtn.onclick = closeModal;
-            cancelBtn.onclick = closeModal;
-            window.onclick = function(event) {
-                if (event.target == modal) closeModal();
-            }
-
-            async function loadGoalsData() {
-                goalsContainer.innerHTML = '<p style="text-align: center;">Chargement...</p>';
-                try {
-                    const response = await fetch('<?= base_url('api/objectif/popup') ?>');
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        renderGoals(result.data);
-                    } else {
-                        goalsContainer.innerHTML = `<p style="color: red;">Erreur: ${result.message}</p>`;
-                    }
-                } catch (error) {
-                    console.error('Error loading goals:', error);
-                    goalsContainer.innerHTML = '<p style="color: red;">Erreur lors du chargement des données.</p>';
-                }
-            }
-
-            function renderGoals(data) {
-                const { objectifs_disponibles, objectifs_actuels } = data;
-                goalsContainer.innerHTML = '';
-
-                objectifs_disponibles.forEach(obj => {
-                    const actuel = objectifs_actuels.find(a => a.objectif_id == obj.id);
-                    const isSelected = !!actuel;
-
-                    const item = document.createElement('div');
-                    item.className = `goal-selection-item ${isSelected ? 'selected' : ''}`;
-                    item.innerHTML = `
-                        <div style="display: flex; align-items: center;">
-                            <input type="checkbox" class="goal-checkbox" value="${obj.id}" ${isSelected ? 'checked' : ''}>
-                            <strong>${obj.libelle}</strong>
-                        </div>
-                        <div class="goal-inputs">
-                            <div class="form-group">
-                                <label>Poids cible (kg)</label>
-                                <input type="number" name="poids_cible_${obj.id}" step="0.1" value="${actuel ? actuel.poids_cible : ''}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Durée (jours)</label>
-                                <input type="number" name="duree_${obj.id}" value="${actuel ? actuel.duree : ''}" required>
-                            </div>
-                        </div>
-                    `;
-
-                    const checkbox = item.querySelector('.goal-checkbox');
-                    checkbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            const selectedCount = goalsContainer.querySelectorAll('.goal-checkbox:checked').length;
-                            if (selectedCount > 3) {
-                                this.checked = false;
-                                alert('Vous ne pouvez sélectionner que 3 objectifs maximum.');
-                                return;
-                            }
-                            item.classList.add('selected');
-                        } else {
-                            item.classList.remove('selected');
-                        }
-                    });
-
-                    goalsContainer.appendChild(item);
-                });
-            }
-
-            goalForm.onsubmit = async function(e) {
-                e.preventDefault();
-                
-                const selectedItems = goalsContainer.querySelectorAll('.goal-selection-item.selected');
-                if (selectedItems.length === 0) {
-                    alert('Veuillez sélectionner au moins un objectif.');
-                    return;
-                }
-
-                const objectifs = [];
-                selectedItems.forEach(item => {
-                    const id = item.querySelector('.goal-checkbox').value;
-                    const poidsCible = item.querySelector(`input[name="poids_cible_${id}"]`).value;
-                    const duree = item.querySelector(`input[name="duree_${id}"]`).value;
-                    
-                    objectifs.push({
-                        objectif_id: parseInt(id),
-                        poids_cible: parseFloat(poidsCible),
-                        duree: parseInt(duree)
-                    });
-                });
-
-                try {
-                    const response = await fetch('<?= base_url('api/objectif/update') ?>', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ objectifs })
-                    });
-
-                    const result = await response.json();
-                    if (result.success) {
-                        alert('Objectifs mis à jour avec succès !');
-                        location.reload();
-                    } else {
-                        alert('Erreur: ' + result.message);
-                    }
-                } catch (error) {
-                    console.error('Error updating goals:', error);
-                    alert('Une erreur est survenue lors de la mise à jour.');
-                }
-            };
-        });
-    </script>
-</body>
-
-</html>
+<?= $this->endSection() ?>
