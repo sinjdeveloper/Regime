@@ -133,11 +133,15 @@ class AuthController extends BaseController
         // Validate goal logic before touching the DB
         $objectifModel = new ObjectifModel();
         $objectif      = $objectifModel->find((int)$selectedId);
-        $libelle       = strtolower(trim($objectif['libelle'] ?? ''));
-        $needsDetails  = $libelle !== 'calculer imc idéal';
+        $libelle = strtolower(trim($objectif['libelle'] ?? ''));
 
-        if ($needsDetails) {
-            $poidsActuel = $healthSession['poids'] ?? 0;
+        $isImcGoal = str_contains($libelle, 'imc');
+        $needsPoids = !$isImcGoal;
+
+        $poidsActuel = $healthSession['poids'] ?? 0;
+
+        // validate poids only for gain/loss goals
+        if ($needsPoids) {
 
             if (empty($poidsCible) || (float)$poidsCible <= 0) {
                 return redirect()->to('/signup/goals')
@@ -151,23 +155,31 @@ class AuthController extends BaseController
 
             if (str_contains($libelle, 'réduire') && (float)$poidsCible >= $poidsActuel) {
                 return redirect()->to('/signup/goals')
-                    ->with('errors', ['Pour une perte de poids, le poids cible doit être inférieur à votre poids actuel (' . $poidsActuel . ' kg).']);
+                    ->with('errors', [
+                        'Pour une perte de poids, le poids cible doit être inférieur à votre poids actuel (' . $poidsActuel . ' kg).'
+                    ]);
             }
 
-            if ((str_contains($libelle, 'augmenter') || str_contains($libelle, 'masse')) && (float)$poidsCible <= $poidsActuel) {
+            if (
+                (str_contains($libelle, 'augmenter') || str_contains($libelle, 'masse'))
+                && (float)$poidsCible <= $poidsActuel
+            ) {
                 return redirect()->to('/signup/goals')
-                    ->with('errors', ['Pour une prise de masse, le poids cible doit être supérieur à votre poids actuel (' . $poidsActuel . ' kg).']);
+                    ->with('errors', [
+                        'Pour une prise de masse, le poids cible doit être supérieur à votre poids actuel (' . $poidsActuel . ' kg).'
+                    ]);
             }
+        }
 
-            if (empty($duree) || (int)$duree <= 0) {
-                return redirect()->to('/signup/goals')
-                    ->with('errors', ['Durée invalide.']);
-            }
+        // duration always required
+        if (empty($duree) || (int)$duree <= 0) {
+            return redirect()->to('/signup/goals')
+                ->with('errors', ['Durée invalide.']);
+        }
 
-            if ((int)$duree > 730) {
-                return redirect()->to('/signup/goals')
-                    ->with('errors', ['Durée irréaliste (maximum 730 jours).']);
-            }
+        if ((int)$duree > 730) {
+            return redirect()->to('/signup/goals')
+                ->with('errors', ['Durée irréaliste (maximum 730 jours).']);
         }
 
         $userModel   = new UserModel();
@@ -223,8 +235,8 @@ class AuthController extends BaseController
             $objectifModel->db->table('goalpoids')->insert([
                 'client_id'   => $clientId,
                 'objectif_id' => (int)$selectedId,
-                'poids_cible' => $needsDetails ? (float)$poidsCible : 0,
-                'duree'       => $needsDetails ? (int)$duree : 0,
+                'poids_cible' => $needsPoids ? (float)$poidsCible : 0,
+                'duree' => (int)$duree,
             ]);
 
             session()->set('user', [

@@ -75,9 +75,9 @@
                                             name="goals_selected"
                                             value="<?= $goal['id'] ?>"
                                             class="hidden-checkbox"
-                                            data-needs-details="<?= strtolower(trim($goal['libelle'] ?? '')) !== 'calculer imc idéal' ? '1' : '0' ?>">
-                                        <span class="custom-checkbox">
-                                            <span class="checkbox-inner"></span>
+                                            data-goal-type="<?= strtolower(trim($goal['libelle'] ?? '')) ?>"
+                                            <span class="custom-checkbox">
+                                        <span class="checkbox-inner"></span>
                                         </span>
                                     </label>
                                 <?php endforeach; ?>
@@ -85,11 +85,15 @@
 
                             <!-- Single shared extra fields div -->
                             <div class="goal-extra" id="shared-extra" style="display:none;">
+
                                 <input type="number"
+                                    id="poids-cible-field"
                                     name="goals_poids_cible"
                                     step="0.1" min="20" max="300"
                                     placeholder="Poids cible (kg)">
+
                                 <input type="number"
+                                    id="duree-field"
                                     name="goals_duree"
                                     min="1" max="730"
                                     placeholder="Durée (jours)">
@@ -109,41 +113,66 @@
     </section>
     <script>
         document.querySelectorAll('.hidden-checkbox').forEach(function(radio) {
+
             radio.addEventListener('change', function() {
+
                 const extra = document.getElementById('shared-extra');
-                if (this.dataset.needsDetails === '1') {
-                    extra.style.display = 'grid';
+                const poidsField = document.getElementById('poids-cible-field');
+                const dureeField = document.getElementById('duree-field');
+
+                const type = this.dataset.goalType;
+
+                extra.style.display = 'grid';
+
+                // IMC ideal -> only duration
+                if (type.includes('imc')) {
+
+                    poidsField.style.display = 'none';
+                    poidsField.value = '';
+
+                    dureeField.style.display = 'block';
+
                 } else {
-                    extra.style.display = 'none';
-                    // Clear values so they don't interfere
-                    extra.querySelectorAll('input').forEach(i => i.value = '');
+
+                    // gain/loss goals
+                    poidsField.style.display = 'block';
+                    dureeField.style.display = 'block';
                 }
             });
         });
 
         document.getElementById('goals-form').addEventListener('submit', function(e) {
+
             const selected = document.querySelector('.hidden-checkbox:checked');
+
             if (!selected) {
                 e.preventDefault();
                 alert('Veuillez sélectionner un objectif.');
                 return;
             }
 
-            if (selected.dataset.needsDetails === '1') {
-                const poids = document.querySelector('input[name="goals_poids_cible"]');
-                const duree = document.querySelector('input[name="goals_duree"]');
+            const type = selected.dataset.goalType;
+
+            const poids = document.querySelector('input[name="goals_poids_cible"]');
+            const duree = document.querySelector('input[name="goals_duree"]');
+
+            // only validate poids for non-IMC goals
+            if (!type.includes('imc')) {
+
                 if (!poids.value || parseFloat(poids.value) <= 0) {
                     e.preventDefault();
                     alert('Veuillez saisir un poids cible valide.');
                     poids.focus();
                     return;
                 }
-                if (!duree.value || parseInt(duree.value) <= 0) {
-                    e.preventDefault();
-                    alert('Veuillez saisir une durée valide en jours.');
-                    duree.focus();
-                    return;
-                }
+            }
+
+            // duration always required
+            if (!duree.value || parseInt(duree.value) <= 0) {
+                e.preventDefault();
+                alert('Veuillez saisir une durée valide en jours.');
+                duree.focus();
+                return;
             }
         });
     </script>
