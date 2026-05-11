@@ -1,0 +1,319 @@
+/* Scoped so it doesn't break navbar/home */
+.regime-detail,
+.regime-detail * {
+    box-sizing: border-box;
+}
+
+.regime-detail {
+    background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+    min-height: calc(100vh - 76px);
+}
+
+/* Use existing global container, but adjust width for this page only */
+.regime-detail .container {
+    max-width: 1280px;
+}
+
+/* Main Content */
+.regime-detail .main-content {
+    padding: 40px 0;
+}
+
+/* Product Layout */
+.regime-detail .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+}
+
+/* Product Images */
+.regime-detail .product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.regime-detail .main-image {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    aspect-ratio: 16 / 9;
+}
+
+.regime-detail .main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.regime-detail .thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.regime-detail .thumbnail {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 2px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.regime-detail .thumbnail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.15);
+}
+
+.regime-detail .thumbnail.active {
+    border: 2px solid #636;
+}
+
+.regime-detail .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Product Details */
+.regime-detail .product-details {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 7.5px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+
+.regime-detail .details-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.regime-detail .icon-badge {
+    width: 32px;
+    height: 32px;
+    background: #a3a101;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.regime-detail .details-header h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #636;
+    margin: 0;
+}
+
+.regime-detail .description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #364153;
+    margin: 0 0 20px 0;
+}
+
+/* Warning Box */
+.regime-detail .warning-box {
+    background: #fff7ed;
+    border-left: 4px solid #ff6900;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.regime-detail .warning-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #9f2d00;
+    margin: 0 0 2px 0;
+}
+
+.regime-detail .warning-subtitle {
+    font-size: 12px;
+    color: #ca3500;
+    margin: 0;
+}
+
+/* Stats Grid */
+.regime-detail .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.regime-detail .stat-card {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+}
+
+.regime-detail .stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #636;
+    margin-bottom: 4px;
+}
+
+.regime-detail .stat-label {
+    font-size: 12px;
+    color: #4a5565;
+}
+
+/* Pricing Box */
+.regime-detail .pricing-box {
+    background: #636;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 16px;
+}
+
+.regime-detail .price-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 4px 0;
+}
+
+.regime-detail .price-value {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    margin: 0 0 4px 0;
+}
+
+.regime-detail .price-discount {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.regime-detail .savings-badge {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: right;
+    min-width: 100px;
+}
+
+.regime-detail .savings-label {
+    font-size: 12px;
+    color: white;
+    margin: 0 0 4px 0;
+}
+
+.regime-detail .savings-value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #a3a101;
+    margin: 0;
+}
+
+/* Buy Button */
+.regime-detail .btn-buy {
+    width: 100%;
+    background: #a3a101;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 10px 7.5px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.regime-detail .btn-buy:hover {
+    background: #8a8a01;
+    transform: translateY(-1px);
+}
+
+/* Description Section */
+.regime-detail .description-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 10px 7.5px rgba(0, 0, 0, 0.1), 0 4px 3px rgba(0, 0, 0, 0.1);
+}
+
+.regime-detail .description-section h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #636;
+    margin: 0 0 12px 0;
+}
+
+.regime-detail .description-section p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #364153;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .regime-detail .product-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .regime-detail .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .regime-detail .pricing-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .regime-detail .savings-badge {
+        width: 100%;
+        text-align: center;
+    }
+
+    .regime-detail .thumbnail-grid {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .regime-detail .thumbnail-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .regime-detail .main-content {
+        padding: 24px 0;
+    }
+
+    .regime-detail .product-details {
+        padding: 16px;
+    }
+}
