@@ -12,6 +12,7 @@ body {
     min-height: 100vh;
 }
 
+
 /* Header */
 .header {
     background: #636;
@@ -190,7 +191,15 @@ body {
 }
 
 /* Card */
-.card {
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* IMPORTANT: scope dashboard cards so they don't override homepage cards */
+.main-content .card {
     background: white;
     border-radius: 20px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -200,11 +209,11 @@ body {
     width: 100%;
 }
 
-.card-header {
+.main-content .card-header {
     margin-bottom: 24px;
 }
 
-.card-title {
+.main-content .card-title {
     display: inline-block;
     padding: 10px 32px;
     background: rgba(163, 161, 1, 0.03);
@@ -213,10 +222,23 @@ body {
     color: black;
 }
 
-.card-body {
+.main-content .card-body {
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+/* Responsive: scope these too */
+@media (max-width: 1024px) {
+    .main-content .card {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content .card {
+        padding: 16px;
+    }
 }
 
 /* Form Elements */

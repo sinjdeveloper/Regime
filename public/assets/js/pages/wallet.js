@@ -1,76 +1,80 @@
-(function () {
-  const btn = document.getElementById('btn-redeem-code');
-  const input = document.getElementById('code');
-  const msg = document.getElementById('redeem-msg');
+document.addEventListener('DOMContentLoaded', function () {
+  const page = document.querySelector('.code-validation-page');
+  const form = document.getElementById('codeValidationForm');
+  const input = document.getElementById('code-input');
+  const btn = document.getElementById('btn-submit-code');
+  const msg = document.getElementById('code-msg');
 
-  if (!btn || !input || !msg) return;
+  if (!page || !form || !input || !btn || !msg) return;
 
-  const redeemUrl = btn.getAttribute('data-redeem-url');
-  if (!redeemUrl) {
-    console.error('[wallet] Missing data-redeem-url on #btn-redeem-code');
-    msg.className = 'msg error';
+  const redeemUrl = page.getAttribute('data-redeem-url');
+
+  function showMessage(text, type) {
     msg.style.display = 'block';
-    msg.textContent = 'Configuration manquante (URL).';
-    return;
+    msg.textContent = text;
+
+    // styles simples (sans toucher au CSS global)
+    msg.style.padding = '12px';
+    msg.style.borderRadius = '12px';
+    msg.style.border = '1px solid transparent';
+
+    if (type === 'success') {
+      msg.style.background = '#eafaf1';
+      msg.style.color = '#1e7e34';
+      msg.style.borderColor = '#c3e6cb';
+    } else {
+      msg.style.background = '#fdeaea';
+      msg.style.color = '#b02a37';
+      msg.style.borderColor = '#f5c2c7';
+    }
   }
 
-  async function submitCode() {
-    const code = input.value.trim();
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-    msg.className = 'msg';
-    msg.style.display = 'block';
+    const code = (input.value || '').trim();
 
     if (!code) {
-      msg.classList.add('error');
-      msg.textContent = 'Veuillez saisir un code.';
+      showMessage('Veuillez entrer un code de validation.', 'error');
+      return;
+    }
+    if (code.length < 6) {
+      showMessage('Le code doit contenir au moins 6 caractères.', 'error');
+      return;
+    }
+    if (!redeemUrl) {
+      showMessage('Configuration manquante (URL).', 'error');
       return;
     }
 
     btn.disabled = true;
-    msg.textContent = 'Envoi de la demande...';
+    btn.textContent = 'Envoi...';
 
     try {
-      const response = await fetch(redeemUrl, {
+      const res = await fetch(redeemUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code })
       });
 
-      const data = await response.json().catch(() => null);
+      const data = await res.json().catch(() => null);
 
-      if (!response.ok) {
-        msg.classList.add('error');
-        msg.textContent = (data && data.message) ? data.message : 'Erreur serveur.';
+      if (!res.ok) {
+        showMessage((data && data.message) ? data.message : 'Erreur serveur.', 'error');
         return;
       }
 
-      if (!data) {
-        msg.classList.add('error');
-        msg.textContent = 'Réponse invalide du serveur.';
-        return;
-      }
-
-      if (data.success) {
-        msg.classList.add('success');
-        msg.textContent = data.message || 'Demande envoyée avec succès.';
+      if (data && data.success) {
+        showMessage(data.message || 'Demande envoyée avec succès.', 'success');
         input.value = '';
       } else {
-        msg.classList.add('error');
-        msg.textContent = data.message || 'Une erreur est survenue.';
+        showMessage((data && data.message) ? data.message : 'Une erreur est survenue.', 'error');
       }
-    } catch (e) {
-      msg.classList.add('error');
-      msg.textContent = 'Erreur réseau.';
+    } catch (err) {
+      showMessage('Erreur réseau.', 'error');
     } finally {
       btn.disabled = false;
-    }
-  }
-
-  btn.addEventListener('click', submitCode);
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      submitCode();
+      btn.textContent = 'Envoyer pour validation';
     }
   });
-})();
+});

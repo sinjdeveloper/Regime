@@ -19,6 +19,8 @@ $programmesUrl = $ctaUrl;
 
 $walletUrl = site_url('/wallet');
 $mesRegimesUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/mes-regimes') : $loginUrl);
+
+$suggestionsUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/suggestions') : $loginUrl);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -82,6 +84,7 @@ $mesRegimesUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/mes-regime
                 <a href="<?= $programmesUrl ?>" class="nav-link">Programmes</a>
                 <a href="<?= $imcUrl ?>" class="nav-link">Mon IMC</a>
                 <a href="<?= $suiviUrl ?>" class="nav-link">Suivi</a>
+                <a href="<?= $suggestionsUrl ?>" class="nav-link">Mes Suggestions</a>
                 <a href="<?= $mesRegimesUrl ?>" class="nav-link">Mes Regimes</a>
             </nav>
 
