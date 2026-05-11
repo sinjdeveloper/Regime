@@ -928,10 +928,6 @@
             });
         }
 
-        function selectRegime(regimeId) {
-            alert('Régime ' + regimeId + ' sélectionné!');
-        }
-
         // Close modals when clicking outside
         document.getElementById('profileModal')?.addEventListener('click', function(e) {
             if (e.target === this) {
