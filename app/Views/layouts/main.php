@@ -81,11 +81,12 @@ $suggestionsUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/suggestio
 
             <nav class="nav">
                 <a href="<?= $homeUrl ?>" class="nav-link">Accueil</a>
-                <a href="<?= $programmesUrl ?>" class="nav-link">Programmes</a>
-                <a href="<?= $imcUrl ?>" class="nav-link">Mon IMC</a>
-                <a href="<?= $suiviUrl ?>" class="nav-link">Suivi</a>
+                <!-- <a href="<?= $programmesUrl ?>" class="nav-link">Programmes</a> -->
+                <!-- <a href="<?= $imcUrl ?>" class="nav-link">Mon IMC</a> -->
+                <!-- <a href="<?= $suiviUrl ?>" class="nav-link">Suivi</a> -->
                 <a href="<?= $suggestionsUrl ?>" class="nav-link">Mes Suggestions</a>
                 <a href="<?= $mesRegimesUrl ?>" class="nav-link">Mes Regimes</a>
+                <a href="<?= $ctaUrl ?>" class="nav-link">Dashboard</a>
             </nav>
 
             <div class="header-actions">

@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
         login: '/user/login',
         logout: '/logout',
         dashboard: isAdmin ? '/admin/dashboard' : '/dashboard',
-        profile: isAdmin ? '/admin/dashboard' : '/profile',
-        imc: isAdmin ? '/admin/dashboard' : '/imc',
-        suivi: isAdmin ? '/admin/dashboard' : '/suivi',
+        profile: isAdmin ? '/admin/dashboard' : '/dashboard',
+        imc: isAdmin ? '/admin/dashboard' : '/dashboard',
+        suivi: isAdmin ? '/admin/dashboard' : '/dashboard',
         gold: isAdmin ? '/admin/dashboard' : '/gold',
         wallet: '/wallet'
     };
