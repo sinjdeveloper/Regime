@@ -106,31 +106,44 @@ class ClientModel extends Model
     public static function validateUserInfo($data)
     {
         $errors = [];
+        $fieldErrors = [];
 
-        if (empty($data['prenom']))
+        if (empty($data['prenom'])) {
             $errors[] = "Prénom requis";
-        if (empty($data['nom']))
+            $fieldErrors['prenom'] = true;
+        }
+        if (empty($data['nom'])) {
             $errors[] = "Nom requis";
-        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL))
+            $fieldErrors['nom'] = true;
+        }
+        if (empty($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Email invalide";
-        if (empty($data['genre']))
+            $fieldErrors['email'] = true;
+        }
+        if (empty($data['genre'])) {
             $errors[] = "Genre requis";
-        if (empty($data['password']))
+            $fieldErrors['genre'] = true;
+        }
+        if (empty($data['password'])) {
             $errors[] = "Mot de passe requis";
-        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null))
+            $fieldErrors['password'] = true;
+        }
+        if (($data['password'] ?? null) !== ($data['password_confirm'] ?? null)) {
             $errors[] = "Les mots de passe ne correspondent pas";
+            $fieldErrors['password_confirm'] = true;
+        }
 
         if (!empty($errors)) {
-            return ['status' => false, 'errors' => $errors];
+            return ['status' => false, 'errors' => $errors, 'field_errors' => $fieldErrors];
         }
 
         return [
             'status' => true,
             'data' => [
-                'prenom' => $data['prenom'],   // must be here
-                'nom' => $data['nom'],       // must be here
-                'email' => $data['email'],
-                'genre' => $data['genre'],
+                'prenom'        => $data['prenom'],
+                'nom'           => $data['nom'],
+                'email'         => $data['email'],
+                'genre'         => $data['genre'],
                 'password_hash' => password_hash($data['password'], PASSWORD_BCRYPT)
             ]
         ];

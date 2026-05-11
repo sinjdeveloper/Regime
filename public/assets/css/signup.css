@@ -1,5 +1,3 @@
-
-
 /* CSS for section section:Signup */
 .signup-section {
     display: flex;
@@ -249,6 +247,24 @@
     text-decoration: underline;
 }
 
+.input-wrapper.input-error {
+    border: 1.5px solid #e53e3e;
+    border-radius: 8px;
+}
+
+.input-wrapper.input-error input,
+.input-wrapper.input-error select {
+    color: #e53e3e;
+}
+
+.field-error-msg {
+    display: block;
+    font-size: 12px;
+    color: #e53e3e;
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
 .footer-copy {
     text-align: center;
     color: #6a7282;
@@ -284,4 +300,3 @@
         padding: 24px 16px;
     }
 }
-

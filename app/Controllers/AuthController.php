@@ -46,7 +46,7 @@ class AuthController extends BaseController
         }
 
         // TEMP: dump all flash data
-        var_dump(session()->getFlashdata('errors'));
+        // var_dump(session()->getFlashdata('errors'));
 
         return view('signup/user-info');
     }
@@ -59,7 +59,16 @@ class AuthController extends BaseController
 
         if ($result['status'] === false) {
             return redirect()->back()->withInput()
-                ->with('errors', $result['errors']);
+                ->with('errors', $result['errors'])
+                ->with('field_errors', $result['field_errors'] ?? []);
+        }
+
+        // Check email uniqueness
+        $existing = $clientModel->where('email', $data['email'])->first();
+        if ($existing) {
+            return redirect()->back()->withInput()
+                ->with('errors', ['Cet email est déjà utilisé.'])
+                ->with('field_errors', ['email' => true]);
         }
 
         $draft = session()->get('signup_draft') ?? [];

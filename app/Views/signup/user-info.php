@@ -19,9 +19,9 @@
 
         <!-- LEFT SIDE -->
         <div class="signup-left" style="background:
-            linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)),
-            url('<?= base_url('assets/images/signup/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png') ?>')
-            center/cover no-repeat;">
+        linear-gradient(rgba(102, 51, 102, 0.83), rgba(102, 51, 102, 0.83)),
+        url('<?= base_url('assets/images/signup/c7860d66b83eb9d06c543aa34ea9bc9aa4727194.png') ?>')
+        center/cover no-repeat;">
             <div class="brand-content">
                 <h1 class="brand-title">
                     <span>Vary</span><span class="highlight">'</span><span>Ena</span>
@@ -35,12 +35,10 @@
         <!-- RIGHT SIDE -->
         <div class="signup-right">
             <div class="signup-card-wrapper">
-
                 <div class="signup-card">
 
                     <!-- HEADER -->
                     <div class="card-header">
-
                         <div class="merged-logo">
                             <img src="<?= base_url('assets/images/signup/33_33.svg') ?>" class="logo-part" style="left:1px; top:1px; width:38px; height:38px;">
                             <img src="<?= base_url('assets/images/signup/33_36.svg') ?>" class="logo-part" style="left:15px; top:16.5px;">
@@ -50,7 +48,6 @@
                             <img src="<?= base_url('assets/images/signup/33_49.svg') ?>" class="logo-part" style="left:19px; top:22px;">
                             <img src="<?= base_url('assets/images/signup/33_52.svg') ?>" class="logo-part" style="left:25px; top:20.5px;">
                         </div>
-
                         <h2 class="card-brand">
                             <span>Vary</span><span class="highlight">'</span><span>Ena</span>
                         </h2>
@@ -60,6 +57,8 @@
                     <div class="card-body">
 
                         <h3 class="form-title">Créer un compte</h3>
+
+                        <?php $fieldErrors = session()->getFlashdata('field_errors') ?? []; ?>
 
                         <!-- ERROR DISPLAY -->
                         <?php if (!empty(session()->getFlashdata('errors'))): ?>
@@ -76,39 +75,48 @@
 
                                 <div class="form-group">
                                     <label>Prénom</label>
-                                    <div class="input-wrapper">
+                                    <div class="input-wrapper <?= isset($fieldErrors['prenom']) ? 'input-error' : '' ?>">
                                         <img src="<?= base_url('assets/images/signup/33_72.svg') ?>" class="input-icon">
                                         <input type="text" name="prenom"
                                             value="<?= old('prenom') ?>"
                                             placeholder="Jean" required>
                                     </div>
+                                    <?php if (isset($fieldErrors['prenom'])): ?>
+                                        <span class="field-error-msg">Prénom requis</span>
+                                    <?php endif; ?>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Nom</label>
-                                    <div class="input-wrapper">
+                                    <div class="input-wrapper <?= isset($fieldErrors['nom']) ? 'input-error' : '' ?>">
                                         <img src="<?= base_url('assets/images/signup/33_82.svg') ?>" class="input-icon">
                                         <input type="text" name="nom"
                                             value="<?= old('nom') ?>"
                                             placeholder="Dupont" required>
                                     </div>
+                                    <?php if (isset($fieldErrors['nom'])): ?>
+                                        <span class="field-error-msg">Nom requis</span>
+                                    <?php endif; ?>
                                 </div>
 
                             </div>
 
                             <div class="form-group">
                                 <label>Email</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['email']) ? 'input-error' : '' ?>">
                                     <img src="<?= base_url('assets/images/signup/33_92.svg') ?>" class="input-icon">
                                     <input type="email" name="email"
                                         value="<?= old('email') ?>"
                                         placeholder="jean@email.com" required>
                                 </div>
+                                <?php if (isset($fieldErrors['email'])): ?>
+                                    <span class="field-error-msg">Email invalide ou déjà utilisé</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
                                 <label>Genre</label>
-                                <div class="input-wrapper select-wrapper">
+                                <div class="input-wrapper select-wrapper <?= isset($fieldErrors['genre']) ? 'input-error' : '' ?>">
                                     <select name="genre" required>
                                         <option value="" disabled <?= old('genre') ? '' : 'selected' ?>>Choisir</option>
                                         <option value="homme" <?= old('genre') == 'homme' ? 'selected' : '' ?>>Homme</option>
@@ -117,24 +125,33 @@
                                     </select>
                                     <img src="<?= base_url('assets/images/signup/33_101.svg') ?>" class="select-icon">
                                 </div>
+                                <?php if (isset($fieldErrors['genre'])): ?>
+                                    <span class="field-error-msg">Genre requis</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
                                 <label>Mot de passe</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['password']) ? 'input-error' : '' ?>">
                                     <img src="<?= base_url('assets/images/signup/33_110.svg') ?>" class="input-icon">
                                     <input type="password" name="password" required>
                                     <img src="<?= base_url('assets/images/signup/33_114.svg') ?>" class="input-icon-right">
                                 </div>
+                                <?php if (isset($fieldErrors['password'])): ?>
+                                    <span class="field-error-msg">Mot de passe requis</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="form-group">
                                 <label>Confirmer le mot de passe</label>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper <?= isset($fieldErrors['password_confirm']) ? 'input-error' : '' ?>">
                                     <img src="<?= base_url('assets/images/signup/33_124.svg') ?>" class="input-icon">
                                     <input type="password" name="password_confirm" required>
                                     <img src="<?= base_url('assets/images/signup/33_128.svg') ?>" class="input-icon-right">
                                 </div>
+                                <?php if (isset($fieldErrors['password_confirm'])): ?>
+                                    <span class="field-error-msg">Les mots de passe ne correspondent pas</span>
+                                <?php endif; ?>
                             </div>
 
                             <button type="submit" class="submit-btn">
