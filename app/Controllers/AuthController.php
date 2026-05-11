@@ -140,7 +140,6 @@ class AuthController extends BaseController
 
         $poidsActuel = $healthSession['poids'] ?? 0;
 
-        // validate poids only for gain/loss goals
         if ($needsPoids) {
 
             if (empty($poidsCible) || (float)$poidsCible <= 0) {
@@ -171,7 +170,6 @@ class AuthController extends BaseController
             }
         }
 
-        // duration always required
         if (empty($duree) || (int)$duree <= 0) {
             return redirect()->to('/signup/goals')
                 ->with('errors', ['Durée invalide.']);

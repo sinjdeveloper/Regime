@@ -29,7 +29,6 @@ class RegimeController extends BaseController
         $regimeModel = new RegimeModel();
         $transactionModel = new TransactionModel();
 
-        // Récupérer le client
         $client = null;
         if (!empty($user['client_id'])) {
             $client = $clientModel->find((int) $user['client_id']);
@@ -49,7 +48,6 @@ class RegimeController extends BaseController
 
         $prix = (float) ($regime['prix'] ?? 0);
 
-        // Appliquer réduction Gold si applicable
         $isGold = (int) ($client['estGold'] ?? 0) === 1;
         if ($isGold) {
             $discountPercent = \App\Services\AppSettingsService::getGoldDiscount();
@@ -59,25 +57,21 @@ class RegimeController extends BaseController
             $finalPrice = $prix;
         }
 
-        // Transaction DB
         $db = \Config\Database::connect();
         $db->transBegin();
 
         try {
-            // Vérifier solde et débiter
             $ok = $clientModel->updateBalance((int)$client['id'], -$finalPrice);
             if (!$ok) {
                 $db->transRollback();
                 return $this->response->setJSON(['success' => false, 'message' => 'Solde insuffisant'])->setStatusCode(400);
             }
 
-            // Enregistrer l'achat dans la table relationnelle
             $db->table('regimeclient')->insert([
                 'client_id' => (int)$client['id'],
                 'regime_id' => (int)$regimeId,
             ]);
 
-            // Enregistrer la transaction
             $txOk = $transactionModel->insert([
                 'client_id' => (int)$client['id'],
                 'code_id' => null,
