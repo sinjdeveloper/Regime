@@ -88,11 +88,23 @@ class SuggestionController extends BaseController
 
         // Sélectionner le sport avec meilleur pourcentage_reduction
         $sportAvecMeilleur = $sportModel->orderBy('pourcentage_reduction', 'DESC')->first();
+        $purchasedRows = $db->table('regimeclient')
+            ->select('regime_id')
+            ->where('client_id', $idClient)
+            ->get()
+            ->getResultArray();
 
+        $purchasedSet = [];
+        foreach ($purchasedRows as $row) {
+            $rid = (int) ($row['regime_id'] ?? 0);
+            if ($rid > 0) {
+                $purchasedSet[$rid] = true;
+            }
+        }
         // Construire les suggestions
         $suggestions = [];
         foreach ($regimes as $regime) {
-            // Calculer prix avec réduction Gold si applicable
+            $isPurchased = isset($purchasedSet[(int) $regime['id']]);
             $prix = $regime['prix'];
             if ($client['estGold']) {
                 $prixFinal = \App\Helpers\PricingHelper::applyGoldReduction($prix, true);
@@ -110,7 +122,9 @@ class SuggestionController extends BaseController
                     'pourcentage_volaille' => $regime['pourcentage_volaille'],
                     'prix_original' => $prix,
                     'prix_final' => $prixFinal,
-                    'reduction_appliquee' => $client['estGold'] ? 15 : 0
+                    'reduction_appliquee' => $client['estGold'] ? 15 : 0,
+                    'image' => $regime['image'],
+                    'is_purchased' => $isPurchased,
                 ],
                 'sport' => [
                     'id' => $sportAvecMeilleur['id'],
