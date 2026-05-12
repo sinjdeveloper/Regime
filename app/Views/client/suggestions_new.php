@@ -26,14 +26,14 @@
         <p class="suggestions-subtitle">Programmes adaptés à vos objectifs et votre profil santé</p>
         <div class="suggestions-status">
             <div class="status-badge">
-                💪 Poids actuel: <strong><?= (int) $client['poids'] ?>kg</strong>
+                 Poids actuel: <strong><?= (int) $client['poids'] ?>kg</strong>
             </div>
             <div class="status-badge">
-                📏 Taille: <strong><?= (int) $client['taille'] ?>cm</strong>
+                Taille: <strong><?= (int) $client['taille'] ?>cm</strong>
             </div>
             <?php if ($isGold): ?>
                 <div class="status-badge gold">
-                    ⭐ Membre GOLD - <?= \App\Services\AppSettingsService::getGoldDiscount() ?>% de réduction
+                    Membre GOLD - <?= \App\Services\AppSettingsService::getGoldDiscount() ?>% de réduction
                 </div>
             <?php endif; ?>
         </div>
