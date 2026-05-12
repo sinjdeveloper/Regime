@@ -32,7 +32,7 @@ $pageTitle = 'Accueil - Vary\'Ena';
                         $isAdmin = $isLoggedIn && (($userSession['role'] ?? null) === 'admin');
                         $loginUrl = site_url('/user/login');
                         $adminHomeUrl = site_url('/admin/dashboard');
-                        $imcUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/imc') : $loginUrl);
+                        $imcUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/dashboard') : $loginUrl);
                     ?>
                     <a href="<?= $imcUrl ?>" class="btn btn-primary">Calculer mon IMC <img src="<?= base_url('assets/images/images7_416.svg') ?>" alt=""></a>
                     <a href="#section-programs" class="btn btn-outline">Découvrir les programmes</a>
