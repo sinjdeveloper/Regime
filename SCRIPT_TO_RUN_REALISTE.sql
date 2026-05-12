@@ -144,53 +144,75 @@ ADD UNIQUE (libelle);
 ALTER TABLE regime
 ADD UNIQUE (libelle);
 
-INSERT INTO regime 
+INSERT INTO regime
 (
     libelle,
     description,
+    variation_poids,
     pourcentage_viande,
     pourcentage_poisson,
     pourcentage_volaille,
-    variation_poids,
-    prix
+    prix,
+    image
 )
 VALUES
 (
-    'Keto Boost',
-    'Regime faible en glucides pour une perte de poids rapide.',
-    40,
-    20,
-    40,
-    -5,
-    120000
-),
-(
-    'Detox Nature',
-    'Regime detoxifiant à base de fruits et légumes frais.',
-    20,
-    30,
-    50,
-    -3,
-    90000
-),
-(
-    'Muscle Max',
-    'Nutrition riche en proteines pour prise de masse musculaire.',
-    50,
+    'Régime méditerranéen',
+    'Alimentation équilibrée riche en légumes, huile d''olive, poisson et céréales complètes.',
+    -2.5,
+    15,
+    25,
     10,
-    40,
-    4,
-    180000
+    45000,
+    'mediterranean.jpg'
+),
+(
+    'Régime hyperprotéiné',
+    'Programme riche en protéines pour préserver la masse musculaire et favoriser la perte de graisse.',
+    -4.0,
+    35,
+    15,
+    30,
+    60000,
+    'high-protein.jpg'
+),
+(
+    'Régime prise de masse',
+    'Excédent calorique contrôlé pour augmenter le poids et développer la masse musculaire.',
+    3.5,
+    30,
+    10,
+    35,
+    55000,
+    'mass-gain.jpg'
+),
+(
+    'Régime faible en glucides',
+    'Réduction des sucres rapides pour stabiliser la glycémie et favoriser la perte de poids.',
+    -3.0,
+    25,
+    20,
+    20,
+    50000,
+    'low-carb.jpg'
+),
+(
+    'Régime équilibré',
+    'Répartition harmonieuse des macronutriments pour maintenir un IMC idéal.',
+    -1.0,
+    20,
+    15,
+    20,
+    40000,
+    'balanced.jpg'
 );
 
-INSERT INTO sport
-(libelle, pourcentage_reduction)
-VALUES
-('Cardio Fit', 15),
-('Yoga Relax', 10),
-('HIIT Extreme', 20),
-('Pilates Core', 12),
-('Musculation Pro', 25);
+INSERT INTO sport (libelle, pourcentage_reduction, image) VALUES
+('Marche rapide', 5.00, 'walking.jpg'),
+('Course à pied', 8.00, 'running.jpg'),
+('Musculation', 12.00, 'gym.jpg'),
+('Natation', 10.00, 'swimming.jpg'),
+('Cyclisme', 7.50, 'cycling.jpg');
 
 ALTER TABLE regime ADD image VARCHAR(255);
 ALTER TABLE sport ADD image VARCHAR(255);
@@ -346,12 +368,13 @@ DELETE FROM regime;
 -- ----------------------------------------------------------
 -- SPORTS
 -- ----------------------------------------------------------
-INSERT INTO sport (libelle, pourcentage_reduction) VALUES
-('Marche rapide', 5.00),
-('Course à pied', 8.00),
-('Musculation', 12.00),
-('Natation', 10.00),
-('Cyclisme', 7.50);
+INSERT INTO sport (libelle, pourcentage_reduction, image) VALUES
+('Marche rapide', 5.00, 'walking.jpg'),
+('Course à pied', 8.00, 'running.jpg'),
+('Musculation', 12.00, 'gym.jpg'),
+('Natation', 10.00, 'swimming.jpg'),
+('Cyclisme', 7.50, 'cycling.jpg');
+
 
 -- ----------------------------------------------------------
 -- REGIMES
@@ -399,7 +422,7 @@ VALUES
     20,
     20,
     50000,
-    NULL
+    'no-glucose.jpg'
 ),
 (
     'Régime équilibré',
@@ -409,7 +432,7 @@ VALUES
     15,
     20,
     40000,
-    NULL
+    'balanced.jpg'
 );
 
 -- ----------------------------------------------------------
