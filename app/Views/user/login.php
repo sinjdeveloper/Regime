@@ -66,6 +66,10 @@
               <button type="submit" class="btn-submit">Se connecter</button>
             </form>
 
+            <div class="demo-credentials">
+              Demo: demo@gmail.com / demo
+            </div>
+
             <div class="signup-prompt">
               <span class="text-muted">Vous n'avez pas de compte? </span>
               <a href="<?= site_url('signup') ?>" class="link-primary">S'inscrire</a>

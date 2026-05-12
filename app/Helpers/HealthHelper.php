@@ -5,7 +5,7 @@ namespace App\Helpers;
 
 class HealthHelper
 {
-   
+
     public static function calculateIMC(float $poids, float $taille): float
     {
         // Convertir taille de cm à m
@@ -14,7 +14,7 @@ class HealthHelper
         return round($imc, 1);
     }
 
-  
+
     public static function interpretIMC(float $imc): string
     {
         if ($imc < 18.5) {
@@ -28,7 +28,7 @@ class HealthHelper
         }
     }
 
-  
+
     public static function calculatePoidsDifference(float $poidsActuel, float $poidsObjectif): float
     {
         return round($poidsActuel - $poidsObjectif, 2);
