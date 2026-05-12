@@ -1,138 +1,81 @@
 <?php
+
 /** @var array $sport */
 
 $imageUrl = '';
 if (!empty($sport['image'])) {
     $imageUrl = base_url('assets/images/programs/' . (string) $sport['image']);
 }
+
+$title = (string)($sport['libelle'] ?? 'Sport');
+$reduction = (string)($sport['pourcentage_reduction'] ?? '');
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
+<?= $this->extend('layouts/main') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc((string)($sport['libelle'] ?? 'Sport')) ?> - Vary'Ena</title>
+<?= $this->section('title') ?><?= esc($title) ?> - Vary'Ena<?= $this->endSection() ?>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<?= $this->section('page_css') ?>
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/product-detail.css') ?>">
+<?= $this->endSection() ?>
 
-    <link rel="stylesheet" href="<?= base_url('assets/css/global.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+<?= $this->section('content') ?>
+<div class="regime-detail">
+    <main class="main-content">
+        <div class="container">
+            <div class="product-layout">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #663366 0%, #333333 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container-page {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .top h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        .link-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid white;
-            padding: 10px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .hero {
-            height: 280px;
-            background: #eee;
-        }
-
-        .hero img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .content {
-            padding: 18px;
-        }
-
-        .pill {
-            margin-top: 14px;
-            background: #f7f7f7;
-            border-radius: 10px;
-            padding: 12px;
-        }
-
-        .pill .label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: .5px;
-        }
-
-        .pill .value {
-            margin-top: 6px;
-            font-size: 18px;
-            font-weight: 800;
-            color: #333;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container-page">
-        <div class="top">
-            <div>
-                <h1><?= esc((string)($sport['libelle'] ?? 'Sport')) ?></h1>
-                <div style="opacity:.9;">Programme Sport</div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <a class="link-btn" href="<?= site_url('/suivi') ?>">Suivi</a>
-                <a class="link-btn" href="<?= site_url('/') ?>">Accueil</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="hero">
-                <?php if ($imageUrl): ?>
-                    <img src="<?= esc($imageUrl) ?>" alt="<?= esc((string)($sport['libelle'] ?? 'Sport')) ?>">
-                <?php endif; ?>
-            </div>
-
-            <div class="content">
-                <div style="font-weight:700; color:#333;">Réduction</div>
-                <div class="pill">
-                    <div class="label">Pourcentage</div>
-                    <div class="value"><?= esc((string)($sport['pourcentage_reduction'] ?? '')) ?> %</div>
+                <!-- LEFT: IMAGE -->
+                <div class="product-images">
+                    <div class="main-image">
+                        <?php if ($imageUrl): ?>
+                            <img src="<?= esc($imageUrl) ?>" alt="<?= esc($title) ?>">
+                        <?php else: ?>
+                            <div style="height:280px; display:flex; align-items:center; justify-content:center; background:#eee;">
+                                <span style="color:#999;">Aucune image</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
+
+                <!-- RIGHT: DETAILS -->
+                <div class="product-details">
+                    <div class="details-header">
+                        <div class="icon-badge">
+                            <svg width="16" height="16" fill="none" stroke="white" stroke-width="1.5">
+                                <circle cx="8" cy="8" r="7"></circle>
+                            </svg>
+                        </div>
+                        <h2>Programme Sport</h2>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="description">
+                        Ce programme sportif permet d'améliorer vos performances et de compléter votre régime alimentaire.
+                    </p>
+
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <svg width="20" height="20" fill="none" stroke="#636" stroke-width="1.8">
+                                <path d="M3 12h18"></path>
+                                <path d="M12 3v18"></path>
+                            </svg>
+                            <div class="stat-value"><?= esc($reduction !== '' ? $reduction . '%' : '—') ?></div>
+                            <div class="stat-label">Réduction</div>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div style="margin-top:20px;">
+                        <a class="btn-buy" href="<?= site_url('/') ?>" style="text-decoration:none;">
+                            Retour accueil
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
-</body>
-
-</html>
+    </main>
+</div>
+<?= $this->endSection() ?>
