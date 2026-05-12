@@ -129,6 +129,24 @@ if ($objectifLabel === '' && !empty($objectif)) {
                             <label class="stat-label">Votre IMC</label>
                             <div class="stat-value-container">
                                 <span class="stat-value"><?= esc(number_format((float) $imc, 1)) ?></span>
+                                <?php
+                                    $imcInterpretation = 'Ideal Weight';
+                                    $imcColor = '#008000';
+                                    if ((float) $imc < 18.5) {
+                                        $imcInterpretation = 'Underweight';
+                                        $imcColor = '#0066cc';
+                                    } elseif ((float) $imc < 25) {
+                                        $imcInterpretation = 'Ideal Weight';
+                                        $imcColor = '#008000';
+                                    } elseif ((float) $imc < 30) {
+                                        $imcInterpretation = 'Overweight';
+                                        $imcColor = '#ff8800';
+                                    } else {
+                                        $imcInterpretation = 'Obésité';
+                                        $imcColor = '#cc0000';
+                                    }
+                                ?>
+                                <span style="font-size: 12px; color: <?= $imcColor ?>; font-weight: 700; margin-top: 4px;"><?= $imcInterpretation ?></span>
                             </div>
                         </div>
                     </div>

@@ -2,13 +2,13 @@
 /** @var array $client */
 /** @var float $imc */
 
-$interpretation = 'Poids normal';
+$interpretation = 'Ideal Weight';
 if ($imc < 18.5) {
-    $interpretation = 'Poids insuffisant';
+    $interpretation = 'Underweight';
 } elseif ($imc < 25) {
-    $interpretation = 'Poids normal';
+    $interpretation = 'Ideal Weight';
 } elseif ($imc < 30) {
-    $interpretation = 'Surpoids';
+    $interpretation = 'Overweight';
 } else {
     $interpretation = 'Obésité';
 }
@@ -41,7 +41,30 @@ if ($imc < 18.5) {
         <div style="font-size:40px;font-weight:800;color:#663366;line-height:1;">
             <?= number_format((float)$imc, 1) ?>
         </div>
-        <div style="margin-top:8px;color:#333;font-weight:700;"><?= esc($interpretation) ?></div>
+        
+        <?php
+            // Determine badge color based on IMC value
+            $badgeColor = '#666';
+            $badgeBg = '#f0f0f0';
+            
+            if ($imc < 18.5) {
+                $badgeColor = '#0066cc';
+                $badgeBg = '#e6f2ff';
+            } elseif ($imc < 25) {
+                $badgeColor = '#008000';
+                $badgeBg = '#e6ffe6';
+            } elseif ($imc < 30) {
+                $badgeColor = '#ff8800';
+                $badgeBg = '#fff3e6';
+            } else {
+                $badgeColor = '#cc0000';
+                $badgeBg = '#ffe6e6';
+            }
+        ?>
+        
+        <div style="margin-top:12px; display: inline-block; padding: 8px 16px; border-radius: 20px; background-color: <?= $badgeBg ?>; color: <?= $badgeColor ?>; font-weight: 700; font-size: 14px;">
+            <?= esc($interpretation) ?>
+        </div>
 
         <div class="metric">
             <div class="item">
