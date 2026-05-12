@@ -16,10 +16,17 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({})
             });
+            const resClone = res.clone();
             const data = await res.json().catch(() => null);
+            let serverMsg = null;
+            if (data && data.message) serverMsg = data.message;
+            else {
+                const text = await resClone.text().catch(() => null);
+                if (text) serverMsg = text;
+            }
 
             if (!res.ok || !data) {
-                msg.textContent = 'Erreur pendant l\'activation.';
+                msg.textContent = serverMsg || 'Erreur pendant l\'activation.';
                 btn.disabled = false;
                 return;
             }

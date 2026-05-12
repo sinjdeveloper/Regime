@@ -150,8 +150,15 @@ class ProgramController extends BaseController
                     ->setBody($pdfContent);
         } catch (\Throwable $e) {
             log_message('error', 'Erreur export PDF régime (FPDF): ' . $e->getMessage());
+
+            $flash = ['message' => 'Impossible de générer le PDF pour le moment.'];
+            if (defined('ENVIRONMENT') && ENVIRONMENT !== 'production') {
+                $flash['details'] = $e->getMessage();
+            }
+
             return redirect()->to('/programs/regime/' . (int) $id)
-                ->with('error', 'Impossible de générer le PDF pour le moment.');
+                ->with('error', $flash['message'])
+                ->with('flash', $flash);
         }
     }
     public function sport($id)

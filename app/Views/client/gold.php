@@ -3,9 +3,12 @@
 /** @var bool $isGold */
 
 $argent = (float)($client['argent'] ?? 0);
+
+$goldDiscount = \App\Services\AppSettingsService::getGoldDiscount();
+$goldPrice = \App\Controllers\GoldController::getGoldPrice(); // tu l'utilises déjà ailleurs
 ?>
 
-<?= $this->extend('layouts/app') ?>
+<?= $this->extend('layouts/main') ?>
 
 <?= $this->section('title') ?>Offre Gold - Vary'Ena<?= $this->endSection() ?>
 
@@ -18,50 +21,52 @@ $argent = (float)($client['argent'] ?? 0);
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<div class="container-page">
-    <div class="page-header">
-        <div>
-            <h1>Offre Gold</h1>
-            <div style="opacity:.9;">Solde: <?= number_format($argent, 2) ?> Ar</div>
-        </div>
-        <div style="display:flex; gap:10px;">
-            <a class="link-btn" href="<?= site_url('/profile') ?>">Profil</a>
-            <a class="link-btn" href="<?= site_url('/dashboard') ?>">Dashboard</a>
-            <a class="link-btn" href="<?= site_url('/') ?>">Accueil</a>
-        </div>
-    </div>
+<div class="gold-page">
+    <main class="main-content">
+        <div class="container">
+        
 
-    <div class="card">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-            <div>
-                <div style="font-size:14px; color:#666; text-transform:uppercase; letter-spacing:.5px;">Statut</div>
-                <div style="margin-top:8px;">
-                    <span class="badge <?= $isGold ? 'badge-gold' : 'badge-standard' ?>">
-                        <?= $isGold ? 'GOLD' : 'STANDARD' ?>
-                    </span>
+            <!-- Gold Offer Card -->
+            <div class="gold-card">
+                <div class="card-header">
+                    <div class="status-section">
+                        <span class="status-badge"><?= $isGold ? 'GOLD' : 'STANDARD' ?></span>
+                    </div>
+
+                    <div class="price-badge">
+                        <?= number_format((float)$goldPrice, 0, '.', ' ') ?> Ar
+                    </div>
                 </div>
+
+                <div class="benefits-section">
+                    <div class="benefit-left">
+                        <p class="benefit-title">Réduction Gold: <?= (int)$goldDiscount ?>%</p>
+                    </div>
+                    <div class="benefit-right">
+                        <p class="benefit-title">Avantages</p>
+                        <ul class="benefit-list">
+                            <li>Réduction automatique sur les suggestions</li>
+                            <li>Accès Premium</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <?php if ($isGold): ?>
+                    <button class="btn-activate" type="button" disabled style="opacity:.75; cursor:not-allowed;">
+                        Déjà GOLD ✓
+                    </button>
+                <?php else: ?>
+                    <button
+                        class="btn-activate"
+                        id="btn-subscribe-gold"
+                        data-subscribe-url="<?= site_url('api/gold/subscribe') ?>"
+                        type="button">
+                        Activer Gold
+                    </button>
+                    <div id="gold-msg" style="margin-top:12px; display:none;"></div>
+                <?php endif; ?>
             </div>
-            <div style="text-align:right; color:#333; font-weight:700;">Réduction Gold: <?= \App\Services\AppSettingsService::getGoldDiscount() ?>%</div>
         </div>
-
-        <div style="margin-top:14px; color:#333;">
-            <div style="font-weight:800;">Avantages</div>
-            <ul style="margin:8px 0 0 18px;">
-                <li>Réduction automatique sur les suggestions</li>
-                <li>Accès Premium</li>
-            </ul>
-        </div>
-
-        <?php if ($isGold): ?>
-            <div style="margin-top:14px; font-weight:800; color:#333;">Votre abonnement Gold est actif.</div>
-        <?php else: ?>
-            <button
-                class="btn-action"
-                id="btn-subscribe-gold"
-                data-subscribe-url="<?= site_url('api/gold/subscribe') ?>"
-                type="button">Activer Gold</button>
-            <div class="msg" id="gold-msg"></div>
-        <?php endif; ?>
-    </div>
+    </main>
 </div>
 <?= $this->endSection() ?>

@@ -104,6 +104,7 @@ $suggestionsUrl = $isAdmin ? $adminHomeUrl : ($isLoggedIn ? site_url('/suggestio
         </div>
     </header>
 
+    <?= view('partials/flash_messages') ?>
     <?= $this->renderSection('content') ?>
     <?= $this->renderSection('page_js') ?>
 </body>

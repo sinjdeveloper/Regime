@@ -24,10 +24,17 @@ document.addEventListener('DOMContentLoaded', function () {
         body: 'regime_id=' + encodeURIComponent(regimeId || '')
       });
 
+      const resClone = res.clone();
       const data = await res.json().catch(() => null);
+      let serverMsg = null;
+      if (data && data.message) serverMsg = data.message;
+      else {
+        const text = await resClone.text().catch(() => null);
+        if (text) serverMsg = text;
+      }
 
       if (!res.ok || !data) {
-        msg.textContent = "Erreur lors de l'achat.";
+        msg.textContent = serverMsg || "Erreur lors de l'achat.";
         btn.disabled = false;
         return;
       }
@@ -36,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         msg.textContent = data.message || 'Achat réussi';
         setTimeout(() => location.reload(), 800);
       } else {
-        msg.textContent = data.message || 'Achat échoué';
+        msg.textContent = data.message || serverMsg || 'Achat échoué';
         btn.disabled = false;
       }
     } catch (e) {

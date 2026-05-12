@@ -106,7 +106,13 @@ class RegimeController extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', 'Achat régime error: ' . $e->getMessage());
-            return $this->response->setJSON(['success' => false, 'message' => 'Erreur serveur'])->setStatusCode(500);
+
+            $message = 'Erreur serveur';
+            if (defined('ENVIRONMENT') && ENVIRONMENT !== 'production') {
+                $message .= ': ' . $e->getMessage();
+            }
+
+            return $this->response->setJSON(['success' => false, 'message' => $message])->setStatusCode(500);
         }
     }
 
