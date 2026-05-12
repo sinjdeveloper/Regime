@@ -58,7 +58,9 @@ class ClientController extends BaseController
         $imc = $poids / (($taille / 100) ** 2);
 
         $goalPoidsModel = new GoalPoidsModel();
-        $objectif = $goalPoidsModel->where('client_id', $clientId)->first();
+        // Récupérer le premier objectif du client avec le libellé joint depuis la table `objectif`
+        $objectifs = $goalPoidsModel->getClientGoalsWithDetails((int) $clientId);
+        $objectif = !empty($objectifs) ? $objectifs[0] : null;
         $isGold = $estGold == 1;
         $argent = $client['argent'];
 
@@ -149,7 +151,9 @@ class ClientController extends BaseController
 
         // Récupérer les objectifs
         $goalPoidsModel = new GoalPoidsModel();
-        $objectif = $goalPoidsModel->where('client_id', $clientId)->first();
+        // Récupérer tous les objectifs avec leur libellé (si besoin) et prendre le premier
+        $objectifs = $goalPoidsModel->getClientGoalsWithDetails((int) $clientId);
+        $objectif = !empty($objectifs) ? $objectifs[0] : null;
 
         $suggestions = [];
 

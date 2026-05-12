@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="${urls.profile}">${label}</a>
             <div class="popup-divider"></div>
             <a href="${urls.imc}">Mon IMC</a>
-            <a href="${urls.suivi}">Modifier objectifs</a>
             <a href="${urls.suivi}">Modifier durée</a>
             <a href="${urls.wallet}">Entrer code</a>
             <div class="popup-divider"></div>

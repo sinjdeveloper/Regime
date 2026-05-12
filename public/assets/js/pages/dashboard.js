@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const goalsContainer = document.getElementById('goalsContainer');
     const goalForm = document.getElementById('updateGoalForm');
 
-    if (!modal || !openBtn || !closeBtn || !cancelBtn || !goalsContainer || !goalForm) {
+    // Diagnostic: log missing elements but try to continue where possible
+    if (!modal || !openBtn) {
+        console.error('Dashboard popup: required elements missing', { modal: !!modal, openBtn: !!openBtn, closeBtn: !!closeBtn, cancelBtn: !!cancelBtn, goalsContainer: !!goalsContainer, goalForm: !!goalForm });
         return;
     }
 
